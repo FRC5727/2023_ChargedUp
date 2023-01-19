@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -50,13 +52,29 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {}
 
+  private CANCoder fle = new CANCoder(Constants.LEFT_FRONT_ENCODER);
+  private CANCoder fre = new CANCoder(Constants.RIGHT_FRONT_ENCODER);
+  private CANCoder rre = new CANCoder(Constants.RIGHT_REAR_ENCODER);
+  private CANCoder rle = new CANCoder(Constants.LEFT_REAR_ENCODER);
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    System.out.println("Front Left Encoder" + fle.getAbsolutePosition());
+    System.out.println("Front Right Encoder" + fre.getAbsolutePosition());
+    System.out.println("Rear Left Encoder" + rle.getAbsolutePosition());
+    System.out.println("Rear Right Encoder" + rre.getAbsolutePosition());
+  }
+  /*\
+   * SmartDashboard.putNumber("Front Left Encoder", fle.getAbsolutePosition());
+      SmartDashboard.putNumber("Front Right Encoder", fre.getAbsolutePosition());
+      SmartDashboard.putNumber("Rear Right Encoder", rre.getAbsolutePosition());
+      SmartDashboard.putNumber("Rear Left Encoder", rle.getAbsolutePosition());
+    }
+   */
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
