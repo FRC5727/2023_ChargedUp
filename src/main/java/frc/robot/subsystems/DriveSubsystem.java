@@ -68,7 +68,7 @@ public class DriveSubsystem extends SubsystemBase {
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
   // cause the angle reading to increase until it wraps back over to zero.
-  private final AHRS mNavX = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP //will change to pigeon 2.0 when built
+  //private final AHRS mNavX = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP //will change to pigeon 2.0 when built
   
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule mLeftFront;
@@ -90,13 +90,13 @@ public class DriveSubsystem extends SubsystemBase {
             // This can either be STANDARD or FAST depending on your gear configuration
             Mk4SwerveModuleHelper.GearRatio.L2,
             // This is the ID of the drive motor
-            Constants.LEFT_FRONT_DRIVE,
+            Constants.fldmPort,
             // This is the ID of the steer motor
-            Constants.LEFT_FRONT_STEER,
+            Constants.flsmPort,
             // This is the ID of the steer encoder
-            Constants.LEFT_FRONT_ENCODER,
+            Constants.flePort,
             // This is how much the steer encoder is offset from true zero (In our case, zero is facing straight forward)
-            Constants.LEFT_FRONT_STEER_OFFSET
+            Constants.fleo
     );
 
     mRightFront = Mk4SwerveModuleHelper.createFalcon500(
@@ -104,10 +104,10 @@ public class DriveSubsystem extends SubsystemBase {
                     .withSize(2, 4)
                     .withPosition(2, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
-            Constants.RIGHT_FRONT_DRIVE,
-            Constants.RIGHT_FRONT_STEER,
-            Constants.RIGHT_FRONT_ENCODER,
-            Constants.RIGHT_FRONT_STEER_OFFSET
+            Constants.frdmPort,
+            Constants.frsmPort,
+            Constants.frePort,
+            Constants.freo
     );
 
     mLeftRear = Mk4SwerveModuleHelper.createFalcon500(
@@ -115,10 +115,10 @@ public class DriveSubsystem extends SubsystemBase {
                     .withSize(2, 4)
                     .withPosition(4, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
-            Constants.LEFT_REAR_DRIVE,
-            Constants.LEFT_REAR_STEER,
-            Constants.LEFT_REAR_ENCODER,
-            Constants.LEFT_REAR_STEER_OFFSET
+            Constants.rldmPort,
+            Constants.rlsmPort,
+            Constants.rlePort,
+            Constants.rleo
     );
 
     mRightRear = Mk4SwerveModuleHelper.createFalcon500(
@@ -126,10 +126,10 @@ public class DriveSubsystem extends SubsystemBase {
                     .withSize(2, 4)
                     .withPosition(6, 0),
             Mk4SwerveModuleHelper.GearRatio.L2,
-            Constants.RIGHT_REAR_DRIVE,
-            Constants.RIGHT_REAR_STEER,
-            Constants.RIGHT_REAR_ENCODER,
-            Constants.RIGHT_REAR_STEER_OFFSET
+            Constants.rrdmPort,
+            Constants.rrsmPort,
+            Constants.rrePort,
+            Constants.rreo
     );
   }
 
@@ -137,11 +137,9 @@ public class DriveSubsystem extends SubsystemBase {
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
    */
-  public CommandBase zeroGyroscopeCommand() {
-        return runOnce(() -> {
-                mNavX.calibrate(); //will change to pigeon 2.0 when built
-        });
-  }
+  //public CommandBase zeroGyroscopeCommand() {
+        //zeroGyroscope();
+  //}
 
   public void zeroGyroscope() {
     gyro.calibrate();
@@ -174,6 +172,12 @@ public class DriveSubsystem extends SubsystemBase {
     return Rotation2d.fromDegrees(gyro.getAngle());
   }
 
+  public void updateAngle() {
+    // SmartDashboard.putBoolean("FLM Angle OK", mLeftFront.checkAngle());
+    // SmartDashboard.putBoolean("FRM Angle OK", mRightFront.checkAngle());
+    // SmartDashboard.putBoolean("RLM Angle OK", mLeftRear.checkAngle());
+    // SmartDashboard.putBoolean("RRM Angle OK", mRightRear.checkAngle());
+  }
   public void drive(ChassisSpeeds chassisSpeeds) {
     mChassisSpeeds = chassisSpeeds;
   }
@@ -182,7 +186,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(mChassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-    SmartDashboard.putNumber("NavX Angle", mNavX.getAngle()); //will change to pigeon 2.0 when built
+    SmartDashboard.putNumber("Gyro Angle", gyro.getAngle()); //will change to pigeon 2.0 when built
 
     mLeftFront.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
     mRightFront.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
