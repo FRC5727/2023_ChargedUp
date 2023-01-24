@@ -38,10 +38,17 @@ public final class Constants {
   public static double rleo = Math.toRadians(-198.457031); //Rear Left Encoder Offset
 //intake front
 
-  public static final int dXboxA = 1, dXboxB = 2, dXboxX = 3, dXboxY = 4; 
+  public static int dXboxController = 0;
+  public static int mXboxController = 1;
 
-  public static final int dXboxController = 0, mXboxController = 1;
+  public static int dXboxA = 0;
+  public static int dXboxB = 1;
+  public static int dXboxX = 2;
+  public static int dXboxY = 3;
 
+  public static int mXboxA = 0;
+  public static int mXboxB = 1;
+  public static int mXboxX = 2;
 
 
 //public static final int CANDLE = 19;
