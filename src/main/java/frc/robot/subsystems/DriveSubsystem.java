@@ -33,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
    * <p>
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
-  public static final double MAX_VOLTAGE = 12.0;
+  public static final double MAX_VOLTAGE = 13.0;
   private ADIS16470_IMU gyro = new ADIS16470_IMU(IMUAxis.kZ, SPI.Port.kOnboardCS0, CalibrationTime._1s);
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
@@ -72,10 +72,10 @@ public class DriveSubsystem extends SubsystemBase {
   //private final AHRS mNavX = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP //will change to pigeon 2.0 when built
   
   // These are our modules. We initialize them in the constructor.
-  private final SwerveModule mLeftFront;
-  private final SwerveModule mRightFront;
-  private final SwerveModule mLeftRear;
-  private final SwerveModule mRightRear;
+  private final SwerveModule flm;
+  private final SwerveModule frm;
+  private final SwerveModule rlm;
+  private final SwerveModule rrm;
   private final ShuffleboardTab mTab;
 
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -84,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     mTab = Shuffleboard.getTab("Drivetrain");
 
-    mLeftFront = Mk4SwerveModuleHelper.createFalcon500(
+    flm = Mk4SwerveModuleHelper.createFalcon500(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             mTab.getLayout("Front Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
@@ -101,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.fleo
     );
 
-    mRightFront = Mk4SwerveModuleHelper.createFalcon500(
+    frm = Mk4SwerveModuleHelper.createFalcon500(
         mTab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(2, 0),
@@ -112,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.freo
     );
 
-    mLeftRear = Mk4SwerveModuleHelper.createFalcon500(
+    rlm = Mk4SwerveModuleHelper.createFalcon500(
         mTab.getLayout("Rear Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(4, 0),
@@ -123,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.rleo
     );
 
-    mRightRear = Mk4SwerveModuleHelper.createFalcon500(
+    rrm = Mk4SwerveModuleHelper.createFalcon500(
         mTab.getLayout("Rear Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(6, 0),
@@ -139,9 +139,9 @@ public class DriveSubsystem extends SubsystemBase {
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
    */
-  //public CommandBase zeroGyroscopeCommand() {
-        //zeroGyroscope();
-  //}
+  public void zeroGyroscopeCommand() {
+        zeroGyroscope();
+  }
 
   public void zeroGyroscope() {
     gyro.calibrate();
@@ -191,9 +191,19 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Angle", gyro.getAngle()); //will change to pigeon 2.0 when built
     //m_odometry.update(Rotation2d.fromDegrees(gyro.getAngle()), states);
 
-    mLeftFront.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-    mRightFront.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-    mLeftRear.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-    mRightRear.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+    flm.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+    frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+    rlm.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+    rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+    //System.out.println(mChassisSpeeds);
+    String speed = new String(mChassisSpeeds.toString());
+    SmartDashboard.putString("Speed", speed);
+    /*
+     * //last years module states (just a reference)
+     *flm.set(states[0].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[0].angle.getRadians());
+      frm.set(-states[1].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[1].angle.getRadians());
+      rlm.set(states[2].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[2].angle.getRadians());
+      rrm.set(-states[3].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[3].angle.getRadians());
+     */
   }
 }

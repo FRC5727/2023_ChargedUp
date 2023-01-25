@@ -49,6 +49,10 @@ public final class Constants {
   public static int mXboxA = 0;
   public static int mXboxB = 1;
   public static int mXboxX = 2;
+  
+  public static double maxSpeedRotation = 0.5;
+  public static double maxSpeedX = 0.5;
+  public static double maxSpeedY = 0.5;
 
 
 //public static final int CANDLE = 19;
