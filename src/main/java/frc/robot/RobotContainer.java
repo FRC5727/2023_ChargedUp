@@ -5,8 +5,6 @@
 package frc.robot;
 
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -18,53 +16,13 @@ import frc.robot.subsystems.DriveSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final CommandXboxController mXbox = new CommandXboxController(0);
-  private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
-  
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
 	public RobotContainer() {
-    SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(Constants.yRampSpeed);
-    SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(Constants.xRampSpeed);
-    SlewRateLimiter rSlewRateLimiter = new SlewRateLimiter(Constants.rRampSpeed);
-    /* //funny stuff
-     * () -> -modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getLeftY() * Constants.controllerXYExpo))) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
-       () -> -modifyAxis(xSlewRateLimiter.calculate(Math.pow(mXbox.getLeftx() * Constants.controllerXYExpo)) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getRightX() * Constants.controllerRoExpo))) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation));
-     */ //reference 
-
-    mDriveSubsystem.setDefaultCommand(new DriveCommand(
-       mDriveSubsystem, 
-       () -> -modifyAxis(ySlewRateLimiter.calculate(mXbox.getLeftY())) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
-       () -> -modifyAxis(xSlewRateLimiter.calculate(mXbox.getLeftX())) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(rSlewRateLimiter.calculate(mXbox.getRightX())) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation)); //the rotation axis is not inverted bc if it was trying to rotate right it would rotate left
+    driveSubsystem.setDefaultCommand(driveCommand);
+    configureBindings();
   }
-  private static double deadband(double value, double deadband) {
-		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
-				return (value - deadband) / (1.0 - deadband);
-			} else {
-				return (value + deadband) / (1.0 - deadband);
-			}
-		} else {
-			return 0.0;
-		}
-	}
-
-  private static double modifyAxis(double value) {
-		// Deadband
-		value = deadband(value, 0.1);
-		// Square the axis
-		value = Math.copySign(value * value, value);
-  
-		return value;
-	}
-/*
- * mDrivetrain.setDefaultCommand(new DrivetrainTeleOp(
-				mDrivetrain,
-				() -> -modifyAxis(mXbox.getLeftY()) * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(mXbox.getLeftX()) * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(mXbox.getRightX()) * Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
- */
-  /**
+  /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
@@ -88,7 +46,7 @@ public class RobotContainer {
     
   //}
   public void updateAngle() {
-    mDriveSubsystem.updateAngle();
+    driveSubsystem.updateAngle();
   }
 }
 

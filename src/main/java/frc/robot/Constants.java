@@ -8,9 +8,8 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,34 +48,43 @@ public final class Constants {
   public static PIDController translationXController = new PIDController(3.0, 0, 0); //10
   public static PIDController translationYController = new PIDController(3.0, 0, 0);
   public static ProfiledPIDController rotationController = new ProfiledPIDController(4.0, 0, 0, Constants.rotationConstraints);
-  //public static final TrapezoidProfile.Constraints rotationConstraints = new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularVelocity);
   public static double maxVelocity = (6380.0 / 60.0 * 
         SdsModuleConfigurations.MK4_L2.getDriveReduction() * 
         SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI);
   
 
-  public static int dXboxController = 0;
-  public static int mXboxController = 1;
+  public static XboxController dXboxController = new XboxController(0);
+  public static XboxController mXboxController = new XboxController(1);
 
-  public static int dXboxA = 0;
-  public static int dXboxB = 1;
-  public static int dXboxX = 2;
-  public static int dXboxY = 3;
+  public static double deadzone = 0.05;
 
-  public static int mXboxA = 0;
-  public static int mXboxB = 1;
-  public static int mXboxX = 2;
-  
-  public static double maxSpeedRotation = 0.35;
-  public static double maxSpeedX = 0.35;
-  public static double maxSpeedY = 0.35;
+  //Buttons
+  public static int aXboxButton = 1;
+  public static int bXboxButton = 2;
+  public static int xXboxButton = 3;
+  public static int yXboxButton = 4;
+  public static int lbXboxBumper = 5;
+  public static int rbXboxBumper = 6;
+  public static int backXboxButton = 7;
+  public static int startXboxButton = 8;
+  public static int leftStickXboxButton = 9;
+  public static int rightStickXboxButton = 10;
 
-  public static double xRampSpeed = 2.5;
-  public static double yRampSpeed = 2.5;
-  public static double rRampSpeed = 2.5;
+  //Axis / sticks
+  public static int XboxLeftXstick = 0;
+  public static int XboxRightXstick = 4;
+  public static int XboxLeftYstick = 1;
+  public static int XboxRightYstick = 5;
+
+  //Triggers
+  public static int XboxLeftTriger = 2;
+  public static int XboxRightTriger = 3;
+
+
+  public static double translationRateLimit = 2.5;
+  public static double rotationRateLimit = 2.5;
 
   public static double controllerXYExpo = 2.6;
-
   public static double controllerRoExpo = 2.6;
         //x^3
         //x^1.96 the best so far

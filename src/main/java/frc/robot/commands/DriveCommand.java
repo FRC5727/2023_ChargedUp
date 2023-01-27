@@ -7,25 +7,37 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveCommand extends CommandBase {
   /** Creates a new DriveCommand. */
   /** Creates a new DriveCommand. */
-  public final DriveSubsystem mDrivesSubsystem;
-  private final DoubleSupplier mTranslationXSupplier;
-  private final DoubleSupplier mTranslationYSupplier;
-  private final DoubleSupplier mRotationSupplier;
-  public DriveCommand(DriveSubsystem mDriveSubsystem, DoubleSupplier translationXSupplier,
-  DoubleSupplier translationYSupplier, DoubleSupplier rotationSupplier) {
-    mDrivesSubsystem = mDriveSubsystem;
-    mTranslationXSupplier = translationXSupplier;
-    mTranslationYSupplier = translationYSupplier;
-    mRotationSupplier = rotationSupplier;
+  private final DriveSubsystem drive;
+  
 
-    addRequirements(mDriveSubsystem);
+  private SlewRateLimiter translationXLimiter;
+  private SlewRateLimiter translationYLimiter;
+  private SlewRateLimiter rotationLimiter;
+
+  private double translationXPercent;
+  private double translationYPercent;
+  private double rotationPercent;
+  
+  private int gearShift = 1;
+
+  public DriveCommand(DriveSubsystem drive) {
+    this.drive = drive;
+
+    translationXLimiter = new SlewRateLimiter(Constants.translationRateLimit);
+    translationYLimiter = new SlewRateLimiter(Constants.translationRateLimit);
+    rotationLimiter = new SlewRateLimiter(Constants.rotationRateLimit);
+
+    addRequirements(drive);
   }
+
 
 
   
@@ -36,16 +48,61 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      mDrivesSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-        mTranslationXSupplier.getAsDouble(),
-        mTranslationYSupplier.getAsDouble(),
-        mRotationSupplier.getAsDouble(),
-        mDrivesSubsystem.getGyroscopeRotation()));
+    translationXPercent = -Constants.dXboxController.getRawAxis(1);
+    translationYPercent = -Constants.dXboxController.getRawAxis(0);
+    rotationPercent = -Constants.dXboxController.getRawAxis(4);
+
+    translationXPercent = translationXLimiter.calculate(translationXPercent);
+    translationYPercent = translationYLimiter.calculate(translationYPercent);
+    rotationPercent = rotationLimiter.calculate(rotationPercent);
+
+    gearShift = Constants.dXboxController.getRawButtonReleased(Constants.bXboxButton) && gearShift < 5 ? gearShift + 1 : Constants.dXboxController.getRawButtonReleased(Constants.xXboxButton) && gearShift > 1 ? gearShift - 1 : gearShift;
+
+    
+    double multiplicationValue = gearShift * 0.2;
+    translationXPercent *= multiplicationValue;
+    translationYPercent *= multiplicationValue;
+    rotationPercent *= multiplicationValue;
+
+      // translationXPercent *= .75;
+      // translationYPercent *= .75;
+      // rotationPercent *= .4;
+    if(Constants.dXboxController.getRawButtonReleased(Constants.startXboxButton)){
+      translationXPercent *= 11.00; //gotta crank it to 11
+      translationYPercent *= 11.00;
+      rotationPercent *= 11.00;
+    } 
+    
+    double[] deadzones = {translationXPercent, translationYPercent, rotationPercent};
+    for (double sticks : deadzones) {
+      if (Math.abs(sticks) < Constants.deadzone) {
+        sticks = 0.0;
+      }
+    }
+      drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+        translationXPercent * Constants.maxVelocity,
+        translationYPercent * Constants.maxVelocity,
+        rotationPercent * Constants.maxAngularVelocity,
+        drive.getGyroscopeRotation()
+        )
+      );
+      /*
+      drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+        Math.pow(translationXPercent, Constants.controllerXYExpo) * translationXPercent * Constants.maxVelocity,
+        Math.pow(translationYPercent, Constants.controllerXYExpo) * translationYPercent * Constants.maxVelocity,
+        Math.pow(rotationPercent, Constants.controllerRoExpo) * translationYPercent * Constants.maxAngularVelocity,
+        drive.getGyroscopeRotation()
+        )
+      );
+
+       */
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drive.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+  }
 
   // Returns true when the command should end.
   @Override
