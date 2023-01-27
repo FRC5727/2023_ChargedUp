@@ -25,17 +25,17 @@ public class RobotContainer {
     SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(Constants.yRampSpeed);
     SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(Constants.xRampSpeed);
     SlewRateLimiter rSlewRateLimiter = new SlewRateLimiter(Constants.rRampSpeed);
-    /* //funny stuff testing
+    /* //funny stuff
      * () -> -modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getLeftY() * Constants.controllerXYExpo))) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
        () -> -modifyAxis(xSlewRateLimiter.calculate(Math.pow(mXbox.getLeftx() * Constants.controllerXYExpo)) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
        () -> modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getRightX() * Constants.controllerRoExpo))) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation));
-     */
+     */ //reference 
 
     mDriveSubsystem.setDefaultCommand(new DriveCommand(
        mDriveSubsystem, 
-       () -> -modifyAxis(mXbox.getLeftY()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
-       () -> -modifyAxis(mXbox.getLeftX()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(mXbox.getRightX()) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation)); //the rotation axis is not inverted bc if it was trying to rotate right it would rotate left
+       () -> -modifyAxis(ySlewRateLimiter.calculate(mXbox.getLeftY())) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
+       () -> -modifyAxis(xSlewRateLimiter.calculate(mXbox.getLeftX())) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
+       () -> modifyAxis(rSlewRateLimiter.calculate(mXbox.getRightX())) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation)); //the rotation axis is not inverted bc if it was trying to rotate right it would rotate left
   }
   private static double deadband(double value, double deadband) {
 		if (Math.abs(value) > deadband) {

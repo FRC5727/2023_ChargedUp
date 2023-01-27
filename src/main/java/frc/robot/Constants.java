@@ -71,9 +71,9 @@ public final class Constants {
   public static double maxSpeedX = 0.35;
   public static double maxSpeedY = 0.35;
 
-  public static double xRampSpeed = 0.75;
-  public static double yRampSpeed = 0.75;
-  public static double rRampSpeed = 0.75;
+  public static double xRampSpeed = 2.5;
+  public static double yRampSpeed = 2.5;
+  public static double rRampSpeed = 2.5;
 
   public static double controllerXYExpo = 2.6;
 
