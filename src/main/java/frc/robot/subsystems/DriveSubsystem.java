@@ -59,11 +59,11 @@ public class DriveSubsystem extends SubsystemBase {
           // Front left
           new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
           // Front right
-          new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
           // Back left
-          new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
           // Back right
-          new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
+          new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
 
   // By default we use a Pigeon for our gyroscope. But if you use another gyroscope, like a NavX, you can change this.
@@ -165,6 +165,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetPose(double xValue, double yValue){
     offsetPose = new Translation2d(xValue, yValue);
   }
+  public SwerveDriveKinematics getKinematics(){
+    return m_kinematics;
+  }
 
   public void resetPose(){
     resetPose(robotPose.getTranslation().getX(), robotPose.getTranslation().getY());
@@ -175,35 +178,50 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void updateAngle() {
-    // SmartDashboard.putBoolean("FLM Angle OK", mLeftFront.checkAngle());
-    // SmartDashboard.putBoolean("FRM Angle OK", mRightFront.checkAngle());
-    // SmartDashboard.putBoolean("RLM Angle OK", mLeftRear.checkAngle());
-    // SmartDashboard.putBoolean("RRM Angle OK", mRightRear.checkAngle());
   }
   public void drive(ChassisSpeeds chassisSpeeds) {
     mChassisSpeeds = chassisSpeeds;
   }
 
+  public void setModuleStates(SwerveModuleState[] states) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxVelocity);
+
+    flm.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+    frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
+    rlm.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+    rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
+
+    
+
+    SmartDashboard.putNumber("Pose X", robotPose.getTranslation().getX());
+    SmartDashboard.putNumber("Pose Y", robotPose.getTranslation().getY());
+    SmartDashboard.putNumber("Pose Rotation", robotPose.getRotation().getDegrees());
+}
+  
+  
   @Override
   public void periodic() {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(mChassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     SmartDashboard.putNumber("Gyro Angle", gyro.getAngle()); //will change to pigeon 2.0 when built
-    //m_odometry.update(Rotation2d.fromDegrees(gyro.getAngle()), states);
 
     flm.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-    frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+    frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-    rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
-    //System.out.println(mChassisSpeeds);
+    rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
     String speed = new String(mChassisSpeeds.toString());
     SmartDashboard.putString("Speed", speed);
-    /*
-     * //last years module states (just a reference)
-     *flm.set(states[0].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[0].angle.getRadians());
-      frm.set(-states[1].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[1].angle.getRadians());
-      rlm.set(states[2].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[2].angle.getRadians());
-      rrm.set(-states[3].speedMetersPerSecond / Constants.maxVelocity * Constants.maxVoltage, states[3].angle.getRadians());
-     */
+  }
+  public void stop(){
+    this.mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(mChassisSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxVelocity);
+
+
+
+    flm.set(0.0, Math.toRadians(0.0));
+    frm.set(0.0, Math.toRadians(0.0));
+    rlm.set(0.0, Math.toRadians(0.0));
+    rrm.set(0.0, Math.toRadians(0.0));
   }
 }

@@ -59,23 +59,11 @@ public class Robot extends TimedRobot {
   private CANCoder rle = new CANCoder(Constants.rlePort);
   @Override
   public void disabledPeriodic() {
-    //System.out.println("Front Left Encoder " + fle.getAbsolutePosition());
-    //System.out.println("Front Right Encoder " + fre.getAbsolutePosition());
-    //System.out.println("Rear Left Encoder " + rle.getAbsolutePosition());
-    //System.out.println("Rear Right Encoder " + rre.getAbsolutePosition());
     SmartDashboard.putNumber("Front Left Encoder", fle.getAbsolutePosition());
     SmartDashboard.putNumber("Front Right Encoder", fre.getAbsolutePosition());
     SmartDashboard.putNumber("Rear Right Encoder", rre.getAbsolutePosition());
     SmartDashboard.putNumber("Rear Left Encoder", rle.getAbsolutePosition());
   }
-  /*\
-   * 
-   *  SmartDashboard.putNumber("Front Left Encoder", fle.getAbsolutePosition());
-      SmartDashboard.putNumber("Front Right Encoder", fre.getAbsolutePosition());
-      SmartDashboard.putNumber("Rear Right Encoder", rre.getAbsolutePosition());
-      SmartDashboard.putNumber("Rear Left Encoder", rle.getAbsolutePosition());
-    }
-   */
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -90,7 +78,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+  }
 
   @Override
   public void teleopInit() {

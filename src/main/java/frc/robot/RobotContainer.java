@@ -5,11 +5,8 @@
 package frc.robot;
 
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-//import frc.robot.commands.DriveCommand;
-//import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -22,23 +19,23 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class RobotContainer {
   private final CommandXboxController mXbox = new CommandXboxController(0);
-  //public final DriveSubsystem mDriveSubsystem = new DriveSubsystem();
   private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
-  //public final DriveCommand mDriveCommand = new DriveCommand(mDriveSubsystem, null, null, null);
-  //  private final DriveManuallyCommand driveManuallyCommand = new DriveManuallyCommand(driveSubsystem, intakeSubsystem, visionSubsystem);
-	//private final CommandJoystick mJoystick = new CommandJoystick(1);
-  //private final DriveSubsytem mDriveSubsystem = new DriveSubsytem();
-  //private final DriveSubsystem mDriveSubsystem = new DriveSubsystem();
   
-
 	public RobotContainer() {
+    SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(Constants.yRampSpeed);
+    SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(Constants.xRampSpeed);
+    SlewRateLimiter rSlewRateLimiter = new SlewRateLimiter(Constants.rRampSpeed);
+    /* //funny stuff testing
+     * () -> -modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getLeftY() * Constants.controllerXYExpo))) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
+       () -> -modifyAxis(xSlewRateLimiter.calculate(Math.pow(mXbox.getLeftx() * Constants.controllerXYExpo)) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
+       () -> modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getRightX() * Constants.controllerRoExpo))) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation));
+     */
 
-    mDriveSubsystem.setDefaultCommand(new DriveCommand( //fixed lol
+    mDriveSubsystem.setDefaultCommand(new DriveCommand(
        mDriveSubsystem, 
        () -> -modifyAxis(mXbox.getLeftY()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
        () -> -modifyAxis(mXbox.getLeftX()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(mXbox.getRightX()) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation));
-    //    driveSubsystem.setDefaultCommand(driveManuallyCommand);
+       () -> modifyAxis(mXbox.getRightX()) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation)); //the rotation axis is not inverted bc if it was trying to rotate right it would rotate left
   }
   private static double deadband(double value, double deadband) {
 		if (Math.abs(value) > deadband) {
@@ -57,7 +54,7 @@ public class RobotContainer {
 		value = deadband(value, 0.1);
 		// Square the axis
 		value = Math.copySign(value * value, value);
-
+  
 		return value;
 	}
 /*
