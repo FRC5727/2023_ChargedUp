@@ -47,7 +47,8 @@ public final class Constants {
 
   public static PIDController translationXController = new PIDController(3.0, 0, 0); //10
   public static PIDController translationYController = new PIDController(3.0, 0, 0);
-  public static ProfiledPIDController rotationController = new ProfiledPIDController(4.0, 0, 0, Constants.rotationConstraints);
+  public static PIDController rotationController = new PIDController(4.0, 0, 0);
+  //public static ProfiledPIDController rotationController = new ProfiledPIDController(4.0, 0, 0, Constants.rotationConstraints);
   public static double maxVelocity = (6380.0 / 60.0 * 
         SdsModuleConfigurations.MK4_L2.getDriveReduction() * 
         SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI);

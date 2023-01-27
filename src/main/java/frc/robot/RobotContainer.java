@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.Auto;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -18,9 +20,13 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  private final Auto auto = new Auto(driveSubsystem);
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     configureBindings();
+  }
+  public Command getAutonomousCommand() {
+    return auto;
   }
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
