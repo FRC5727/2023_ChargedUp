@@ -79,7 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final ShuffleboardTab mTab;
 
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0), null); 
+  //private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0), null); 
 
   public DriveSubsystem() {
     mTab = Shuffleboard.getTab("Drivetrain");
@@ -190,7 +190,7 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-    robotPose = odometry.getPoseMeters();
+    //robotPose = odometry.getPoseMeters();
     SmartDashboard.putNumber("Pose X", robotPose.getTranslation().getX());
     SmartDashboard.putNumber("Pose Y", robotPose.getTranslation().getY());
     SmartDashboard.putNumber("Pose Rotation", robotPose.getRotation().getDegrees());
@@ -209,6 +209,10 @@ public class DriveSubsystem extends SubsystemBase {
     rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
     String speed = new String(mChassisSpeeds.toString());
     SmartDashboard.putString("Speed", speed);
+    Pose2d poseData = getPose();
+    SmartDashboard.putNumber("Pose X", poseData.getTranslation().getX());
+    SmartDashboard.putNumber("Pose Y", poseData.getTranslation().getY());
+    SmartDashboard.putNumber("Pose Rotation", poseData.getRotation().getDegrees());
   }
   public void stop(){
     this.mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);

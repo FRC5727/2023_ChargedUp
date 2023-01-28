@@ -45,9 +45,9 @@ public final class Constants {
   public static double rleo = Math.toRadians(-198.457031); //Rear Left Encoder Offset
 //intake front
 
-  public static PIDController translationXController = new PIDController(3.0, 0, 0); //10
-  public static PIDController translationYController = new PIDController(3.0, 0, 0);
-  public static PIDController rotationController = new PIDController(4.0, 0, 0);
+  public static PIDController translationXController = new PIDController(0, 0, 0); //10
+  public static PIDController translationYController = new PIDController(0, 0, 0);
+  public static PIDController rotationController = new PIDController(0, 0, 0);
   //public static ProfiledPIDController rotationController = new ProfiledPIDController(4.0, 0, 0, Constants.rotationConstraints);
   public static double maxVelocity = (6380.0 / 60.0 * 
         SdsModuleConfigurations.MK4_L2.getDriveReduction() * 
@@ -60,16 +60,16 @@ public final class Constants {
   public static double deadzone = 0.05;
 
   //Buttons
-  public static int aXboxButton = 1;
-  public static int bXboxButton = 2;
-  public static int xXboxButton = 3;
-  public static int yXboxButton = 4;
-  public static int lbXboxBumper = 5;
-  public static int rbXboxBumper = 6;
-  public static int backXboxButton = 7;
-  public static int startXboxButton = 8;
-  public static int leftStickXboxButton = 9;
-  public static int rightStickXboxButton = 10;
+  public static final int aXboxButton = 1;
+  public static final int bXboxButton = 2;
+  public static final int xXboxButton = 3;
+  public static final int yXboxButton = 4;
+  public static final int lbXboxBumper = 5;
+  public static final int rbXboxBumper = 6;
+  public static final int backXboxButton = 7;
+  public static final int startXboxButton = 8;
+  public static final int leftStickXboxButton = 9;
+  public static final int rightStickXboxButton = 10;
 
   //Axis / sticks
   public static int XboxLeftXstick = 0;

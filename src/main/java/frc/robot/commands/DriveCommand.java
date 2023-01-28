@@ -50,7 +50,8 @@ public class DriveCommand extends CommandBase {
   public void execute() {
     translationXPercent = -Constants.dXboxController.getRawAxis(1);
     translationYPercent = -Constants.dXboxController.getRawAxis(0);
-    rotationPercent = -Constants.dXboxController.getRawAxis(4);
+    rotationPercent = Constants.dXboxController.getRawAxis(4);
+
 
     translationXPercent = translationXLimiter.calculate(translationXPercent);
     translationYPercent = translationYLimiter.calculate(translationYPercent);
@@ -67,17 +68,22 @@ public class DriveCommand extends CommandBase {
       // translationXPercent *= .75;
       // translationYPercent *= .75;
       // rotationPercent *= .4;
-    if(Constants.dXboxController.getRawButtonReleased(Constants.startXboxButton)){
-      translationXPercent *= 11.00; //gotta crank it to 11
-      translationYPercent *= 11.00;
-      rotationPercent *= 11.00;
-    } 
+    // if(Constants.dXboxController.getRawButtonReleased(Constants.startXboxButton)){
+    //   translationXPercent *= 11.00; //gotta crank it to 11
+    //   translationYPercent *= 11.00;
+    //   rotationPercent *= 11.00;
+    // } 
     
-    double[] deadzones = {translationXPercent, translationYPercent, rotationPercent};
-    for (double sticks : deadzones) {
-      if (Math.abs(sticks) < Constants.deadzone) {
-        sticks = 0.0;
-      }
+    if (Math.abs(translationXPercent) < Constants.deadzone){
+      translationXPercent = 0.0;
+  }
+  
+    if (Math.abs(translationYPercent) < Constants.deadzone){
+      translationYPercent = 0.0;
+    }
+  
+  if (Math.abs(rotationPercent) < Constants.deadzone){
+      rotationPercent = 0.0;
     }
       drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
         translationXPercent * Constants.maxVelocity,

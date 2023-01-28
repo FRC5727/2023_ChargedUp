@@ -22,8 +22,13 @@ public class Auto extends SequentialCommandGroup {
     Constants.translationYController.reset();
     Constants.rotationController.reset();
 
-    PathPlannerTrajectory test1 = PathPlanner.loadPath("New Path", 3.0, 1.5);
-
+    PathPlannerTrajectory test1 = PathPlanner.loadPath("new1", 0.75, 0.75); 
+    //install vendor
+     
+    /* 
+    https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json 
+    */
+    
     addCommands(
       new InstantCommand(() -> driveSubsystem.zeroGyroscope()),
       new WaitCommand(1.0),
@@ -36,11 +41,11 @@ public class Auto extends SequentialCommandGroup {
         Constants.translationYController,
         Constants.rotationController, //Constants.rotationController
         driveSubsystem::setModuleStates,
-        true,
         driveSubsystem
       ),
       new InstantCommand(() -> driveSubsystem.stop()),
-      new WaitCommand(0.5));
+    new WaitCommand(0.5)
+      );
   }
 
   

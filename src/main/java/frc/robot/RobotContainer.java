@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.Auto;
 import frc.robot.commands.DriveCommand;
@@ -20,13 +22,21 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
-  private final Auto auto = new Auto(driveSubsystem);
+  SendableChooser<Command> chooser = new SendableChooser<>();
+  public final Auto auto = new Auto(driveSubsystem);
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     configureBindings();
+    chooser.setDefaultOption("Auto", auto);
+    chooser.addOption("New 2 Ball Left", auto);
+    chooser.addOption("New 2 Ball Right", auto);
+    chooser.addOption("New 1 Ball", auto);
+    chooser.addOption("New 3 Ball", auto);
+    SmartDashboard.putData(chooser);
+    //getAutonomousCommand();
   }
   public Command getAutonomousCommand() {
-    return auto;
+    return chooser.getSelected();
   }
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
