@@ -59,6 +59,8 @@ public final class Constants {
 
   public static double deadzone = 0.05;
 
+  public static int talonCount = 8;
+
   //Buttons
   public static final int aXboxButton = 1;
   public static final int bXboxButton = 2;

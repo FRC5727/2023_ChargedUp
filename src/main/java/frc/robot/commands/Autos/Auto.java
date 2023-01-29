@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Autos;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -22,7 +22,7 @@ public class Auto extends SequentialCommandGroup {
     Constants.translationYController.reset();
     Constants.rotationController.reset();
 
-    PathPlannerTrajectory test1 = PathPlanner.loadPath("new1", 0.75, 0.75); 
+    PathPlannerTrajectory test1 = PathPlanner.loadPath("new1", 1.00, 1.00); 
     //install vendor
      
     /* 

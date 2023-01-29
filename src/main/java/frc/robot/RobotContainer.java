@@ -8,8 +8,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.Auto;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Autos.Auto;
+import frc.robot.commands.Songs.GiornosTheme;
+import frc.robot.commands.Songs.ItsBeenSoLong;
+import frc.robot.commands.Songs.Megalovania;
+import frc.robot.commands.Songs.MichaelHunterThemeFromSanAndreas;
+import frc.robot.commands.Songs.SwedenC418;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -20,20 +25,37 @@ import frc.robot.subsystems.DriveSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  //Subsystems
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  
   SendableChooser<Command> chooser = new SendableChooser<>();
-  public final Auto auto = new Auto(driveSubsystem);
+  //Auto Routines 
+  private final Auto auto = new Auto(driveSubsystem);
+
+  //Songs
+  private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
+  private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
+  private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
+  private final MichaelHunterThemeFromSanAndreas michaelHunterThemeFromSanAndreas = new MichaelHunterThemeFromSanAndreas(driveSubsystem);
+  private final Megalovania megalovania = new Megalovania(driveSubsystem);
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     configureBindings();
-    chooser.setDefaultOption("Auto", auto);
-    chooser.addOption("New 2 Ball Left", auto);
-    chooser.addOption("New 2 Ball Right", auto);
-    chooser.addOption("New 1 Ball", auto);
-    chooser.addOption("New 3 Ball", auto);
+    //Auto Routines
+    chooser.setDefaultOption("Auto 1", auto);
+    chooser.addOption("Auto 2", auto);
+    chooser.addOption("Auto 3", auto);
+    chooser.addOption("Auto 4", auto);
+    //Songs
+    chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
+    chooser.addOption("Ginornos Theme", giornosTheme);
+    chooser.addOption("Sweden by C418", swedenC418);
+    chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
+    chooser.addOption("Megalovania", megalovania);
     SmartDashboard.putData(chooser);
-    //getAutonomousCommand();
+
   }
   public Command getAutonomousCommand() {
     return chooser.getSelected();

@@ -74,17 +74,17 @@ public class DriveCommand extends CommandBase {
     //   rotationPercent *= 11.00;
     // } 
     
-    if (Math.abs(translationXPercent) < Constants.deadzone){
-      translationXPercent = 0.0;
-  }
+      if (Math.abs(translationXPercent) < Constants.deadzone){
+        translationXPercent = 0.0;
+      }
   
-    if (Math.abs(translationYPercent) < Constants.deadzone){
-      translationYPercent = 0.0;
-    }
+      if (Math.abs(translationYPercent) < Constants.deadzone){
+        translationYPercent = 0.0;
+      }
   
-  if (Math.abs(rotationPercent) < Constants.deadzone){
-      rotationPercent = 0.0;
-    }
+      if (Math.abs(rotationPercent) < Constants.deadzone){
+          rotationPercent = 0.0;
+        }
       drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
         translationXPercent * Constants.maxVelocity,
         translationYPercent * Constants.maxVelocity,

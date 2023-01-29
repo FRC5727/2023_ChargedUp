@@ -21,7 +21,7 @@
       "type": "wpilib",
       "name": "WPILib roboRIO Debug",
       "request": "launch",
-      "desktop": false
+      "desktop": true
     }
   ]
 }
