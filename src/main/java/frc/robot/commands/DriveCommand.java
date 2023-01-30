@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
@@ -83,8 +81,8 @@ public class DriveCommand extends CommandBase {
       }
   
       if (Math.abs(rotationPercent) < Constants.deadzone){
-          rotationPercent = 0.0;
-        }
+        rotationPercent = 0.0;
+      }
       drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
         translationXPercent * Constants.maxVelocity,
         translationYPercent * Constants.maxVelocity,

@@ -10,11 +10,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Autos.Auto;
+import frc.robot.commands.Autos.ChargeStationRedSideAuto;
+import frc.robot.commands.Autos.StraightLineAuto1;
+import frc.robot.commands.Autos.StraightLineRedToCargo4Auto;
 import frc.robot.commands.Songs.GiornosTheme;
 import frc.robot.commands.Songs.ItsBeenSoLong;
 import frc.robot.commands.Songs.Megalovania;
 import frc.robot.commands.Songs.MichaelHunterThemeFromSanAndreas;
 import frc.robot.commands.Songs.SwedenC418;
+import frc.robot.commands.Songs.bohemianRhapsody;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -33,6 +37,9 @@ public class RobotContainer {
   SendableChooser<Command> chooser = new SendableChooser<>();
   //Auto Routines 
   private final Auto auto = new Auto(driveSubsystem);
+  private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(driveSubsystem);
+  private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(driveSubsystem);
+  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(driveSubsystem);
 
   //Songs
   private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
@@ -40,20 +47,24 @@ public class RobotContainer {
   private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
   private final MichaelHunterThemeFromSanAndreas michaelHunterThemeFromSanAndreas = new MichaelHunterThemeFromSanAndreas(driveSubsystem);
   private final Megalovania megalovania = new Megalovania(driveSubsystem);
+  private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
+
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     configureBindings();
     //Auto Routines
-    chooser.setDefaultOption("Auto 1", auto);
-    chooser.addOption("Auto 2", auto);
-    chooser.addOption("Auto 3", auto);
-    chooser.addOption("Auto 4", auto);
+    chooser.setDefaultOption("Go forward and come back", auto);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", straightLineAuto1);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", straightLineRedToCargo4Auto);
+    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+
     //Songs
     chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
     chooser.addOption("Ginornos Theme", giornosTheme);
     chooser.addOption("Sweden by C418", swedenC418);
     chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
     chooser.addOption("Megalovania", megalovania);
+    chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
     SmartDashboard.putData(chooser);
 
   }

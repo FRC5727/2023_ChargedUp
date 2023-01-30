@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class Megalovania extends CommandBase {
-  /** Creates a new Megalovania. */
+public class bohemianRhapsody extends CommandBase {
+  /** Creates a new bohemianRhapsody. */
   private Orchestra orchestra;
   private DriveSubsystem driveSubsystem;
-  public Megalovania(DriveSubsystem driveSubsystem) {
+  public bohemianRhapsody(DriveSubsystem driveSubsystem) {
     this.driveSubsystem = driveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSubsystem);
@@ -29,7 +29,7 @@ public class Megalovania extends CommandBase {
     for (int i = 0; i < Constants.talonCount; i++){
       orchestra.addInstrument(new TalonFX(i));
     }
-    orchestra.loadMusic("Megalovania.chrp");
+    orchestra.loadMusic("bohemianrhapsody.chrp");
     orchestra.play();
   }
 

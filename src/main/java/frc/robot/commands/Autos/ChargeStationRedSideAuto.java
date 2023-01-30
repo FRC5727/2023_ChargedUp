@@ -8,44 +8,43 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class Auto extends SequentialCommandGroup {
-  /** Creates a new Auto. */
-  public Auto(DriveSubsystem driveSubsystem) {
+public class ChargeStationRedSideAuto extends SequentialCommandGroup {
+  /** Creates a new ChargeStationRedSideAuto. */
+  public ChargeStationRedSideAuto(DriveSubsystem driveSubsystem) {
+    // Use addRequirements() here to declare subsystem dependencies.
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
+    PathPlannerTrajectory a_ChargeStationRedCenter1 = PathPlanner.loadPath("ChargeStationRedCenter1", 1.00, 1.00);
 
-    PathPlannerTrajectory test1 = PathPlanner.loadPath("new1", 1.00, 1.00); 
-    //install vendor
-     
-    /* 
-    https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json 
-    */
-    
     addCommands(
       new InstantCommand(() -> driveSubsystem.zeroGyroscope()),
       new WaitCommand(1.0),
       new InstantCommand(() -> driveSubsystem.resetPose(0, 0)),
       new PPSwerveControllerCommand(
-        test1,
-        driveSubsystem::getPose,
-        driveSubsystem.getKinematics(),
-        Constants.translationXController,
-        Constants.translationYController,
-        Constants.rotationController, //Constants.rotationController
-        driveSubsystem::setModuleStates,
-        driveSubsystem
+        a_ChargeStationRedCenter1,
+        driveSubsystem::getPose, //it figures out where it is at
+        driveSubsystem.getKinematics(), //gets the kinematics
+        Constants.translationXController, //X Movement PID controller
+        Constants.translationYController, //Y Movement PID controller
+        Constants.rotationController, //Rotation PID controller
+        driveSubsystem::setModuleStates, //makes the swerve move according to the path
+        driveSubsystem //it needs this so it can actually drive
       ),
       new InstantCommand(() -> driveSubsystem.stop()),
       new WaitCommand(0.5)
       );
+
+
   }
+ 
 
   
 }
