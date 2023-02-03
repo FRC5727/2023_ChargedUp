@@ -34,6 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
    * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
    */
   public static final double MAX_VOLTAGE = 13.0;
+  private boolean canDrive = true;
   private ADIS16470_IMU gyro = new ADIS16470_IMU(IMUAxis.kZ, SPI.Port.kOnboardCS0, CalibrationTime._1s);
   //  The formula for calculating the theoretical maximum velocity is:
   //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
@@ -79,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final ShuffleboardTab mTab;
 
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-  //private SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0), null); 
+  //private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0), null); 
 
   public DriveSubsystem() {
     mTab = Shuffleboard.getTab("Drivetrain");
@@ -185,22 +186,23 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxVelocity);
-
+    
     flm.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
     frm.set(-states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-
-    
-
+    //robotPose = odometry.getPoseMeters();
     SmartDashboard.putNumber("Pose X", robotPose.getTranslation().getX());
     SmartDashboard.putNumber("Pose Y", robotPose.getTranslation().getY());
     SmartDashboard.putNumber("Pose Rotation", robotPose.getRotation().getDegrees());
-}
-  
+  }
+  public void start(){
+    canDrive = true;
+  }
   
   @Override
   public void periodic() {
+  
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(mChassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     SmartDashboard.putNumber("Gyro Angle", gyro.getAngle()); //will change to pigeon 2.0 when built
@@ -211,6 +213,11 @@ public class DriveSubsystem extends SubsystemBase {
     rrm.set(-states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
     String speed = new String(mChassisSpeeds.toString());
     SmartDashboard.putString("Speed", speed);
+    Pose2d poseData = getPose();
+    SmartDashboard.putNumber("Pose X", poseData.getTranslation().getX());
+    SmartDashboard.putNumber("Pose Y", poseData.getTranslation().getY());
+    SmartDashboard.putNumber("Pose Rotation", poseData.getRotation().getDegrees());
+    
   }
   public void stop(){
     this.mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);

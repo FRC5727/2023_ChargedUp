@@ -5,9 +5,20 @@
 package frc.robot;
 
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Autos.Auto;
+import frc.robot.commands.Autos.ChargeStationRedSideAuto;
+import frc.robot.commands.Autos.StraightLineAuto1;
+import frc.robot.commands.Autos.StraightLineRedToCargo4Auto;
+import frc.robot.commands.Songs.GiornosTheme;
+import frc.robot.commands.Songs.ItsBeenSoLong;
+import frc.robot.commands.Songs.Megalovania;
+import frc.robot.commands.Songs.MichaelHunterThemeFromSanAndreas;
+import frc.robot.commands.Songs.SwedenC418;
+import frc.robot.commands.Songs.bohemianRhapsody;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -18,53 +29,49 @@ import frc.robot.subsystems.DriveSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final CommandXboxController mXbox = new CommandXboxController(0);
-  private final DriveSubsystem mDriveSubsystem = new DriveSubsystem(); 
+  //Subsystems
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  //Commands
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   
+  SendableChooser<Command> chooser = new SendableChooser<>();
+  //Auto Routines 
+  private final Auto auto = new Auto(driveSubsystem);
+  private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(driveSubsystem);
+  private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(driveSubsystem);
+  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(driveSubsystem);
+
+  //Songs
+  private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
+  private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
+  private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
+  private final MichaelHunterThemeFromSanAndreas michaelHunterThemeFromSanAndreas = new MichaelHunterThemeFromSanAndreas(driveSubsystem);
+  private final Megalovania megalovania = new Megalovania(driveSubsystem);
+  private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
+
 	public RobotContainer() {
-    SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(Constants.yRampSpeed);
-    SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(Constants.xRampSpeed);
-    SlewRateLimiter rSlewRateLimiter = new SlewRateLimiter(Constants.rRampSpeed);
-    /* //funny stuff testing
-     * () -> -modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getLeftY() * Constants.controllerXYExpo))) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
-       () -> -modifyAxis(xSlewRateLimiter.calculate(Math.pow(mXbox.getLeftx() * Constants.controllerXYExpo)) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(ySlewRateLimiter.calculate(Math.pow(mXbox.getRightX() * Constants.controllerRoExpo))) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation));
-     */
+    driveSubsystem.setDefaultCommand(driveCommand);
+    configureBindings();
+    //Auto Routines
+    chooser.setDefaultOption("Go forward and come back", auto);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", straightLineAuto1);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", straightLineRedToCargo4Auto);
+    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
-    mDriveSubsystem.setDefaultCommand(new DriveCommand(
-       mDriveSubsystem, 
-       () -> -modifyAxis(mXbox.getLeftY()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedY, 
-       () -> -modifyAxis(mXbox.getLeftX()) * mDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND * Constants.maxSpeedX, 
-       () -> modifyAxis(mXbox.getRightX()) * mDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Constants.maxSpeedRotation)); //the rotation axis is not inverted bc if it was trying to rotate right it would rotate left
+    //Songs
+    chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
+    chooser.addOption("Ginornos Theme", giornosTheme);
+    chooser.addOption("Sweden by C418", swedenC418);
+    chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
+    chooser.addOption("Megalovania", megalovania);
+    chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
+    SmartDashboard.putData(chooser);
+
   }
-  private static double deadband(double value, double deadband) {
-		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
-				return (value - deadband) / (1.0 - deadband);
-			} else {
-				return (value + deadband) / (1.0 - deadband);
-			}
-		} else {
-			return 0.0;
-		}
-	}
-
-  private static double modifyAxis(double value) {
-		// Deadband
-		value = deadband(value, 0.1);
-		// Square the axis
-		value = Math.copySign(value * value, value);
-  
-		return value;
-	}
-/*
- * mDrivetrain.setDefaultCommand(new DrivetrainTeleOp(
-				mDrivetrain,
-				() -> -modifyAxis(mXbox.getLeftY()) * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(mXbox.getLeftX()) * Drivetrain.MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(mXbox.getRightX()) * Drivetrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
- */
-  /**
+  public Command getAutonomousCommand() {
+    return chooser.getSelected();
+  }
+  /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
@@ -88,7 +95,7 @@ public class RobotContainer {
     
   //}
   public void updateAngle() {
-    mDriveSubsystem.updateAngle();
+    driveSubsystem.updateAngle();
   }
 }
 
