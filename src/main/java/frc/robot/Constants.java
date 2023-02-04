@@ -7,8 +7,10 @@ package frc.robot;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -20,7 +22,8 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public final class Constants {
   
-  
+  public static int pigeon2IMU = 0;
+
   public static int fldmPort = 0; //Front Left Drive Motor
   public static int flsmPort = 1; // Front Left Steer Motor
 
@@ -49,8 +52,9 @@ public final class Constants {
   public static PIDController rotationController = new PIDController(0, 0, 0);
 
   public static double maxVelocity = (6380.0 / 60.0 * 
-        SdsModuleConfigurations.MK4_L2.getDriveReduction() * 
-        SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI);
+        SdsModuleConfigurations.MK4I_L2.getDriveReduction() * 
+        SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * 
+        Math.PI);
   
 
   public static XboxController dXboxController = new XboxController(0);
@@ -59,7 +63,28 @@ public final class Constants {
   public static double deadzone = 0.05;
 
   public static int talonCount = 8;
+  
+  /**
+   * The maximum voltage that will be delivered to the drive motors.
+   * <p>
+   * This can be reduced to cap the robot's maximum speed. Typically, this is useful during initial testing of the robot.
+   */
+  public static final double MAX_VOLTAGE = 13.0;
 
+  //  The formula for calculating the theoretical maximum velocity is:
+  //   <Motor free speed RPM> / 60 * <Drive reduction> * <Wheel diameter meters> * pi
+  //  By default this value is setup for a Mk3 standard module using Falcon500s to drive.
+  //  An example of this constant for a Mk4 L2 module with NEOs to drive is:
+  //   5880.0 / 60.0 / SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI
+  /**
+   * The maximum velocity of the robot in meters per second.
+   * <p>
+   * This is a measure of how fast the robot should be able to drive in a straight line.
+   */
+  public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SdsModuleConfigurations.MK4I_L2.getDriveReduction() * SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
+
+  public static final double speedLimit = 0.75;
+  public static final double rSpeedLimit = 0.40;
   //Buttons
   public static final int aXboxButton = 1;
   public static final int bXboxButton = 2;
@@ -99,16 +124,25 @@ public final class Constants {
 
 //public static final int CANDLE = 19;
 
-public static final int MAX_COUNTS_PER_REV = 42;
-public static final double EPSILON = 0.0001;
+  public static final int MAX_COUNTS_PER_REV = 42;
+  public static final double EPSILON = 0.0001;
 
-// The left-to-right distance between the drivetrain wheels. Should be measured from center to center.
-public static final double DRIVETRAIN_TRACKWIDTH_METERS = 1.0; // Measure and set trackwidth
-// The front-to-back distance between the drivetrain wheels. Should be measured from center to center.
-public static final double DRIVETRAIN_WHEELBASE_METERS = 1.0; // Measure and set wheelbase
+  // The left-to-right distance between the drivetrain wheels. Should be measured from center to center.
+  public static final double swerveWidth = 0.635; // Measure and set trackwidth
+  // The front-to-back distance between the drivetrain wheels. Should be measured from center to center.
+  public static final double swerveLength = 0.7366; // Measure and set wheelbase
 
-public static double maxAngularVelocity = maxVelocity / Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
-public static final TrapezoidProfile.Constraints rotationConstraints = new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularVelocity);
+  /**
+     * The maximum angular velocity of the robot in radians per second.
+     * <p>
+     * This is a measure of how fast the robot can rotate in place.
+     */
+    // Here we calculate the theoretical maximum angular velocity. You can also replace this with a measured amount.
+  public static double maxAngularVelocity = maxVelocity / Math.hypot(swerveWidth / 2.0, swerveLength / 2.0);
+
+  public static final TrapezoidProfile.Constraints rotationConstraints = new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularVelocity);
+
+  
 
 
 
