@@ -55,17 +55,17 @@ public class DriveCommand extends CommandBase {
     translationYPercent = translationYLimiter.calculate(translationYPercent);
     rotationPercent = rotationLimiter.calculate(rotationPercent);
 
-    gearShift = Constants.dXboxController.getRawButtonReleased(Constants.bXboxButton) && gearShift < 5 ? gearShift + 1 : Constants.dXboxController.getRawButtonReleased(Constants.xXboxButton) && gearShift > 1 ? gearShift - 1 : gearShift;
+    //gearShift = Constants.dXboxController.getRawButtonReleased(Constants.bXboxButton) && gearShift < 5 ? gearShift + 1 : Constants.dXboxController.getRawButtonReleased(Constants.xXboxButton) && gearShift > 1 ? gearShift - 1 : gearShift;
 
     
-    double multiplicationValue = gearShift * 0.2;
-    translationXPercent *= multiplicationValue;
-    translationYPercent *= multiplicationValue;
-    rotationPercent *= multiplicationValue;
+    // double multiplicationValue = gearShift * 0.2;
+    // translationXPercent *= multiplicationValue;
+    // translationYPercent *= multiplicationValue;
+    // rotationPercent *= multiplicationValue;
 
-      // translationXPercent *= .75;
-      // translationYPercent *= .75;
-      // rotationPercent *= .4;
+      translationXPercent *= .75;
+      translationYPercent *= .75;
+      rotationPercent *= .4;
     // if(Constants.dXboxController.getRawButtonReleased(Constants.startXboxButton)){
     //   translationXPercent *= 11.00; //gotta crank it to 11
     //   translationYPercent *= 11.00;

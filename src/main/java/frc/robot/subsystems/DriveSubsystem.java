@@ -1,12 +1,10 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-
-
-
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -37,7 +35,16 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double maxVelocity = Constants.maxVelocity;
   private static final double maxAngularVelocity = Constants.maxAngularVelocity;
 
-  private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU);
+  private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
+
+  private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); //Front Left Drive Motor
+  private static final TalonFX FLSMTalon = new TalonFX(Constants.flsmPort, Constants.rickBot); // Front Left Steer Motor
+  private static final TalonFX FRDMTalon = new TalonFX(Constants.frdmPort, Constants.rickBot); //Front Right Drive Motor
+  private static final TalonFX FRSMTalon = new TalonFX(Constants.frsmPort, Constants.rickBot); // Front Right Steer Motor
+  private static final TalonFX RRDMTalon = new TalonFX(Constants.rrdmPort, Constants.rickBot); //Rear Right Drive Motor
+  private static final TalonFX RRSMTalon = new TalonFX(Constants.rrsmPort, Constants.rickBot); //Rear Right Steer Motor
+  private static final TalonFX RLDMTalon = new TalonFX(Constants.rldmPort, Constants.rickBot); //Rear Left Drive Motor
+  private static final TalonFX RLSMTalon = new TalonFX(Constants.rlsmPort, Constants.rickBot); //Rear Left Steer Motor
 
   public final static SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       // Front left
@@ -52,11 +59,16 @@ public class DriveSubsystem extends SubsystemBase {
   
   public DriveSubsystem() {
     mTab = Shuffleboard.getTab("Drivetrain");
-    Mk4ModuleConfiguration test = new Mk4ModuleConfiguration();
-    test.setCanivoreName("rickBot");
+    Mk4ModuleConfiguration CANivore = new Mk4ModuleConfiguration();
+    CANivore.setCanivoreName(Constants.rickBot);
+    CANivore.useCanivore();
     flm = Mk4iSwerveModuleHelper.createFalcon500(
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
-            test,
+            mTab.getLayout("Front Left Module", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(0, 0),
+            //Initalizes the module onto our CANivore
+            CANivore,
             // This can either be STANDARD or FAST depending on your gear configuration
             Mk4iSwerveModuleHelper.GearRatio.L2,
             // This is the ID of the drive motor
@@ -69,7 +81,10 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.fleo
     ); 
     frm = Mk4iSwerveModuleHelper.createFalcon500(
-            test,
+            mTab.getLayout("Front Right Module", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(2, 0),
+            CANivore,
             Mk4iSwerveModuleHelper.GearRatio.L2,
             Constants.frdmPort,
             Constants.frsmPort,
@@ -77,7 +92,10 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.freo
     );
     rlm = Mk4iSwerveModuleHelper.createFalcon500(
-            test,
+            mTab.getLayout("Rear Left Module", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(4, 0),
+            CANivore,
             Mk4iSwerveModuleHelper.GearRatio.L2,
             Constants.rldmPort,
             Constants.rlsmPort,
@@ -85,14 +103,16 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.rleo
     );
     rrm = Mk4iSwerveModuleHelper.createFalcon500(
-            test,
+            mTab.getLayout("Rear Right Module", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(6, 0),
+            CANivore,
             Mk4iSwerveModuleHelper.GearRatio.L2,
             Constants.rrdmPort,
             Constants.rrsmPort,
             Constants.rrePort,
             Constants.rreo
     );
-    
   }
   /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
@@ -180,6 +200,26 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(0.0, Math.toRadians(0.0));
     rlm.set(0.0, Math.toRadians(0.0));
     rrm.set(0.0, Math.toRadians(0.0));
+  }
+  public void eBrakeMode(){
+    FLDMTalon.setNeutralMode(NeutralMode.Brake);
+    FLSMTalon.setNeutralMode(NeutralMode.Brake);
+    FRDMTalon.setNeutralMode(NeutralMode.Brake);
+    FRSMTalon.setNeutralMode(NeutralMode.Brake);
+    RRDMTalon.setNeutralMode(NeutralMode.Brake);
+    RRSMTalon.setNeutralMode(NeutralMode.Brake);
+    RLDMTalon.setNeutralMode(NeutralMode.Brake);
+    RLSMTalon.setNeutralMode(NeutralMode.Brake);
+  }
+  public void unPark(){
+    FLDMTalon.setNeutralMode(NeutralMode.Coast);
+    FLSMTalon.setNeutralMode(NeutralMode.Coast);
+    FRDMTalon.setNeutralMode(NeutralMode.Coast);
+    FRSMTalon.setNeutralMode(NeutralMode.Coast);
+    RRDMTalon.setNeutralMode(NeutralMode.Coast);
+    RRSMTalon.setNeutralMode(NeutralMode.Coast);
+    RLDMTalon.setNeutralMode(NeutralMode.Coast);
+    RLSMTalon.setNeutralMode(NeutralMode.Coast);
   }
 }
 //https://github.com/BytingBulldogs3539/swerve-lib/blob/develop/src/main/java/com/swervedrivespecialties/swervelib/SdsSwerveModuleHelper.java
