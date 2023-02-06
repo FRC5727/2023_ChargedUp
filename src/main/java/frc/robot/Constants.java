@@ -44,12 +44,26 @@ public final class Constants {
   public static final int rrePort = 2; //Rear Right Encoder Port
   public static final int rlePort = 3; //Rear Left Encoder Port
 
-  public static final double fleo = Math.toRadians(-39.814453); //Front Left Encoder Offset
-  public static final double freo = Math.toRadians(-239.589844); //Front Right Encoder Offset
-  public static final double rreo = Math.toRadians(-249.697266); //Rear Right Encoder Offset
-  public static final double rleo = Math.toRadians(-198.457031); //Rear Left Encoder Offset
+  // public static final double fleo = Math.toRadians(-180.615); //Front Left Encoder Offset
+  // public static final double freo = Math.toRadians(-123.223); //Front Right Encoder Offset
+  // public static final double rreo = Math.toRadians(-6.500); //Rear Right Encoder Offset
+  // public static final double rleo = Math.toRadians(-357.360); //Rear Left Encoder Offset
+  
 
-  public static final String rickBot = "rickBot";
+  public static final double fleo = Math.toRadians(-225.443); //Front Left Encoder Offset
+  public static final double freo = Math.toRadians(-0.081); //Front Right Encoder Offset
+  public static final double rreo = Math.toRadians(-251.190); //Rear Right Encoder Offset
+  public static final double rleo = Math.toRadians(-196.433); //Rear Left Encoder Offset
+  //Turn wheels to 0
+  //Get encoder abs offset
+  //input values
+  //push code
+  //turn off
+  //turn on
+  //verify
+
+
+  public static final String rickBot = "CANivore";
 
   public static PIDController translationXController = new PIDController(0, 0, 0); //10
   public static PIDController translationYController = new PIDController(0, 0, 0);
