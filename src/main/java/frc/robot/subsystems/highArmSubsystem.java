@@ -50,12 +50,12 @@ public class highArmSubsystem extends SubsystemBase {
 
     this.m_feedForwardController = new ArmFeedforward(ks, kg, kv, ka);
 
-    this.m_angleOffset = Constants.angleOffset;
+    this.m_angleOffset = Constants.angleOffsetH;
 
-    this.m_gearRatio = Constants.gearRatio;
+    this.m_gearRatio = Constants.gearRatioH;
     
-    this.maxVelocity = Constants.velConstraint;
-    this.maxAcceleration = Constants.accelConstraint;
+    this.maxVelocity = Constants.velConstraintH;
+    this.maxAcceleration = Constants.accelConstraintH;
 
   }
   public double getAbsoluteAngle() {

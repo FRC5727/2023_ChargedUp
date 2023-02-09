@@ -53,10 +53,12 @@ public class ArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.dXboxController.getAButtonPressed()){
-      lowArm.setGoal(45);
-      highArm.setGoal(45);
-    }
+    if (Constants.dXboxController.getPOV() == 0) midPos();
+    if (Constants.dXboxController.getPOV() == 270) lowPos();
+    if (Constants.dXboxController.getPOV() == 180) chassisPos();
+    if (Constants.dXboxController.getPOV() == 90) highPos();
+    if (Constants.dXboxController.getLeftBumperPressed()) intakeGroundPos();
+    if (Constants.dXboxController.getRightBumperPressed()) stationPickupPos();
   }
 
   // Called once the command ends or is interrupted.

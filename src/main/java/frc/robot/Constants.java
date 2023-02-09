@@ -87,6 +87,27 @@ public final class Constants {
   public static final double velConstraint = 0.5;
   public static final double accelConstraint = 0.5; //setting this to 0.5 for testing purposes 
 
+  // Offset in degrees
+  public static final double angleOffsetH = 0;
+
+  // Gear ratio
+  public static final double gearRatioH = 450; //450:1 on the lower arm
+
+  // Profiled PID controller constants
+  public static final double kPH = 0;
+  public static final double kIH = 0;
+  public static final double kDH = 0;
+
+  // Arm feedforward constants
+  public static final double kSH = 0;
+  public static final double kGH = 0;
+  public static final double kVH = 0;
+  public static final double kAH = 0;
+
+  // Constraints for motion profiling
+  public static final double velConstraintH = 0.5;
+  public static final double accelConstraintH = 0.5; //setting this to 0.5 for testing purposes 
+
 
   public static final String rickBot = "CANivore";
 
