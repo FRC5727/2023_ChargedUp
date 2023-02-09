@@ -4,22 +4,20 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.omegabytes.library.math.Conversions;
 import frc.robot.Constants;
 
-public class lowerArmSubsystem extends SubsystemBase {
-  /** Creates a new ArmSubsystem. */
+public class highArmSubsystem extends SubsystemBase {
+  /** Creates a new highArmSubsystem. */
   private WPI_TalonFX m_armMotor;
   private WPI_TalonFX m_armMotorS; //initalize also as talons 
   private CANCoder m_encoder;
@@ -39,7 +37,7 @@ public class lowerArmSubsystem extends SubsystemBase {
 
   private double maxVelocity, maxAcceleration;
   
-  public lowerArmSubsystem() {
+  public highArmSubsystem() {
     this.m_armMotor = new WPI_TalonFX(0, "");
     this.m_encoder = new CANCoder(0, "");
     this.m_armMotorS = new WPI_TalonFX(0, "");
@@ -76,8 +74,6 @@ public class lowerArmSubsystem extends SubsystemBase {
     return m_pidController.getGoal().position;
   }
 
-  
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -90,6 +86,7 @@ public class lowerArmSubsystem extends SubsystemBase {
     + m_feedForwardController.calculate(
       m_pidController.getSetpoint().position, 
     m_pidController.getSetpoint().velocity));
-    SmartDashboard.putNumber("Low Arm Angle: ", getAngle());
+    SmartDashboard.putNumber("High Arm Angle: ", getAngle());
   }
 }
+
