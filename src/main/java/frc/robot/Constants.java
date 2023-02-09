@@ -63,6 +63,31 @@ public final class Constants {
   //verify
 
 
+
+
+
+  // Offset in degrees
+  public static final double angleOffset = 0;
+
+  // Gear ratio
+  public static final double gearRatio = 0;
+
+  // Profiled PID controller constants
+  public static final double kP = 0;
+  public static final double kI = 0;
+  public static final double kD = 0;
+
+  // Arm feedforward constants
+  public static final double kS = 0;
+  public static final double kG = 0;
+  public static final double kV = 0;
+  public static final double kA = 0;
+
+  // Constraints for motion profiling
+  public static final double velConstraint = 0;
+  public static final double accelConstraint = 0;
+
+
   public static final String rickBot = "CANivore";
 
   public static PIDController translationXController = new PIDController(0, 0, 0); //10
