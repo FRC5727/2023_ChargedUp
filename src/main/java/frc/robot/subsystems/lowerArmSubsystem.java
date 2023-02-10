@@ -37,10 +37,10 @@ public class lowerArmSubsystem extends SubsystemBase {
                   ki = 0.0,
                   kd = 0.0;
 
-  private double  ks = 0.0, 
-                  kg = 0.0, 
-                  kv = 0.0, 
-                  ka = 0.0;
+  private double  ks, 
+                  kg, 
+                  kv, 
+                  ka;
 
   private double maxVelocity, maxAcceleration;
   
@@ -61,8 +61,8 @@ public class lowerArmSubsystem extends SubsystemBase {
 
     this.m_gearRatio = Constants.gearRatio;
     
-    this.maxVelocity = Constants.velConstraint;
-    this.maxAcceleration = Constants.accelConstraint;
+    this.maxVelocity = 0.5;
+    this.maxAcceleration = 0.5;
 
   }
   public double getAbsoluteAngle() {

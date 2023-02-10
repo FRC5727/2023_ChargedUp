@@ -6,7 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import frc.omegabytes.library.omegaSwerveLib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
