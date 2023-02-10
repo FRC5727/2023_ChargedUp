@@ -33,9 +33,14 @@ public class lowerArmSubsystem extends SubsystemBase {
   private ProfiledPIDController m_pidController;
   private ArmFeedforward m_feedForwardController;
   
-  private double kp, ki, kd;
+  private double  kp = 0.0,
+                  ki = 0.0,
+                  kd = 0.0;
 
-  private double ks, kg, kv, ka;
+  private double  ks = 0.0, 
+                  kg = 0.0, 
+                  kv = 0.0, 
+                  ka = 0.0;
 
   private double maxVelocity, maxAcceleration;
   

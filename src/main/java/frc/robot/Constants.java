@@ -72,16 +72,7 @@ public final class Constants {
   // Gear ratio
   public static final double gearRatio = 450; //450:1 on the lower arm
 
-  // Profiled PID controller constants
-  public static final double kP = 0;
-  public static final double kI = 0;
-  public static final double kD = 0;
-
-  // Arm feedforward constants
-  public static final double kS = 0;
-  public static final double kG = 0;
-  public static final double kV = 0;
-  public static final double kA = 0;
+  
 
   // Constraints for motion profiling
   public static final double velConstraint = 0.5;
@@ -91,18 +82,8 @@ public final class Constants {
   public static final double angleOffsetH = 0;
 
   // Gear ratio
-  public static final double gearRatioH = 450; //450:1 on the lower arm
+  public static final double gearRatioH = 247.5; //247.5:1 on the higher arm
 
-  // Profiled PID controller constants
-  public static final double kPH = 0;
-  public static final double kIH = 0;
-  public static final double kDH = 0;
-
-  // Arm feedforward constants
-  public static final double kSH = 0;
-  public static final double kGH = 0;
-  public static final double kVH = 0;
-  public static final double kAH = 0;
 
   // Constraints for motion profiling
   public static final double velConstraintH = 0.5;
