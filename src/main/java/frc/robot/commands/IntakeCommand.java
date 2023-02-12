@@ -12,7 +12,7 @@ public class IntakeCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   private final IntakeSubsystem intake;
 
-  private int cubeOrCone; //cone = 1, cube = 0
+  private boolean cube; //cone = 1, cube = 0
   
 
   public IntakeCommand(IntakeSubsystem intake) {
@@ -22,34 +22,40 @@ public class IntakeCommand extends CommandBase {
   }
 
   public void coneIntake(){
-    intake.setSpeed(0, 0);
+    intake.setSpeed(-1.00);
   }
   public void cubeIntake(){
-    intake.setSpeed(0, 0);
+    intake.setSpeed(1);
   }
   public void coneOuttake(){
-    intake.setSpeed(0, 0);
+    intake.setSpeed(1);
   }
   public void cubeOuttake(){
-    intake.setSpeed(0, 0);
+    intake.setSpeed(-1);
   }
   public void place(){
-    if(cubeOrCone == 1) coneOuttake();
-    if(cubeOrCone == 0) cubeOuttake();
+    if(!cube) coneOuttake();
+    if(cube) cubeOuttake();
   }
   public void intake(){
-    if(cubeOrCone == 1) coneIntake();
-    if(cubeOrCone == 0) cubeIntake();
+    if(!cube) coneIntake();
+    if(cube) cubeIntake();
+  }
+  public void setCube(){
+    cube = true;
+  }
+  public void setCone(){
+    cube = false;
   }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    cube = true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.dXboxController.getRawButtonReleased(1)) cubeOrCone = 0;
-    if(Constants.dXboxController.getRawButtonReleased(2)) cubeOrCone = 1; //b 
     if(Constants.dXboxController.getLeftTriggerAxis() > 0.05) place();
     if(Constants.dXboxController.getRightTriggerAxis() > 0.05) intake();
   }

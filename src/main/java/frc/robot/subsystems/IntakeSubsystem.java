@@ -11,20 +11,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private final CANSparkMax frontNeoCanSparkMax = new CANSparkMax(0, MotorType.kBrushless);
-  private final CANSparkMax backNeoCanSparkMax = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax intakeNeo = new CANSparkMax(0, MotorType.kBrushless);
+  
  
 
   public IntakeSubsystem() {
 
   }
-  public void setSpeed(double front, double back) {
-    frontNeoCanSparkMax.set(front);
-    backNeoCanSparkMax.set(back);
+  public void setSpeed(double speed) {
+    intakeNeo.set(speed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(intakeNeo.getOutputCurrent() > 5){
+      setSpeed(0);
+    }
   }
 }

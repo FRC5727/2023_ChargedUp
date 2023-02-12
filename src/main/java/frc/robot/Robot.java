@@ -196,7 +196,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    while(Constants.mXboxController.getRightTriggerAxis() > 0.30){
+    while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
       TalonFX lowerMaster = new TalonFX(9, "CANivore");
       TalonFX lowerSlave = new TalonFX(11, "CANivore");
       TalonFX highMaster = new TalonFX(8, "CANivore");

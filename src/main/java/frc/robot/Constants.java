@@ -135,14 +135,23 @@ public final class Constants {
   public static final int rightStickXboxButton = 10;
 
   //Axis / sticks
-  public static int XboxLeftXstick = 0;
-  public static int XboxRightXstick = 4;
-  public static int XboxLeftYstick = 1;
-  public static int XboxRightYstick = 5;
+  public static final int XboxLeftXstick = 0;
+  public static final int XboxLeftYstick = 1;
+  public static final int XboxLeftTriger = 2;
+  public static final int XboxRightTriger = 3;
+  public static final int XboxRightXstick = 4;
+  public static final int XboxRightYstick = 5;
 
-  //Triggers
-  public static int XboxLeftTriger = 2;
-  public static int XboxRightTriger = 3;
+  //POV
+  public static final int povUp = 0;
+  public static final int povUpRight = 45;
+  public static final int povRight = 90;
+  public static final int povDownRight = 135;
+  public static final int povDown = 180;
+  public static final int povDownLeft = 225;
+  public static final int povLeft = 270;
+  public static final int povUpLeft = 315;
+  
 
 
   public static double translationRateLimit = 2.5;

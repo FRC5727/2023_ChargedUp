@@ -8,8 +8,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Autos.Auto;
 import frc.robot.commands.Autos.ChargeStationRedSideAuto;
 import frc.robot.commands.Autos.StraightLineAuto1;
@@ -22,6 +25,7 @@ import frc.robot.commands.Songs.SwedenC418;
 import frc.robot.commands.Songs.bohemianRhapsody;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 
 
@@ -35,9 +39,11 @@ public class RobotContainer {
   //Subsystems
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   
   SendableChooser<Command> chooser = new SendableChooser<>();
   //Auto Routines 
@@ -54,9 +60,25 @@ public class RobotContainer {
   private final Megalovania megalovania = new Megalovania(driveSubsystem);
   private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
 
+  //Driver Buttons
+  private final JoystickButton cubeMode = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
+  private final JoystickButton coneMode = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
+  private final JoystickButton intake = new JoystickButton(Constants.dXboxController, Constants.XboxRightTriger);
+  private final JoystickButton place = new JoystickButton(Constants.dXboxController, Constants.XboxLeftTriger);
+  private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
+  private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
+  private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
+  private final JoystickButton highPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povRight)); //90
+  private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
+  private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
+  //Manip buttons 
+  private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
+
+  
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     armSubsystem.setDefaultCommand(armCommand);
+    intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("Go forward and come back", auto);
@@ -88,6 +110,22 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    /* DRIVER BINDS */
+    cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
+    coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
+
+    intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
+    place.onTrue(new InstantCommand(() -> intakeCommand.place()));
+
+    chassisPosition.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
+    lowPosition.onTrue(new InstantCommand(() -> armCommand.lowPos()));
+    midPosition.onTrue(new InstantCommand(() -> armCommand.midPos()));
+    highPosition.onTrue(new InstantCommand(() -> armCommand.highPos()));
+    intakeGroundPosition.onTrue(new InstantCommand(() -> armCommand.intakeGroundPos()));
+    stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
+
+    /* MANIP BINDS */
+    zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
     
   }
 
