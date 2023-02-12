@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Autos.Auto;
 import frc.robot.commands.Autos.ChargeStationRedSideAuto;
@@ -19,7 +20,9 @@ import frc.robot.commands.Songs.Megalovania;
 import frc.robot.commands.Songs.MichaelHunterThemeFromSanAndreas;
 import frc.robot.commands.Songs.SwedenC418;
 import frc.robot.commands.Songs.bohemianRhapsody;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+
 
 
 /**
@@ -31,8 +34,10 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   //Subsystems
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   
   SendableChooser<Command> chooser = new SendableChooser<>();
   //Auto Routines 
@@ -51,6 +56,7 @@ public class RobotContainer {
 
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
+    armSubsystem.setDefaultCommand(armCommand);
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("Go forward and come back", auto);

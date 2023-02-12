@@ -6,45 +6,43 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.highArmSubsystem;
-import frc.robot.subsystems.lowerArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+
 
 public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   
-  private final lowerArmSubsystem lowArm;
-  private final highArmSubsystem highArm;
+  private final ArmSubsystem arm;
 
-  public ArmCommand(lowerArmSubsystem lowArm, highArmSubsystem highArm) {
+  public ArmCommand(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.lowArm = lowArm;
-    this.highArm = highArm;
-    addRequirements(lowArm, highArm);
+    this.arm = arm;
+    addRequirements(arm);
   }
 
   public void chassisPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   public void intakeGroundPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   public void highPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   public void midPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   public void lowPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   public void stationPickupPos(){
-    lowArm.setGoal(0);
-    highArm.setGoal(0);
+    arm.setLowArmGoal(0);
+    arm.setHighArmGoal(0);
   }
   // Called when the command is initially scheduled.
   @Override

@@ -44,6 +44,12 @@ public final class Constants {
   public static final int rrePort = 2; //Rear Right Encoder Port
   public static final int rlePort = 3; //Rear Left Encoder Port
 
+  public static final int highMaster = 8;
+  public static final int lowerMaster = 9;
+  public static final int highSlave = 10;
+  public static final int lowerSlave = 11;
+
+
   // public static final double fleo = Math.toRadians(-180.615); //Front Left Encoder Offset
   // public static final double freo = Math.toRadians(-123.223); //Front Right Encoder Offset
   // public static final double rreo = Math.toRadians(-6.500); //Rear Right Encoder Offset
@@ -67,10 +73,10 @@ public final class Constants {
 
 
   // Offset in degrees
-  public static final double angleOffset = 0;
+  public static final double angleOffsetL = 0;
 
   // Gear ratio
-  public static final double gearRatio = 450; //450:1 on the lower arm
+  public static final double gearRatioL = 450; //450:1 on the lower arm
 
   
 

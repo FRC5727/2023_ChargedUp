@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.Pigeon2;
@@ -194,7 +195,21 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    while(Constants.mXboxController.getRightTriggerAxis() > 0.30){
+      TalonFX lowerMaster = new TalonFX(9, "CANivore");
+      TalonFX lowerSlave = new TalonFX(11, "CANivore");
+      TalonFX highMaster = new TalonFX(8, "CANivore");
+      TalonFX highSlave = new TalonFX(10, "CANivore");
+      lowerSlave.follow(lowerMaster);
+      lowerSlave.setInverted(true);
+
+      highSlave.follow(highMaster);
+      highSlave.setInverted(true);
+      lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
+      highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
+    }
+  }
 
   @Override
   public void testInit() {
