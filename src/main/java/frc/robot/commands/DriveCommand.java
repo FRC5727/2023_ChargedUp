@@ -24,7 +24,7 @@ public class DriveCommand extends CommandBase {
   private double translationYPercent;
   private double rotationPercent;
   
-  private int gearShift = 1;
+  //private int gearShift = 1;
 
   public DriveCommand(DriveSubsystem drive) {
     this.drive = drive;

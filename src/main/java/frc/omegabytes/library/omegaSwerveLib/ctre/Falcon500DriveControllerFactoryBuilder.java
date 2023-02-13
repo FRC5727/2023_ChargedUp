@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import frc.omegabytes.library.omegaSwerveLib.DriveController;
 import frc.omegabytes.library.omegaSwerveLib.DriveControllerFactory;
 import frc.omegabytes.library.omegaSwerveLib.ModuleConfiguration;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Falcon500DriveControllerFactoryBuilder {
     private static final double TICKS_PER_ROTATION = 2048.0;

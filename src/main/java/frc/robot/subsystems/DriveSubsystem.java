@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private static final double maxVoltage = Constants.MAX_VOLTAGE;
   private static final double maxVelocity = Constants.maxVelocity;
-  private static final double maxAngularVelocity = Constants.maxAngularVelocity;
+  //private static final double maxAngularVelocity = Constants.maxAngularVelocity;
 
   private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
 
