@@ -20,30 +20,30 @@ public class ArmCommand extends CommandBase {
     addRequirements(arm);
   }
 
-  public void chassisPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
-  public void intakeGroundPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
-  public void highPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
-  public void midPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
-  public void lowPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
-  public void stationPickupPos(){
-    arm.setLowArmGoal(0);
-    arm.setHighArmGoal(0);
-  }
+  // public void chassisPos(){
+  //   arm.setLowArmGoal(60);
+  //   arm.setHighArmGoal(60);
+  // }
+  // public void intakeGroundPos(){
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
+  // }
+  // public void highPos(){
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
+  // }
+  // public void midPos(){
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
+  // }
+  // public void lowPos(){
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
+  // }
+  // public void stationPickupPos(){
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
+  // }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -51,12 +51,12 @@ public class ArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Constants.dXboxController.getPOV() == 0) midPos();
-    if (Constants.dXboxController.getPOV() == 270) lowPos();
-    if (Constants.dXboxController.getPOV() == 180) chassisPos();
-    if (Constants.dXboxController.getPOV() == 90) highPos();
-    if (Constants.dXboxController.getLeftBumperPressed()) intakeGroundPos();
-    if (Constants.dXboxController.getRightBumperPressed()) stationPickupPos();
+    // if (Constants.dXboxController.getPOV() == 0) midPos();
+    // if (Constants.dXboxController.getPOV() == 270) lowPos();
+    // if (Constants.dXboxController.getPOV() == 180) chassisPos();
+    // if (Constants.dXboxController.getPOV() == 90) highPos();
+    // if (Constants.dXboxController.getLeftBumperReleased()) chassisPos();
+    // if (Constants.dXboxController.getRightBumperReleased()) stationPickupPos();
   }
 
   // Called once the command ends or is interrupted.

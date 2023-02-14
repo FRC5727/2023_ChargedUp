@@ -52,6 +52,8 @@ public class Robot extends TimedRobot {
   private static final CANCoder rle = new CANCoder(Constants.rlePort, Constants.rickBot);
   private static final CANCoder fle = new CANCoder(Constants.flePort, Constants.rickBot);
 
+  private static final CANCoder lowerArm = new CANCoder(4,Constants.rickBot);
+  private static final CANCoder highArm = new CANCoder(5, Constants.rickBot);
   // private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); 
   // private static final TalonFX FLSMTalon = new TalonFX(Constants.flsmPort, Constants.rickBot);
 
@@ -78,10 +80,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
     SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
     SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
-    SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
-    SmartDashboard.putNumber("Front Right Encoder  Position Value: ", fre.getPosition());
-    SmartDashboard.putNumber("Rear Right Encoder  Position Value: ", rre.getPosition());
-    SmartDashboard.putNumber("Rear Left Encoder  Position Value: ", rle.getPosition());
+    SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
+    SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
+    // SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
+    // SmartDashboard.putNumber("Front Right Encoder  Position Value: ", fre.getPosition());
+    // SmartDashboard.putNumber("Rear Right Encoder  Position Value: ", rre.getPosition());
+    // SmartDashboard.putNumber("Rear Left Encoder  Position Value: ", rle.getPosition());
     // //CANCoders Bus Voltage
     // SmartDashboard.putNumber("Front Left Encoder Bus Voltage: ", fle.getBusVoltage());
     // SmartDashboard.putNumber("Front Right Encoder Bus Voltage: ", fre.getBusVoltage());
@@ -196,7 +200,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
+    //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
       TalonFX lowerMaster = new TalonFX(9, "CANivore");
       TalonFX lowerSlave = new TalonFX(11, "CANivore");
       TalonFX highMaster = new TalonFX(8, "CANivore");
@@ -208,7 +212,7 @@ public class Robot extends TimedRobot {
       highSlave.setInverted(true);
       lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
       highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
-    }
+    //}
   }
 
   @Override

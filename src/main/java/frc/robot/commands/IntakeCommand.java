@@ -31,7 +31,7 @@ public class IntakeCommand extends CommandBase {
     intake.setSpeed(1);
   }
   public void cubeOuttake(){
-    intake.setSpeed(-1);
+    intake.setSpeed(-1.00);
   }
   public void place(){
     if(!cube) coneOuttake();
@@ -56,8 +56,8 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.dXboxController.getLeftTriggerAxis() > 0.05) place();
-    if(Constants.dXboxController.getRightTriggerAxis() > 0.05) intake();
+    if(Constants.dXboxController.getLeftTriggerAxis() > 0.10) place();
+    if(Constants.dXboxController.getRightTriggerAxis() > 0.10) intake();
   }
 
   // Called once the command ends or is interrupted.

@@ -65,12 +65,14 @@ public class RobotContainer {
   private final JoystickButton coneMode = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
   private final JoystickButton intake = new JoystickButton(Constants.dXboxController, Constants.XboxRightTriger);
   private final JoystickButton place = new JoystickButton(Constants.dXboxController, Constants.XboxLeftTriger);
-  private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
-  private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
-  private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
-  private final JoystickButton highPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povRight)); //90
+  // private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
+  // private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
+  // private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
+  // private final JoystickButton highPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povRight)); //90
+  private final JoystickButton chassis = new JoystickButton(Constants.dXboxController, 8);
   private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
   private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
+  private final JoystickButton halfSpeed = new JoystickButton(Constants.dXboxController, Constants.backXboxButton);
   //Manip buttons 
   private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
 
@@ -117,27 +119,20 @@ public class RobotContainer {
     intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
     place.onTrue(new InstantCommand(() -> intakeCommand.place()));
 
-    chassisPosition.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
-    lowPosition.onTrue(new InstantCommand(() -> armCommand.lowPos()));
-    midPosition.onTrue(new InstantCommand(() -> armCommand.midPos()));
-    highPosition.onTrue(new InstantCommand(() -> armCommand.highPos()));
-    intakeGroundPosition.onTrue(new InstantCommand(() -> armCommand.intakeGroundPos()));
-    stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
+    // chassis.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
+    // // chassisPosition.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
+    // // lowPosition.onTrue(new InstantCommand(() -> armCommand.lowPos()));
+    // // midPosition.onTrue(new InstantCommand(() -> armCommand.midPos()));
+    // // highPosition.onTrue(new InstantCommand(() -> armCommand.highPos()));
+    // intakeGroundPosition.onTrue(new InstantCommand(() -> armCommand.intakeGroundPos()));
+    // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
+
+    halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */
     zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
     
   }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  //public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    
-  //}
   public void updateAngle() {
     driveSubsystem.updateAngle();
   }

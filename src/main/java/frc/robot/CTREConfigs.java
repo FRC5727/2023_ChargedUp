@@ -11,7 +11,7 @@ public final class CTREConfigs {
     public TalonFXConfiguration swerveDriveFXConfig;
     public CANCoderConfiguration swerveCanCoderConfig;
 
-    public TalonFXConfiguration armMotorConfig;
+    public static TalonFXConfiguration armMotorConfig;
     public static CANCoderConfiguration armCanCoderConfig;
 
 

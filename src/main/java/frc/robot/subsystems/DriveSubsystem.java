@@ -35,6 +35,8 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double maxVelocity = Constants.maxVelocity;
   //private static final double maxAngularVelocity = Constants.maxAngularVelocity;
 
+  private boolean halfSpeed = false;
+
   private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
 
   // private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); //Front Left Drive Motor
@@ -153,6 +155,15 @@ public class DriveSubsystem extends SubsystemBase {
   public Rotation2d getGyroscopeRotation() {
     return Rotation2d.fromDegrees(pigeon2.getYaw());
   }
+
+  public void toggleHalfSpeed(){
+    halfSpeed = !halfSpeed;
+  }
+
+  public boolean isHalfSpeed(){
+    return halfSpeed;
+  }
+
 
   public void updateAngle() {}
   public void start(){}

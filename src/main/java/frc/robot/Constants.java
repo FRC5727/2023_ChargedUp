@@ -45,13 +45,9 @@ public final class Constants {
   public static final int highSlave = 10;
   public static final int lowerSlave = 11;
 
-
-  // public static final double fleo = Math.toRadians(-180.615); //Front Left Encoder Offset
-  // public static final double freo = Math.toRadians(-123.223); //Front Right Encoder Offset
-  // public static final double rreo = Math.toRadians(-6.500); //Rear Right Encoder Offset
-  // public static final double rleo = Math.toRadians(-357.360); //Rear Left Encoder Offset
+  public static final int highCoder = 4;
+  public static final int lowCoder = 5;
   
-
   public static final double fleo = Math.toRadians(-225.443); //Front Left Encoder Offset
   public static final double freo = Math.toRadians(-0.081); //Front Right Encoder Offset
   public static final double rreo = Math.toRadians(-251.190); //Rear Right Encoder Offset
