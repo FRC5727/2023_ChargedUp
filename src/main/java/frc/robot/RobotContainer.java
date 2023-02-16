@@ -43,9 +43,7 @@ public class RobotContainer {
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
-  private final LowArmSubsystem lowArmSubsystem = new LowArmSubsystem();
 
-  private final HighArmSubsystem highArmSubsystem = new HighArmSubsystem();
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
@@ -135,7 +133,12 @@ public class RobotContainer {
     // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setHighArmGoal(86), armSubsystem);
     // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setLowArmGoal(54), armSubsystem);
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
-
+    new JoystickButton(Constants.dXboxController, 1).whenReleased(() ->armSubsystem.highPos(), armSubsystem); //1=A
+    new JoystickButton(Constants.dXboxController, 2).whenReleased(() ->armSubsystem.midPos(), armSubsystem); //2=B
+    new JoystickButton(Constants.dXboxController, 3).whenReleased(() ->armSubsystem.lowPos(), armSubsystem); //3=X
+    new JoystickButton(Constants.dXboxController, 4).whenReleased(() ->armSubsystem.intakeGroundPos(), armSubsystem); //4=Y
+    new JoystickButton(Constants.dXboxController, 5).whenReleased(() ->armSubsystem.chassisPos(), armSubsystem); //5=LB
+    //new JoystickButton(Constants.dXboxController, 6).whenReleased(() ->armSubsystem.intakeGroundPos(), armSubsystem); //6=RB
     halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */
