@@ -52,8 +52,8 @@ public class Robot extends TimedRobot {
   private static final CANCoder rle = new CANCoder(Constants.rlePort, Constants.rickBot);
   private static final CANCoder fle = new CANCoder(Constants.flePort, Constants.rickBot);
 
-  private static final CANCoder lowerArm = new CANCoder(4,Constants.rickBot);
-  private static final CANCoder highArm = new CANCoder(5, Constants.rickBot);
+  // private static final CANCoder lowerArm = new CANCoder(4,Constants.rickBot);
+  // private static final CANCoder highArm = new CANCoder(5, Constants.rickBot);
   // private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); 
   // private static final TalonFX FLSMTalon = new TalonFX(Constants.flsmPort, Constants.rickBot);
 
@@ -76,12 +76,12 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //CANCoders Absolute Position Values
-    SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
-    SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
-    SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
-    SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
-    SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
-    SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
+    // SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
+    // SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
+    // SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
+    // SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
+    // SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
+    // SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
     // SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
     // SmartDashboard.putNumber("Front Right Encoder  Position Value: ", fre.getPosition());
     // SmartDashboard.putNumber("Rear Right Encoder  Position Value: ", rre.getPosition());

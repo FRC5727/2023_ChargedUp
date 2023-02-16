@@ -7,8 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.HighArmSubsystem;
-import frc.robot.subsystems.LowArmSubsystem;
+
 
 
 public class ArmCommand extends CommandBase {

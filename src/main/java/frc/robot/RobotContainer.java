@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IntakeCommand;
@@ -25,9 +25,8 @@ import frc.robot.commands.Songs.SwedenC418;
 import frc.robot.commands.Songs.bohemianRhapsody;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HighArmSubsystem;
+
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LowArmSubsystem;
 
 
 
@@ -130,19 +129,17 @@ public class RobotContainer {
     // highButton.onTrue(new InstantCommand(() -> armSubsystem.highPos()));
     // groundButton.onTrue(new InstantCommand(() -> armSubsystem.intakeGroundPos()));
 
-    // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setHighArmGoal(86), armSubsystem);
-    // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setLowArmGoal(54), armSubsystem);
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
-    new JoystickButton(Constants.dXboxController, 1).whenReleased(() ->armSubsystem.highPos(), armSubsystem); //1=A
-    new JoystickButton(Constants.dXboxController, 2).whenReleased(() ->armSubsystem.midPos(), armSubsystem); //2=B
-    new JoystickButton(Constants.dXboxController, 3).whenReleased(() ->armSubsystem.lowPos(), armSubsystem); //3=X
-    new JoystickButton(Constants.dXboxController, 4).whenReleased(() ->armSubsystem.intakeGroundPos(), armSubsystem); //4=Y
-    new JoystickButton(Constants.dXboxController, 5).whenReleased(() ->armSubsystem.chassisPos(), armSubsystem); //5=LB
+    new JoystickButton(Constants.dXboxController, 1).whenPressed(() -> armSubsystem.highPos(), armSubsystem); //1=A
+    new JoystickButton(Constants.dXboxController, 2).whenPressed(() -> armSubsystem.midPos(), armSubsystem); //2=B
+    new JoystickButton(Constants.dXboxController, 3).whenPressed(() -> armSubsystem.lowPos(), armSubsystem); //3=X
+    new JoystickButton(Constants.dXboxController, 4).whenPressed(() -> armSubsystem.intakeGroundPos(), armSubsystem); //4=Y
+    new JoystickButton(Constants.dXboxController, 5).whenPressed(() -> armSubsystem.chassisPos(), armSubsystem); //5=LB
     //new JoystickButton(Constants.dXboxController, 6).whenReleased(() ->armSubsystem.intakeGroundPos(), armSubsystem); //6=RB
-    halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
+    //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */
-    zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
+    //zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
     
   }
   public void updateAngle() {

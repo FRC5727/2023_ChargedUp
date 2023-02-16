@@ -70,12 +70,12 @@ public class ArmSubsystem extends SubsystemBase {
 
 
   public ArmSubsystem() {
-    this.lowerArmMaster = new WPI_TalonFX(Constants.lowerMaster, Constants.rickBot);
-    this.lowerArmSlave = new WPI_TalonFX(Constants.lowerSlave, Constants.rickBot);
+    this.lowerArmMaster = new WPI_TalonFX(9, Constants.rickBot);
+    this.lowerArmSlave = new WPI_TalonFX(11, Constants.rickBot);
     this.lowerArmCoder = new CANCoder(4, Constants.rickBot);
 
-    this.highArmMaster = new WPI_TalonFX(Constants.highMaster, Constants.rickBot);
-    this.highArmSlave = new WPI_TalonFX(Constants.highSlave, Constants.rickBot);
+    this.highArmMaster = new WPI_TalonFX(8, Constants.rickBot);
+    this.highArmSlave = new WPI_TalonFX(10, Constants.rickBot);
     this.highArmCoder = new CANCoder(5, Constants.rickBot);
 
     this.lowPidController = new ProfiledPIDController(L_kp, L_ki, L_kd, 
@@ -100,66 +100,70 @@ public class ArmSubsystem extends SubsystemBase {
     this.H_maxAcceleration = 0.025; // Degrees per second squared
     
     
-    // configArmMotor();
-    // resetToAbsolute();
-    // configArmCanCoder();
-    setCurrentPosToGoal();
+    //configArmMotor();
+    //setCurrentPosToGoal();
     
     lowPidController.disableContinuousInput();
     lowPidController.setTolerance(5, 5);
     
     highPidController.disableContinuousInput();
     highPidController.setTolerance(5, 5);
-  }
-  public void configArmMotor(){
+
     lowerArmSlave.follow(lowerArmMaster);
     highArmSlave.follow(highArmMaster);
-
-    lowerArmMaster.configFactoryDefault();
-    lowerArmSlave.configFactoryDefault();
-
-    highArmMaster.configFactoryDefault();
-    highArmSlave.configFactoryDefault();
-
     lowerArmSlave.setInverted(true);
     highArmSlave.setInverted(true);
+    resetToAbsolute();
   }
-  private void waitForLowCanCoder(){
-    /*
-     * Wait for up to 1000 ms for a good CANcoder signal.
-     *
-     * This prevents a race condition during program startup
-     * where we try to synchronize the Falcon encoder to the
-     * CANcoder before we have received any position signal
-     * from the CANcoder.
-     */
-    for (int i = 0; i < 100; ++i) {
-      lowerArmCoder.getAbsolutePosition();
-      if (lowerArmCoder.getLastError() == ErrorCode.OK) {
-        break;
-      }
-      Timer.delay(0.010);            
-      LowerCANcoderInitTime += 10;
-    }
-  }
-  private void waitForHighCanCoder(){
-    /*
-     * Wait for up to 1000 ms for a good CANcoder signal.
-     *
-     * This prevents a race condition during program startup
-     * where we try to synchronize the Falcon encoder to the
-     * CANcoder before we have received any position signal
-     * from the CANcoder.
-     */
-    for (int i = 0; i < 100; ++i) {
-      highArmCoder.getAbsolutePosition();
-      if (highArmCoder.getLastError() == ErrorCode.OK) {
-        break;
-      }
-      Timer.delay(0.010);            
-      HighCANcoderInitTime += 10;
-    }
-  }
+  // public void configArmMotor(){
+  //   lowerArmSlave.follow(lowerArmMaster);
+  //   highArmSlave.follow(highArmMaster);
+
+  //   lowerArmMaster.configFactoryDefault();
+  //   lowerArmSlave.configFactoryDefault();
+
+  //   highArmMaster.configFactoryDefault();
+  //   highArmSlave.configFactoryDefault();
+
+  //   lowerArmSlave.setInverted(true);
+  //   highArmSlave.setInverted(true);
+  // }
+  // private void waitForLowCanCoder(){
+  //   /*
+  //    * Wait for up to 1000 ms for a good CANcoder signal.
+  //    *
+  //    * This prevents a race condition during program startup
+  //    * where we try to synchronize the Falcon encoder to the
+  //    * CANcoder before we have received any position signal
+  //    * from the CANcoder.
+  //    */
+  //   for (int i = 0; i < 100; ++i) {
+  //     lowerArmCoder.getAbsolutePosition();
+  //     if (lowerArmCoder.getLastError() == ErrorCode.OK) {
+  //       break;
+  //     }
+  //     Timer.delay(0.010);            
+  //     LowerCANcoderInitTime += 10;
+  //   }
+  // }
+  // private void waitForHighCanCoder(){
+  //   /*
+  //    * Wait for up to 1000 ms for a good CANcoder signal.
+  //    *
+  //    * This prevents a race condition during program startup
+  //    * where we try to synchronize the Falcon encoder to the
+  //    * CANcoder before we have received any position signal
+  //    * from the CANcoder.
+  //    */
+  //   for (int i = 0; i < 100; ++i) {
+  //     highArmCoder.getAbsolutePosition();
+  //     if (highArmCoder.getLastError() == ErrorCode.OK) {
+  //       break;
+  //     }
+  //     Timer.delay(0.010);            
+  //     HighCANcoderInitTime += 10;
+  //   }
+  // }
   // public Rotation2d getHighCanCoder(){
   //   return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
   // }
@@ -222,20 +226,31 @@ public class ArmSubsystem extends SubsystemBase {
   public double getLowGoal(){
     return lowPidController.getGoal().position;
   }
-  public void setCurrentPosToGoal() {
-    lowPidController.setGoal(getLowRelativeAngle());
-    highPidController.setGoal(getHighRelativeAngle());
+  // public void setCurrentPosToGoal() {
+  //   lowPidController.setGoal(getLowRelativeAngle());
+  //   highPidController.setGoal(getHighRelativeAngle());
+  // }
+  public void resetToAbsolute(){
+    // waitForCanCoder();
+
+    double absolutePosition1 = Conversions.degreesToFalcon(getLowRelativeAngle(), lowerArmGearRatio);
+    lowerArmMaster.setSelectedSensorPosition(absolutePosition1);
+    lowerArmSlave.setSelectedSensorPosition(absolutePosition1);
+    
+    double absolutePosition2 = Conversions.degreesToFalcon(getHighRelativeAngle(), highArmGearRatio);
+    highArmMaster.setSelectedSensorPosition(absolutePosition2);
+    highArmSlave.setSelectedSensorPosition(absolutePosition2);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     highArmMaster.setVoltage( //sets the voltage according to the PID controller and armFeedForward
-    highPidController.calculate(getHighRelativeAngle(), highPidController.getGoal().position)); //getHighGoal() //86
+    highPidController.calculate(getHighRelativeAngle(), 86)); //getHighGoal() //86
       
     
     lowerArmMaster.setVoltage(
-    lowPidController.calculate(getLowRelativeAngle(), lowPidController.getGoal())); //getLowGoal() 
+    lowPidController.calculate(getLowRelativeAngle(), 54)); //lowPidController.getGoal() 
       
     SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
     SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
