@@ -7,6 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.HighArmSubsystem;
+import frc.robot.subsystems.LowArmSubsystem;
 
 
 public class ArmCommand extends CommandBase {
@@ -21,24 +23,24 @@ public class ArmCommand extends CommandBase {
   }
 
   // public void chassisPos(){
-  //   arm.setLowArmGoal(60);
-  //   arm.setHighArmGoal(60);
+  //   arm.setLowArmGoal(0);
+  //   arm.setHighArmGoal(0);
   // }
   // public void intakeGroundPos(){
-  //   arm.setLowArmGoal(0);
-  //   arm.setHighArmGoal(0);
+  //   arm.setLowArmGoal(36);
+  //   arm.setHighArmGoal(-29);
   // }
   // public void highPos(){
-  //   arm.setLowArmGoal(0);
-  //   arm.setHighArmGoal(0);
+  //   arm.setLowArmGoal(54);
+  //   arm.setHighArmGoal(186);
   // }
   // public void midPos(){
-  //   arm.setLowArmGoal(0);
-  //   arm.setHighArmGoal(0);
+  //   arm.setLowArmGoal(26);
+  //   arm.setHighArmGoal(121);
   // }
   // public void lowPos(){
-  //   arm.setLowArmGoal(0);
-  //   arm.setHighArmGoal(0);
+  //   arm.setLowArmGoal(27);
+  //   arm.setHighArmGoal(2);
   // }
   // public void stationPickupPos(){
   //   arm.setLowArmGoal(0);
@@ -51,11 +53,11 @@ public class ArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (Constants.dXboxController.getPOV() == 0) midPos();
-    // if (Constants.dXboxController.getPOV() == 270) lowPos();
-    // if (Constants.dXboxController.getPOV() == 180) chassisPos();
-    // if (Constants.dXboxController.getPOV() == 90) highPos();
-    // if (Constants.dXboxController.getLeftBumperReleased()) chassisPos();
+    // if (Constants.dXboxController.getBButtonPressed()) arm.midPos();
+    // if (Constants.dXboxController.getAButtonPressed()) arm.lowPos();
+    // // if (Constants.dXboxController.getXButtonReleased()) chassisPos();
+    // if (Constants.dXboxController.getXButtonPressed()) arm.highPos();
+    // if (Constants.dXboxController.getYButtonPressed()) arm.intakeGroundPos();
     // if (Constants.dXboxController.getRightBumperReleased()) stationPickupPos();
   }
 

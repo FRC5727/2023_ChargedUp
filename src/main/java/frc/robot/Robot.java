@@ -201,17 +201,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
-      TalonFX lowerMaster = new TalonFX(9, "CANivore");
-      TalonFX lowerSlave = new TalonFX(11, "CANivore");
-      TalonFX highMaster = new TalonFX(8, "CANivore");
-      TalonFX highSlave = new TalonFX(10, "CANivore");
-      lowerSlave.follow(lowerMaster);
-      lowerSlave.setInverted(true);
+      // TalonFX lowerMaster = new TalonFX(9, "CANivore");
+      // TalonFX lowerSlave = new TalonFX(11, "CANivore");
+      // TalonFX highMaster = new TalonFX(8, "CANivore");
+      // TalonFX highSlave = new TalonFX(10, "CANivore");
+      // lowerSlave.follow(lowerMaster);
+      // lowerSlave.setInverted(true);
 
-      highSlave.follow(highMaster);
-      highSlave.setInverted(true);
-      lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
-      highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
+      // highSlave.follow(highMaster);
+      // highSlave.setInverted(true);
+      // lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
+      // highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
     //}
   }
 

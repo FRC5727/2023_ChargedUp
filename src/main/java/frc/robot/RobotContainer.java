@@ -25,7 +25,9 @@ import frc.robot.commands.Songs.SwedenC418;
 import frc.robot.commands.Songs.bohemianRhapsody;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HighArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LowArmSubsystem;
 
 
 
@@ -40,6 +42,10 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
+  private final LowArmSubsystem lowArmSubsystem = new LowArmSubsystem();
+
+  private final HighArmSubsystem highArmSubsystem = new HighArmSubsystem();
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
@@ -61,10 +67,10 @@ public class RobotContainer {
   private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
 
   //Driver Buttons
-  private final JoystickButton cubeMode = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
-  private final JoystickButton coneMode = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
-  private final JoystickButton intake = new JoystickButton(Constants.dXboxController, Constants.XboxRightTriger);
-  private final JoystickButton place = new JoystickButton(Constants.dXboxController, Constants.XboxLeftTriger);
+  private final JoystickButton lowButton = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
+  private final JoystickButton midButton = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
+  private final JoystickButton highButton = new JoystickButton(Constants.dXboxController, Constants.xXboxButton);
+  private final JoystickButton groundButton = new JoystickButton(Constants.dXboxController, Constants.yXboxButton);
   // private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
   // private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
   // private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
@@ -113,19 +119,22 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /* DRIVER BINDS */
-    cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
-    coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
+    // cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
+    // coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
 
-    intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
-    place.onTrue(new InstantCommand(() -> intakeCommand.place()));
+    // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
+    // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
 
     // chassis.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
     // // chassisPosition.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
-    // // lowPosition.onTrue(new InstantCommand(() -> armCommand.lowPos()));
-    // // midPosition.onTrue(new InstantCommand(() -> armCommand.midPos()));
-    // // highPosition.onTrue(new InstantCommand(() -> armCommand.highPos()));
-    // intakeGroundPosition.onTrue(new InstantCommand(() -> armCommand.intakeGroundPos()));
-    // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
+    // lowButton.onTrue(new InstantCommand(() -> armSubsystem.lowPos()));
+    // midButton.onTrue(new InstantCommand(() -> armSubsystem.midPos()));
+    // highButton.onTrue(new InstantCommand(() -> armSubsystem.highPos()));
+    // groundButton.onTrue(new InstantCommand(() -> armSubsystem.intakeGroundPos()));
+
+    // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setHighArmGoal(86), armSubsystem);
+    // new JoystickButton(Constants.mXboxController, 1).whenPressed(() ->armSubsystem.setLowArmGoal(54), armSubsystem);
+    // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
 
     halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 

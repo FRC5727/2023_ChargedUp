@@ -30,6 +30,8 @@ public final class CTREConfigs {
         /* Arm CANCoder Configuration */
         armCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         armCanCoderConfig.sensorDirection = false;
+
+    
         armCanCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         armCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
 
