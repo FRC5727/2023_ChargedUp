@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_MID, new ArmPosition(26, 90),
       Position.GRID_HIGH, new ArmPosition(54, 163),
       Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(0, 0) // TODO Define
+      Position.INTAKE_SUBSTATION, new ArmPosition(8, 154)
     ));
 
   private WPI_TalonFX lowerArmMaster;

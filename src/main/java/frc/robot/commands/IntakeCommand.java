@@ -51,22 +51,27 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void initialize() {
     cube = true;
+    System.out.println("TODO Start intake");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.dXboxController.getLeftTriggerAxis() > 0.10) place();
-    if(Constants.dXboxController.getRightTriggerAxis() > 0.10) intake();
+    // if(Constants.dXboxController.getLeftTriggerAxis() > 0.10) place();
+    // if(Constants.dXboxController.getRightTriggerAxis() > 0.10) intake();
+    System.out.println("TODO Intake running");
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("TODO Stop intake");
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // TODO Check if piece acquired (motor stalled)
     return false;
   }
 }

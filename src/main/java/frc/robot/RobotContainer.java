@@ -6,6 +6,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -87,7 +88,7 @@ public class RobotContainer {
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
     // armSubsystem.setDefaultCommand(armCommand);
-    intakeSubsystem.setDefaultCommand(intakeCommand);
+    // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("Go forward and come back", auto);
@@ -138,6 +139,17 @@ public class RobotContainer {
       .onFalse(
         Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
         .andThen(new ArmCommand(armSubsystem)));
+
+    // TODO Move the TriggerButton, and make the intakeCommand actually work (runs forever, stops when command terminates, nice to have if finished when piece acquired)
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
+    .whileTrue(
+      Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+      .andThen(new ArmCommand(armSubsystem))
+      .alongWith(intakeCommand))
+    .onFalse(
+      Commands.runOnce(() -> intakeCommand.cancel())
+      .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+      .andThen(new ArmCommand(armSubsystem)));
 
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
