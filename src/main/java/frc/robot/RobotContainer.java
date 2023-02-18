@@ -45,6 +45,7 @@ public class RobotContainer {
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
+  private Position driverTargetPosition = Position.CHASSIS;
 
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
@@ -126,12 +127,14 @@ public class RobotContainer {
     // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_LOW)));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_MID)));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH)));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
-      .whileTrue(new ArmCommand(armSubsystem))
+      .whileTrue(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+        .andThen(new ArmCommand(armSubsystem)))
       .onFalse(
         Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
         .andThen(new ArmCommand(armSubsystem)));
