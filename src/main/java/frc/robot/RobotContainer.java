@@ -5,9 +5,11 @@
 package frc.robot;
 
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
 import frc.robot.commands.ArmCommand;
@@ -27,6 +29,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem.Position;
 
 
 
@@ -45,7 +48,7 @@ public class RobotContainer {
 
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
-  private final ArmCommand armCommand = new ArmCommand(armSubsystem);
+  // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   
   SendableChooser<Command> chooser = new SendableChooser<>();
@@ -56,33 +59,33 @@ public class RobotContainer {
   private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(driveSubsystem);
 
   //Songs
-  private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
-  private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
-  private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
-  private final MichaelHunterThemeFromSanAndreas michaelHunterThemeFromSanAndreas = new MichaelHunterThemeFromSanAndreas(driveSubsystem);
-  private final Megalovania megalovania = new Megalovania(driveSubsystem);
-  private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
+  // private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
+  // private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
+  // private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
+  // private final MichaelHunterThemeFromSanAndreas michaelHunterThemeFromSanAndreas = new MichaelHunterThemeFromSanAndreas(driveSubsystem);
+  // private final Megalovania megalovania = new Megalovania(driveSubsystem);
+  // private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
 
   //Driver Buttons
-  private final JoystickButton lowButton = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
-  private final JoystickButton midButton = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
-  private final JoystickButton highButton = new JoystickButton(Constants.dXboxController, Constants.xXboxButton);
-  private final JoystickButton groundButton = new JoystickButton(Constants.dXboxController, Constants.yXboxButton);
+  // private final JoystickButton lowButton = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
+  // private final JoystickButton midButton = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
+  // private final JoystickButton highButton = new JoystickButton(Constants.dXboxController, Constants.xXboxButton);
+  // private final JoystickButton groundButton = new JoystickButton(Constants.dXboxController, Constants.yXboxButton);
   // private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
   // private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
   // private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
   // private final JoystickButton highPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povRight)); //90
-  private final JoystickButton chassis = new JoystickButton(Constants.dXboxController, 8);
-  private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
-  private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
-  private final JoystickButton halfSpeed = new JoystickButton(Constants.dXboxController, Constants.backXboxButton);
+  // private final JoystickButton chassis = new JoystickButton(Constants.dXboxController, 8);
+  // private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
+  // private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
+  // private final JoystickButton halfSpeed = new JoystickButton(Constants.dXboxController, Constants.backXboxButton);
   //Manip buttons 
   private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
 
   
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
-    armSubsystem.setDefaultCommand(armCommand);
+    // armSubsystem.setDefaultCommand(armCommand);
     intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
@@ -92,12 +95,12 @@ public class RobotContainer {
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     //Songs
-    chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
-    chooser.addOption("Ginornos Theme", giornosTheme);
-    chooser.addOption("Sweden by C418", swedenC418);
-    chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
-    chooser.addOption("Megalovania", megalovania);
-    chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
+    // chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
+    // chooser.addOption("Ginornos Theme", giornosTheme);
+    // chooser.addOption("Sweden by C418", swedenC418);
+    // chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
+    // chooser.addOption("Megalovania", megalovania);
+    // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
     SmartDashboard.putData(chooser);
 
   }
@@ -121,29 +124,25 @@ public class RobotContainer {
 
     // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
     // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
-
-    // chassis.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
-    // // chassisPosition.onTrue(new InstantCommand(() -> armCommand.chassisPos()));
-    // lowButton.onTrue(new InstantCommand(() -> armSubsystem.lowPos()));
-    // midButton.onTrue(new InstantCommand(() -> armSubsystem.midPos()));
-    // highButton.onTrue(new InstantCommand(() -> armSubsystem.highPos()));
-    // groundButton.onTrue(new InstantCommand(() -> armSubsystem.intakeGroundPos()));
-
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
-    new JoystickButton(Constants.dXboxController, 1).whenPressed(() -> armSubsystem.highPos(), armSubsystem); //1=A
-    new JoystickButton(Constants.dXboxController, 2).whenPressed(() -> armSubsystem.midPos(), armSubsystem); //2=B
-    new JoystickButton(Constants.dXboxController, 3).whenPressed(() -> armSubsystem.lowPos(), armSubsystem); //3=X
-    new JoystickButton(Constants.dXboxController, 4).whenPressed(() -> armSubsystem.intakeGroundPos(), armSubsystem); //4=Y
-    new JoystickButton(Constants.dXboxController, 5).whenPressed(() -> armSubsystem.chassisPos(), armSubsystem); //5=LB
-    //new JoystickButton(Constants.dXboxController, 6).whenReleased(() ->armSubsystem.intakeGroundPos(), armSubsystem); //6=RB
+
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_LOW)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_MID)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
+      .whileTrue(new ArmCommand(armSubsystem))
+      .onFalse(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+        .andThen(new ArmCommand(armSubsystem)));
+
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */
     //zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
-    
   }
+
   public void updateAngle() {
     driveSubsystem.updateAngle();
   }
 }
-
