@@ -8,12 +8,16 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 //import com.ctre.phoenix.sensors.Pigeon2;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 //import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -76,10 +80,10 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //CANCoders Absolute Position Values
-    // SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
-    // SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
-    // SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
-    // SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
+    SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
+    SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
+    SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
+    SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
     // SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
     // SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
     // SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
@@ -196,7 +200,8 @@ public class Robot extends TimedRobot {
     }
     //driveSubsystem.unPark();
   }
-
+  private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+  
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
@@ -213,6 +218,22 @@ public class Robot extends TimedRobot {
       // lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
       // highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
     //}
+    
+    if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
+      intakeNeo.setIdleMode(IdleMode.kBrake);
+      intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
+    } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
+      intakeNeo.setIdleMode(IdleMode.kBrake);
+      intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
+    } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
+      intakeNeo.set(-.08);
+      intakeNeo.setIdleMode(IdleMode.kBrake);
+    } 
+    // else if(Constants.dXboxController.getLeftTriggerAxis() < 0.1){
+    //   intakeNeo.set(0);
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    // }
+
   }
 
   @Override

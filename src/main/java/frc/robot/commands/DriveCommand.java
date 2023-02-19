@@ -84,9 +84,15 @@ public class DriveCommand extends CommandBase {
         rotationPercent = 0.0;
       }
       drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-        translationXPercent * Constants.maxVelocity * (drive.isHalfSpeed() ? 0.35 : 1.00),
-        translationYPercent * Constants.maxVelocity * (drive.isHalfSpeed() ? 0.35 : 1.00),
-        rotationPercent * Constants.maxAngularVelocity * (drive.isHalfSpeed() ? 0.35 : 1.00),
+        translationXPercent * Constants.maxVelocity * 0.80
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
+        translationYPercent * Constants.maxVelocity * 0.80
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
+        rotationPercent * Constants.maxAngularVelocity * 0.35
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
         drive.getGyroscopeRotation()
         )
       );

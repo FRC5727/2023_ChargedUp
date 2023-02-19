@@ -60,11 +60,11 @@ public class ArmSubsystem extends SubsystemBase {
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       Position.CHASSIS, new ArmPosition(0, 0),
       Position.MIDDLE, new ArmPosition(-11, 31),
-      Position.GRID_LOW, new ArmPosition(27, 2),
+      Position.GRID_LOW, new ArmPosition(65, 2), //og: 27, 2
       Position.GRID_MID, new ArmPosition(26, 90),
       Position.GRID_HIGH, new ArmPosition(54, 163),
       Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(8, 154)
+      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150) //upper old: 154
     ));
 
   private WPI_TalonFX lowerArmMaster;

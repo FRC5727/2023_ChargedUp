@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //intakeNeo = new CANSparkMax(0, MotorType.kBrushless);
   }
   public void setSpeed(double speed) {
-    //intakeNeo.set(speed);
+    // intakeNeo.set(speed);
   }
 
   @Override
