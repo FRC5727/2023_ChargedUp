@@ -108,8 +108,6 @@ public class ArmSubsystem extends SubsystemBase {
       H_kv = 4.45, // 4.45
       H_ka = 0.02; // 0.02
 
-  // private double L_maxVelocity, L_maxAcceleration;
-  // private double H_maxVelocity, H_maxAcceleration;
   private double L_maxVoltage = 3;
   private double H_maxVoltage = 3;
 
@@ -130,19 +128,13 @@ public class ArmSubsystem extends SubsystemBase {
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
 
-    // this.lowArmFeedforward = new ArmFeedforward(L_ks, L_kg, L_kv, L_ka);
-    // this.highArmFeedforward = new ArmFeedforward(H_ks, H_kg, H_kv, H_ka);
-
     this.lowArmAngleOffset = 0;
     this.highArmAngleOffset = 287.92;
 
     // Jimmy, why are we overriding this?  This is confusing, and I don't know why it's necessary
     this.lowerArmGearRatio = 0.40; // 4.125
     this.highArmGearRatio = 0.10;
-
-    // configArmMotor();
-    // setCurrentPosToGoal();
-
+    
     // TODO Define tolerance elsewhere
     lowPidController.disableContinuousInput();
     lowPidController.setTolerance(1, .5);
@@ -157,8 +149,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     lowerArmMaster.setNeutralMode(NeutralMode.Brake);
     highArmMaster.setNeutralMode(NeutralMode.Brake);
-
-    resetToAbsolute();
   }
 
   // Limit a value (positive or negative)
@@ -166,55 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
 
-  // public void configArmMotor(){
-  // lowerArmSlave.follow(lowerArmMaster);
-  // highArmSlave.follow(highArmMaster);
-
-  // lowerArmMaster.configFactoryDefault();
-  // lowerArmSlave.configFactoryDefault();
-
-  // highArmMaster.configFactoryDefault();
-  // highArmSlave.configFactoryDefault();
-
-  // lowerArmSlave.setInverted(true);
-  // highArmSlave.setInverted(true);
-  // }
-  // private void waitForLowCanCoder(){
-  // /*
-  // * Wait for up to 1000 ms for a good CANcoder signal.
-  // *
-  // * This prevents a race condition during program startup
-  // * where we try to synchronize the Falcon encoder to the
-  // * CANcoder before we have received any position signal
-  // * from the CANcoder.
-  // */
-  // for (int i = 0; i < 100; ++i) {
-  // lowerArmCoder.getAbsolutePosition();
-  // if (lowerArmCoder.getLastError() == ErrorCode.OK) {
-  // break;
-  // }
-  // Timer.delay(0.010);
-  // LowerCANcoderInitTime += 10;
-  // }
-  // }
-  // private void waitForHighCanCoder(){
-  // /*
-  // * Wait for up to 1000 ms for a good CANcoder signal.
-  // *
-  // * This prevents a race condition during program startup
-  // * where we try to synchronize the Falcon encoder to the
-  // * CANcoder before we have received any position signal
-  // * from the CANcoder.
-  // */
-  // for (int i = 0; i < 100; ++i) {
-  // highArmCoder.getAbsolutePosition();
-  // if (highArmCoder.getLastError() == ErrorCode.OK) {
-  // break;
-  // }
-  // Timer.delay(0.010);
-  // HighCANcoderInitTime += 10;
-  // }
-  // }
+ 
   // public Rotation2d getHighCanCoder(){
   // return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
   // }
@@ -237,41 +179,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double getHighRelativeAngle() {
     return highArmCoder.getPosition() * (360.0 / (highArmGearRatio * 4096.0));
-  }
-
-  // public double getHighAngle(){
-  // return getHighAbsoluteAngle() - highArmAngleOffset;
-  // }
-  // public double getLowAngle(){
-  // return getLowAbsoluteAngle() - lowArmAngleOffset;
-  // }
-
-  // public void setHighArmGoal(double angle){
-  // highPidController.setGoal(angle);
-  // }
-  // public void setLowArmGoal(double angle){
-  // lowPidController.setGoal(angle);
-  // }
-  // public double getHighGoal(){
-  // return highPidController.getGoal().position;
-  // }
-  // public double getLowGoal(){
-  // return lowPidController.getGoal().position;
-  // }
-  // public void setCurrentPosToGoal() {
-  // lowPidController.setGoal(getLowRelativeAngle());
-  // highPidController.setGoal(getHighRelativeAngle());
-  // }
-  public void resetToAbsolute() {
-    // waitForCanCoder();
-
-    double absolutePosition1 = Conversions.degreesToFalcon(getLowRelativeAngle(), lowerArmGearRatio);
-    lowerArmMaster.setSelectedSensorPosition(absolutePosition1);
-    lowerArmSlave.setSelectedSensorPosition(absolutePosition1);
-
-    double absolutePosition2 = Conversions.degreesToFalcon(getHighRelativeAngle(), highArmGearRatio);
-    highArmMaster.setSelectedSensorPosition(absolutePosition2);
-    highArmSlave.setSelectedSensorPosition(absolutePosition2);
   }
 
   public void setTargetPosition(Position position) {
@@ -320,12 +227,3 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage());
   }
 }
-// + //PID calculates according to its current angle, and the goal angle its
-// trying to get to
-// highArmFeedforward.calculate(
-// highPidController.getSetpoint().position,
-// highPidController.getSetpoint().velocity)
-// // +
-// // lowArmFeedforward.calculate(
-// // lowPidController.getSetpoint().position,
-// // lowPidController.getSetpoint().velocity)

@@ -131,7 +131,7 @@ public class RobotContainer {
     new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
       .whileTrue(
         Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
@@ -151,6 +151,7 @@ public class RobotContainer {
       .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
       .andThen(new ArmCommand(armSubsystem)));
 
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeCommand.toggleCube()));
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */

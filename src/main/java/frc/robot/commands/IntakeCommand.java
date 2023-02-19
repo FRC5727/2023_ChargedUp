@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -22,16 +24,18 @@ public class IntakeCommand extends CommandBase {
   }
 
   public void coneIntake(){
-    intake.setSpeed(-1.00);
+    intake.setSpeed(0.5);
   }
+
   public void cubeIntake(){
-    intake.setSpeed(1);
+    intake.setSpeed(-0.5);
   }
+
   public void coneOuttake(){
-    intake.setSpeed(1);
+    intake.setSpeed(-0.5);
   }
   public void cubeOuttake(){
-    intake.setSpeed(-1.00);
+    intake.setSpeed(0.5);
   }
   public void place(){
     if(!cube) coneOuttake();
@@ -47,6 +51,26 @@ public class IntakeCommand extends CommandBase {
   public void setCone(){
     cube = false;
   }
+
+  public void cubeIdle(){
+    intake.setSpeed(-.08);
+  }
+  public void coneIdle(){
+    intake.setSpeed(0.08);
+  }
+
+  public void toggleCube(){
+    cube = !cube;
+  }
+
+  public boolean isCube(){
+    return cube;
+  }
+  public void intakeIdle(){
+    if(!cube) coneIdle();
+    if(cube) cubeIdle();
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -57,8 +81,9 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(Constants.dXboxController.getLeftTriggerAxis() > 0.10) place();
-    // if(Constants.dXboxController.getRightTriggerAxis() > 0.10) intake();
+    if(Constants.dXboxController.getLeftTriggerAxis() > 0.10) place();
+    if(Constants.dXboxController.getRightTriggerAxis() > 0.10) intake();
+    if(Constants.dXboxController.getLeftTriggerAxis() < 0.10 && Constants.dXboxController.getRightTriggerAxis() < 0.10) intakeIdle();
     System.out.println("TODO Intake running");
   }
 

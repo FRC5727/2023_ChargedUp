@@ -48,10 +48,10 @@ public final class Constants {
   public static final int highCoder = 4;
   public static final int lowCoder = 5;
   
-  public static final double fleo = Math.toRadians(-225.443); //Front Left Encoder Offset
-  public static final double freo = Math.toRadians(-0.081); //Front Right Encoder Offset
-  public static final double rreo = Math.toRadians(-251.190); //Rear Right Encoder Offset
-  public static final double rleo = Math.toRadians(-196.433); //Rear Left Encoder Offset -202og
+  public static final double fleo = -Math.toRadians(225.443); //Front Left Encoder Offset
+  public static final double freo = -Math.toRadians(0.081); //Front Right Encoder Offset
+  public static final double rreo = -Math.toRadians(251.190); //Rear Right Encoder Offset
+  public static final double rleo = -Math.toRadians(196.433); //Rear Left Encoder Offset -202og
 
   /*
    * public static final double fleo = Math.toRadians(-240.443); //Front Left Encoder Offset

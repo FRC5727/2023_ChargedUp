@@ -37,7 +37,6 @@ public class ChargeStationRedSideAuto extends SequentialCommandGroup {
         driveSubsystem::setModuleStates, //makes the swerve move according to the path
         driveSubsystem //it needs this so it can actually drive
       ),
-      new InstantCommand(() -> driveSubsystem.eBrakeMode()), //new brake mode
       new InstantCommand(() -> driveSubsystem.stop()),
       new WaitCommand(0.5)
       );

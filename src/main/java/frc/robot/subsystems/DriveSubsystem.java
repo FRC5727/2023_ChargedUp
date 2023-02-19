@@ -33,20 +33,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   private static final double maxVoltage = Constants.MAX_VOLTAGE;
   private static final double maxVelocity = Constants.maxVelocity;
-  //private static final double maxAngularVelocity = Constants.maxAngularVelocity;
 
   private boolean halfSpeed = false;
 
   private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
-
-  // private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); //Front Left Drive Motor
-  // private static final TalonFX FLSMTalon = new TalonFX(Constants.flsmPort, Constants.rickBot); // Front Left Steer Motor
-  // private static final TalonFX FRDMTalon = new TalonFX(Constants.frdmPort, Constants.rickBot); //Front Right Drive Motor
-  // private static final TalonFX FRSMTalon = new TalonFX(Constants.frsmPort, Constants.rickBot); // Front Right Steer Motor
-  // private static final TalonFX RRDMTalon = new TalonFX(Constants.rrdmPort, Constants.rickBot); //Rear Right Drive Motor
-  // private static final TalonFX RRSMTalon = new TalonFX(Constants.rrsmPort, Constants.rickBot); //Rear Right Steer Motor
-  // private static final TalonFX RLDMTalon = new TalonFX(Constants.rldmPort, Constants.rickBot); //Rear Left Drive Motor
-  // private static final TalonFX RLSMTalon = new TalonFX(Constants.rlsmPort, Constants.rickBot); //Rear Left Steer Motor
 
   public final static SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       // Front left
@@ -178,9 +168,6 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-    // SmartDashboard.putNumber("Pose X", robotPose.getTranslation().getX());
-    // SmartDashboard.putNumber("Pose Y", robotPose.getTranslation().getY());
-    // SmartDashboard.putNumber("Pose Rotation", robotPose.getRotation().getDegrees());
   }
   @Override
   public void periodic() {
@@ -193,18 +180,6 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-
-    // String speed = new String(mChassisSpeeds.toString());
-    // SmartDashboard.putString("Speed", speed);
-    
-    // Pose2d poseData = getPose();
-    // Field2d field2d = new Field2d();
-    // field2d.setRobotPose(poseData);
-    // SmartDashboard.putData(field2d);
-    
-    // SmartDashboard.putNumber("Pose X", poseData.getTranslation().getX());
-    // SmartDashboard.putNumber("Pose Y", poseData.getTranslation().getY());
-    // SmartDashboard.putNumber("Pose Rotation", poseData.getRotation().getDegrees());
     
   }
   public void stop(){
@@ -216,27 +191,8 @@ public class DriveSubsystem extends SubsystemBase {
     rlm.set(0.0, Math.toRadians(0.0));
     rrm.set(0.0, Math.toRadians(0.0));
   }
-  public void eBrakeMode(){
-    // FLDMTalon.setNeutralMode(NeutralMode.Brake);
-    // FLSMTalon.setNeutralMode(NeutralMode.Brake);
-    // FRDMTalon.setNeutralMode(NeutralMode.Brake);
-    // FRSMTalon.setNeutralMode(NeutralMode.Brake);
-    // RRDMTalon.setNeutralMode(NeutralMode.Brake);
-    // RRSMTalon.setNeutralMode(NeutralMode.Brake);
-    // RLDMTalon.setNeutralMode(NeutralMode.Brake);
-    // RLSMTalon.setNeutralMode(NeutralMode.Brake);
-  }
-  public void unPark(){
-    // FLDMTalon.setNeutralMode(NeutralMode.Coast);
-    // FLSMTalon.setNeutralMode(NeutralMode.Coast);
-    // FRDMTalon.setNeutralMode(NeutralMode.Coast);
-    // FRSMTalon.setNeutralMode(NeutralMode.Coast);
-    // RRDMTalon.setNeutralMode(NeutralMode.Coast);
-    // RRSMTalon.setNeutralMode(NeutralMode.Coast);
-    // RLDMTalon.setNeutralMode(NeutralMode.Coast);
-    // RLSMTalon.setNeutralMode(NeutralMode.Coast);
-  }
+  
 }
-//https://github.com/BytingBulldogs3539/swerve-lib/blob/develop/src/main/java/com/swervedrivespecialties/swervelib/SdsSwerveModuleHelper.java
+
 //
 
