@@ -119,9 +119,8 @@ public final class Constants {
 
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SdsModuleConfigurations.MK4I_L2.getDriveReduction() * SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
 
-  public static final double speedLimit = 0.75;
-  public static final double rSpeedLimit = 0.40;
   //Buttons
+  // TODO Why do you we need these?  They are defined in the XBoxController class
   public static final int aXboxButton = 1;
   public static final int bXboxButton = 2;
   public static final int xXboxButton = 3;
@@ -153,11 +152,20 @@ public final class Constants {
   
 
 
-  public static double translationRateLimit = 2.5;
-  public static double rotationRateLimit = 2.5;
+  public static final double translationRateLimit = 2.5;
+  public static final double rotationRateLimit = 2.5;
+
+  // Percent of max possible speed when travelling normally
+  public static final double maxTranslationPercent = 0.80;
+  public static final double maxRotationPercent = 0.35;
+
+  // Percent of max possible speed when intentionally slowing down
+  public static final double slowTranslationPercent = 0.30;
+  public static final double slowRotationPercent = 0.10;
 
   public static double controllerXYExpo = 2.6;
   public static double controllerRoExpo = 2.6;
+  // TODO Revisit this logic, but use Math.abs() before exponentiation and Math.signum() to preserve sign
         //x^3
         //x^1.96 the best so far
         //x^3.4

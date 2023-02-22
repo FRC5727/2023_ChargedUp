@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.fasterxml.jackson.core.json.DupDetector;
+
 import frc.omegabytes.library.omegaSwerveLib.Mk4ModuleConfiguration;
 import frc.omegabytes.library.omegaSwerveLib.Mk4iSwerveModuleHelper;
 import frc.omegabytes.library.omegaSwerveLib.SwerveModule;
@@ -33,6 +35,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private static final double maxVoltage = Constants.MAX_VOLTAGE;
   private static final double maxVelocity = Constants.maxVelocity;
+  private double currentTranslationPercent;
+  private double currentRotationPercent;
 
   private boolean halfSpeed = false;
 
@@ -154,6 +158,23 @@ public class DriveSubsystem extends SubsystemBase {
     return halfSpeed;
   }
 
+  public void disableSpeedLimit() {
+    currentTranslationPercent = Constants.maxTranslationPercent;
+    currentRotationPercent = Constants.maxRotationPercent;
+  }
+
+  public void enableSpeedLimit() {
+    currentTranslationPercent = Constants.slowTranslationPercent;
+    currentTranslationPercent = Constants.slowRotationPercent;
+  }
+
+  public double getTranslationPercent() {
+    return currentTranslationPercent;
+  }
+
+  public double getRotationPercent() {
+    return currentRotationPercent;
+  }
 
   public void updateAngle() {}
   public void start(){}

@@ -131,24 +131,35 @@ public class RobotContainer {
     new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
     new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
       .whileTrue(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+        Commands.runOnce(() -> {
+          driveSubsystem.enableSpeedLimit();
+          armSubsystem.setTargetPosition(driverTargetPosition);
+        })
         .andThen(new ArmCommand(armSubsystem)))
       .onFalse(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+        Commands.runOnce(() -> {
+          driveSubsystem.disableSpeedLimit();
+          armSubsystem.setTargetPosition(Position.CHASSIS);
+        })
         .andThen(new ArmCommand(armSubsystem)));
 
     // TODO Move the TriggerButton, and make the intakeCommand actually work (runs forever, stops when command terminates, nice to have if finished when piece acquired)
     new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
     .whileTrue(
-      Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+      Commands.runOnce(() -> {
+        driveSubsystem.enableSpeedLimit();
+        armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION);
+      })
       .andThen(new ArmCommand(armSubsystem))
       .alongWith(intakeCommand))
     .onFalse(
-      Commands.runOnce(() -> intakeCommand.cancel())
-      .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+      Commands.runOnce(() -> {
+        intakeCommand.cancel();
+        driveSubsystem.disableSpeedLimit();
+        armSubsystem.setTargetPosition(Position.CHASSIS);
+      })
       .andThen(new ArmCommand(armSubsystem)));
 
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeCommand.toggleCube()));
