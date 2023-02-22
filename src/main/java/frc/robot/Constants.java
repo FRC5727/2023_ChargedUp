@@ -41,65 +41,35 @@ public final class Constants {
   public static final int rlePort = 3; //Rear Left Encoder Port
 
   public static final int highMaster = 8;
-  public static final int lowerMaster = 9;
   public static final int highSlave = 10;
+
+  public static final int lowerMaster = 9;
   public static final int lowerSlave = 11;
 
-  public static final int highCoder = 4;
-  public static final int lowCoder = 5;
-  
-  public static final double fleo = -Math.toRadians(225.443); //Front Left Encoder Offset
-  public static final double freo = -Math.toRadians(0.081); //Front Right Encoder Offset
-  public static final double rreo = -Math.toRadians(251.190); //Rear Right Encoder Offset
-  public static final double rleo = -Math.toRadians(196.433); //Rear Left Encoder Offset -202og
+  public static final int lowerArmCoder = 4;
+  public static final int highArmCoder = 5;
 
-  /*
-   * public static final double fleo = Math.toRadians(-240.443); //Front Left Encoder Offset
-  public static final double freo = Math.toRadians(-0.081); //Front Right Encoder Offset
-  public static final double rreo = Math.toRadians(-251.190); //Rear Right Encoder Offset
-  public static final double rleo = Math.toRadians(-205.433); //Rear Left Encoder Offset
-   */
+  
+  public static final double fleo = -Math.toRadians(316.66); //Front Left Encoder Offset
+  public static final double freo = -Math.toRadians(247.14); //Front Right Encoder Offset
+  public static final double rreo = -Math.toRadians(90.70); //Rear Right Encoder Offset
+  public static final double rleo = -Math.toRadians(208.82); //Rear Left Encoder Offset
   //Turn wheels to 0
-  //Get encoder abs offset
+  //Set all Offsets to 0
+  //Push Code
+  //Power Cycle
+  //Get encoder abs value
   //input values
   //push code
-  //turn off
-  //turn on
+  //Power Cycle
   //verify
-
-
-
-
-
-  // Offset in degrees
-  public static final double angleOffsetL = 0;
-
-  // Gear ratio
-  public static final double gearRatioL = 450; //450:1 on the lower arm
-
-  
-
-  // Constraints for motion profiling
-  public static final double velConstraint = 0.5;
-  public static final double accelConstraint = 0.5; //setting this to 0.5 for testing purposes 
-
-  // Offset in degrees
-  public static final double angleOffsetH = 0;
-
-  // Gear ratio
-  public static final double gearRatioH = 247.5; //247.5:1 on the higher arm
-
-
-  // Constraints for motion profiling
-  public static final double velConstraintH = 0.5;
-  public static final double accelConstraintH = 0.5; //setting this to 0.5 for testing purposes 
 
 
   public static final String rickBot = "CANivore";
 
-  public static PIDController translationXController = new PIDController(0, 0, 0); //10
-  public static PIDController translationYController = new PIDController(0, 0, 0);
-  public static PIDController rotationController = new PIDController(0, 0, 0);
+  public static PIDController translationXController = new PIDController(0.01, 0, 0); //10
+  public static PIDController translationYController = new PIDController(0.01, 0, 0);
+  public static PIDController rotationController = new PIDController(0.01, 0, 0);
 
   public static double maxVelocity = (6380.0 / 60.0 * 
         SdsModuleConfigurations.MK4I_L2.getDriveReduction() * 
@@ -158,19 +128,15 @@ public final class Constants {
 
   public static double controllerXYExpo = 2.6;
   public static double controllerRoExpo = 2.6;
-        //x^3
-        //x^1.96 the best so far
-        //x^3.4
-        //x^2.6
-        //x^4.6
-        //x^5.4
-        //x^0.6
+  //x^3
+  //x^1.96 the best so far
+  //x^3.4
+  //x^2.6
+  //x^4.6
+  //x^5.4
+  //x^0.6
 
 
-//public static final int CANDLE = 19;
-
-  public static final int MAX_COUNTS_PER_REV = 42;
-  public static final double EPSILON = 0.0001;
 
   // The left-to-right distance between the drivetrain wheels. Should be measured from center to center.
   public static final double swerveWidth = 0.635; // Measure and set trackwidth
@@ -178,33 +144,6 @@ public final class Constants {
   public static final double swerveLength = 0.7366; // Measure and set wheelbase
   public static double maxAngularVelocity = maxVelocity / Math.hypot(swerveWidth / 2.0, swerveLength / 2.0);
   public static final TrapezoidProfile.Constraints rotationConstraints = new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularVelocity);
-
-  
-  
-  // private static final TalonFX FLDMTalon = new TalonFX(fldmPort, rickBot); //Front Left Drive Motor
-  // private static final TalonFX FLSMTalon = new TalonFX(flsmPort, rickBot); // Front Left Steer Motor
-  // private static final TalonFX FRDMTalon = new TalonFX(frdmPort, rickBot); //Front Right Drive Motor
-  // private static final TalonFX FRSMTalon = new TalonFX(frsmPort, rickBot); // Front Right Steer Motor
-  // private static final TalonFX RRDMTalon = new TalonFX(rrdmPort, rickBot); //Rear Right Drive Motor
-  // private static final TalonFX RRSMTalon = new TalonFX(rrsmPort, rickBot); //Rear Right Steer Motor
-  // private static final TalonFX RLDMTalon = new TalonFX(rldmPort, rickBot); //Rear Left Drive Motor
-  // private static final TalonFX RLSMTalon = new TalonFX(rlsmPort, rickBot); //Rear Left Steer Motor
-
-  // public static final CANCoder FLEcanCoderConstantsWithCANivore = new CANCoder(flePort, rickBot); //Front Left Encoder Port
-  // public static final CANCoder FREcanCoderConstantsWithCANivore = new CANCoder(frePort, rickBot); //Front Right Encoder Port
-  // public static final CANCoder RREcanCoderConstantsWithCANivore = new CANCoder(rrePort, rickBot); //Rear Right Encoder Port
-  // public static final CANCoder RLEcanCoderConstantsWithCANivore = new CANCoder(rlePort, rickBot); //Rear Left Encoder Port
-   
-  /*
-    FLDMTalon
-    FLSMTalon
-    FRDMTalon
-    FRSMTalon
-    RRDMTalon
-    RRSMTalon
-    RLDMTalon
-    RLSMTalon
-   */
 
 }
 

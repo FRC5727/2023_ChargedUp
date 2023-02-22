@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.CANdleSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  // private CANdleSubsystem caNdleSubsystem;
 
   //private DriveSubsystem driveSubsystem;
 
@@ -170,6 +172,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    // caNdleSubsystem.idleLED();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -198,11 +201,13 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
     //driveSubsystem.unPark();
   }
   private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
   
   /** This function is called periodically during operator control. */
+  private boolean cube = true;
   @Override
   public void teleopPeriodic() {
     //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
@@ -219,23 +224,78 @@ public class Robot extends TimedRobot {
       // highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
     //}
     
-    if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-      intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
-    } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-      intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
-    } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
-      intakeNeo.set(-.08);
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-    } 
+    // if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    //   intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
+    // } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    //   intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
+    // } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
+    //   intakeNeo.set(-.08);
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    // } 
     // else if(Constants.dXboxController.getLeftTriggerAxis() < 0.1){
     //   intakeNeo.set(0);
     //   intakeNeo.setIdleMode(IdleMode.kBrake);
     // }
-
+    if(Constants.dXboxController.getXButtonPressed()){
+      toggleCube();
+    }
+    if(Constants.dXboxController.getRightTriggerAxis() < 0.05 && Constants.dXboxController.getLeftTriggerAxis() < 0.05){
+      intakeIdle();
+    }
+    if(Constants.dXboxController.getRightTriggerAxis() > 0.05){
+      place();
+    }
+    if(Constants.dXboxController.getLeftTriggerAxis() > 0.05){
+      intake();
+    }
+      // intakeNeo.set(0.5);
+  }
+  public void coneIntake(){
+    intakeNeo.set(0.5);
   }
 
+  public void cubeIntake(){
+    intakeNeo.set(-0.5); //pos
+  }
+
+  public void coneOuttake(){
+    intakeNeo.set(-0.5);
+  }
+  public void cubeOuttake(){
+    intakeNeo.set(0.5);
+  }
+  public void place(){
+    if(!isCube()) coneOuttake();
+    if(isCube()) cubeOuttake();
+  }
+  public void intake(){
+    if(!isCube()) coneIntake();
+    if(isCube()) cubeIntake();
+    // System.out.println("TODO Intake running");
+  }
+  
+
+  public void cubeIdle(){
+    intakeNeo.set(-.08);
+  }
+  public void coneIdle(){
+    intakeNeo.set(0.08);
+  }
+
+  public void toggleCube(){
+    cube = !cube;
+  }
+
+  public boolean isCube(){
+    return cube;
+  }
+  public void intakeIdle(){
+    if(!isCube()) coneIdle();
+    if(isCube()) cubeIdle();
+  }
+  
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.

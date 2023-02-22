@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// Coconut.jpg (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -115,15 +115,15 @@ public class ArmSubsystem extends SubsystemBase {
   private double HighCANcoderInitTime = 0.0;
 
   public ArmSubsystem() {
-    // TODO Get the device numbers from centrally defined constants
-    this.lowerArmMaster = new WPI_TalonFX(9, Constants.rickBot);
-    this.lowerArmSlave = new WPI_TalonFX(11, Constants.rickBot);
-    this.lowerArmCoder = new CANCoder(4, Constants.rickBot);
+    // DONE Get the device numbers from centrally defined constants
+    this.lowerArmMaster = new WPI_TalonFX(Constants.lowerMaster, Constants.rickBot);
+    this.lowerArmSlave = new WPI_TalonFX(Constants.lowerSlave, Constants.rickBot);
+    this.lowerArmCoder = new CANCoder(Constants.lowerArmCoder, Constants.rickBot);
 
-    // TODO Get the device numbers from centrally defined constants
-    this.highArmMaster = new WPI_TalonFX(8, Constants.rickBot);
-    this.highArmSlave = new WPI_TalonFX(10, Constants.rickBot);
-    this.highArmCoder = new CANCoder(5, Constants.rickBot);
+    // DONE Get the device numbers from centrally defined constants
+    this.highArmMaster = new WPI_TalonFX(Constants.highMaster, Constants.rickBot);
+    this.highArmSlave = new WPI_TalonFX(Constants.highSlave, Constants.rickBot);
+    this.highArmCoder = new CANCoder(Constants.highArmCoder, Constants.rickBot);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);

@@ -81,6 +81,8 @@ public class RobotContainer {
   // private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
   // private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
   // private final JoystickButton halfSpeed = new JoystickButton(Constants.dXboxController, Constants.backXboxButton);
+  // private final JoystickButton intake = new JoystickButton(Constants.dXboxController, Constants.XboxLeftTriger);
+  // private final JoystickButton place = new JoystickButton(Constants.dXboxController, Constants.XboxRightTriger);
   //Manip buttons 
   private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
 
@@ -124,8 +126,12 @@ public class RobotContainer {
     // cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
     // coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
 
-    // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
-    // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
+  //  if(Constants.dXboxController.getRightTriggerAxis() > 0.05){
+  //   intakeCommand.intake();
+  //  }
+  //  if(Constants.dXboxController.getLeftTriggerAxis() > 0.05){
+  //   intakeCommand.place();
+  //  }
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
 
     new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
@@ -151,7 +157,7 @@ public class RobotContainer {
       .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
       .andThen(new ArmCommand(armSubsystem)));
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeCommand.toggleCube()));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeCommand.toggleCube()));
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */
