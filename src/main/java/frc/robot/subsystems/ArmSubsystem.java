@@ -1,11 +1,13 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// Coconut.jpg (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
+import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Queue;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -49,9 +51,8 @@ public class ArmSubsystem extends SubsystemBase {
     INTAKE_SUBSTATION,
   };
 
-  // Next position for the Arm to target
-  // TODO Allow for this to be a list of positions
-  private Position targetPosition = Position.CHASSIS;
+  // Next positions for the Arm to target
+  private Queue<Position> targetPosition = new ArrayDeque<Position>();
 
   // Whether or not Arm is currently enabled to move to a position
   private boolean enabled = false;
@@ -60,11 +61,11 @@ public class ArmSubsystem extends SubsystemBase {
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       Position.CHASSIS, new ArmPosition(0, 0),
       Position.MIDDLE, new ArmPosition(-11, 31),
-      Position.GRID_LOW, new ArmPosition(65, 2), //og: 27, 2
+      Position.GRID_LOW, new ArmPosition(65, 2),
       Position.GRID_MID, new ArmPosition(26, 90),
       Position.GRID_HIGH, new ArmPosition(54, 163),
       Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150) //upper old: 154
+      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150)
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -115,15 +116,15 @@ public class ArmSubsystem extends SubsystemBase {
   private double HighCANcoderInitTime = 0.0;
 
   public ArmSubsystem() {
-    // TODO Get the device numbers from centrally defined constants
-    this.lowerArmMaster = new WPI_TalonFX(9, Constants.rickBot);
-    this.lowerArmSlave = new WPI_TalonFX(11, Constants.rickBot);
-    this.lowerArmCoder = new CANCoder(4, Constants.rickBot);
+    // DONE Get the device numbers from centrally defined constants
+    this.lowerArmMaster = new WPI_TalonFX(Constants.lowerMaster, Constants.rickBot);
+    this.lowerArmSlave = new WPI_TalonFX(Constants.lowerSlave, Constants.rickBot);
+    this.lowerArmCoder = new CANCoder(Constants.lowerArmCoder, Constants.rickBot);
 
-    // TODO Get the device numbers from centrally defined constants
-    this.highArmMaster = new WPI_TalonFX(8, Constants.rickBot);
-    this.highArmSlave = new WPI_TalonFX(10, Constants.rickBot);
-    this.highArmCoder = new CANCoder(5, Constants.rickBot);
+    // DONE Get the device numbers from centrally defined constants
+    this.highArmMaster = new WPI_TalonFX(Constants.highMaster, Constants.rickBot);
+    this.highArmSlave = new WPI_TalonFX(Constants.highSlave, Constants.rickBot);
+    this.highArmCoder = new CANCoder(Constants.highArmCoder, Constants.rickBot);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
@@ -182,19 +183,33 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setTargetPosition(Position position) {
-    this.targetPosition = position;
+    targetPosition.clear();
+    targetPosition.add(Position.MIDDLE);
+    targetPosition.add(position);
   }
 
   public void beginMovement() {
-    lowPidController.setSetpoint(armPositions.get(targetPosition).lowerArmAngle);
+    ArmPosition nextPosition = armPositions.get(targetPosition.peek());
+
+    lowPidController.setSetpoint(nextPosition.lowerArmAngle);
     lowPidController.reset();
-    highPidController.setSetpoint(armPositions.get(targetPosition).upperArmAngle);
+    highPidController.setSetpoint(nextPosition.upperArmAngle);
     highPidController.reset();
   }
 
   public void updateMovement() {
-    lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowRelativeAngle()), L_maxVoltage));
-    highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighRelativeAngle()), H_maxVoltage));
+    if (lowPidController.atSetpoint() && highPidController.atSetpoint()) {
+      targetPosition.remove();
+      if (targetPosition.size() > 0) {
+        beginMovement();
+      }
+    }
+    if (targetPosition.size() > 0) {
+      lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowRelativeAngle()), L_maxVoltage));
+      highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighRelativeAngle()), H_maxVoltage));
+    } else {
+      stopMovement();
+    }
   }
 
   public void stopMovement() {
@@ -203,7 +218,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean doneMovement() {
-    return lowPidController.atSetpoint() && highPidController.atSetpoint();
+    return targetPosition.size() == 0;
   }
 
   @Override
@@ -211,7 +226,7 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // Update dashboard to help monitor and debug
 
-    SmartDashboard.putString("Target Position", targetPosition.toString());
+    SmartDashboard.putString("Target Position", targetPosition.peek().toString());
     SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
     SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
     SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());

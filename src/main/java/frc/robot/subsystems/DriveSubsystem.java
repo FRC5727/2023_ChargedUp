@@ -54,61 +54,67 @@ public class DriveSubsystem extends SubsystemBase {
   );
   
   public DriveSubsystem() {
+    pigeon2.configMountPoseYaw(-90);
+
     mTab = Shuffleboard.getTab("Drivetrain");
     Mk4ModuleConfiguration CANivore = new Mk4ModuleConfiguration();
     CANivore.setCanivoreName(Constants.rickBot);
     CANivore.useCanivore();
     flm = Mk4iSwerveModuleHelper.createFalcon500(
-            // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
-            mTab.getLayout("Front Left Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(0, 0),
-            //Initalizes the module onto our CANivore
-            CANivore,
-            // This can either be STANDARD or FAST depending on your gear configuration
-            Mk4iSwerveModuleHelper.GearRatio.L2,
-            // This is the ID of the drive motor
-            Constants.fldmPort,
-            // This is the ID of the steer motor
-            Constants.flsmPort,
-            // This is the ID of the steer encoder
-            Constants.flePort,
-            // This is how much the steer encoder is offset from true zero (In our case, zero is facing straight forward)
-            Constants.fleo
-    ); 
-    frm = Mk4iSwerveModuleHelper.createFalcon500(
-            mTab.getLayout("Front Right Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(2, 0),
-            CANivore,
-            Mk4iSwerveModuleHelper.GearRatio.L2,
-            Constants.frdmPort,
-            Constants.frsmPort,
-            Constants.frePort,
-            Constants.freo
-    );
-    rlm = Mk4iSwerveModuleHelper.createFalcon500(
-            mTab.getLayout("Rear Left Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(4, 0),
-            CANivore,
-            Mk4iSwerveModuleHelper.GearRatio.L2,
-            Constants.rldmPort,
-            Constants.rlsmPort,
-            Constants.rlePort,
-            Constants.rleo
-    );
-    rrm = Mk4iSwerveModuleHelper.createFalcon500(
-            mTab.getLayout("Rear Right Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(6, 0),
-            CANivore,
-            Mk4iSwerveModuleHelper.GearRatio.L2,
-            Constants.rrdmPort,
-            Constants.rrsmPort,
-            Constants.rrePort,
-            Constants.rreo
-    );
+                // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
+                mTab.getLayout("Front Left Module", BuiltInLayouts.kList)
+                .withSize(2, 4)
+                .withPosition(0, 0),
+                //Initalizes the module onto our CANivore
+                CANivore,
+                // This can either be STANDARD or FAST depending on your gear configuration
+                Mk4iSwerveModuleHelper.GearRatio.L2,
+                // This is the ID of the drive motor
+                Constants.fldmPort,
+                // This is the ID of the steer motor
+                Constants.flsmPort,
+                // This is the ID of the steer encoder
+                Constants.flePort,
+                // This is how much the steer encoder is offset from true zero (In our case, zero is facing straight forward)
+                Constants.fleo
+        ); 
+        frm = Mk4iSwerveModuleHelper.createFalcon500(
+                mTab.getLayout("Front Right Module", BuiltInLayouts.kList)
+                .withSize(2, 4)
+                .withPosition(2, 0),
+                CANivore,
+                Mk4iSwerveModuleHelper.GearRatio.L2,
+                Constants.frdmPort,
+                Constants.frsmPort,
+                Constants.frePort,
+                Constants.freo
+        );
+        rlm = Mk4iSwerveModuleHelper.createFalcon500(
+                mTab.getLayout("Rear Left Module", BuiltInLayouts.kList)
+                .withSize(2, 4)
+                .withPosition(4, 0),
+                CANivore,
+                Mk4iSwerveModuleHelper.GearRatio.L2,
+                Constants.rldmPort,
+                Constants.rlsmPort,
+                Constants.rlePort,
+                Constants.rleo
+        );
+        rrm = Mk4iSwerveModuleHelper.createFalcon500(
+                mTab.getLayout("Rear Right Module", BuiltInLayouts.kList)
+                .withSize(2, 4)
+                .withPosition(6, 0),
+                CANivore,
+                Mk4iSwerveModuleHelper.GearRatio.L2,
+                Constants.rrdmPort,
+                Constants.rrsmPort,
+                Constants.rrePort,
+                Constants.rreo
+        );
+  }
+
+  public double getGyroPitch(){
+    return pigeon2.getPitch();
   }
   /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
@@ -212,8 +218,4 @@ public class DriveSubsystem extends SubsystemBase {
     rlm.set(0.0, Math.toRadians(0.0));
     rrm.set(0.0, Math.toRadians(0.0));
   }
-  
 }
-
-//
-

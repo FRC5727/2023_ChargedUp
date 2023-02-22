@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private final CANSparkMax intakeNeo;
+  // private final CANSparkMax intakeNeo;
 
   
  
 
   public IntakeSubsystem() {
-    intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+    // intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
   }
   public void setSpeed(double speed) {
     // intakeNeo.set(speed);
