@@ -4,15 +4,11 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import frc.omegabytes.library.omegaSwerveLib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 
 /**
@@ -44,16 +40,25 @@ public final class Constants {
   public static final int rrePort = 2; //Rear Right Encoder Port
   public static final int rlePort = 3; //Rear Left Encoder Port
 
-  // public static final double fleo = Math.toRadians(-180.615); //Front Left Encoder Offset
-  // public static final double freo = Math.toRadians(-123.223); //Front Right Encoder Offset
-  // public static final double rreo = Math.toRadians(-6.500); //Rear Right Encoder Offset
-  // public static final double rleo = Math.toRadians(-357.360); //Rear Left Encoder Offset
-  
+  public static final int highMaster = 8;
+  public static final int lowerMaster = 9;
+  public static final int highSlave = 10;
+  public static final int lowerSlave = 11;
 
-  public static final double fleo = Math.toRadians(-225.443); //Front Left Encoder Offset
+  public static final int highCoder = 4;
+  public static final int lowCoder = 5;
+  
+  public static final double fleo = -Math.toRadians(225.443); //Front Left Encoder Offset
+  public static final double freo = -Math.toRadians(0.081); //Front Right Encoder Offset
+  public static final double rreo = -Math.toRadians(251.190); //Rear Right Encoder Offset
+  public static final double rleo = -Math.toRadians(196.433); //Rear Left Encoder Offset -202og
+
+  /*
+   * public static final double fleo = Math.toRadians(-240.443); //Front Left Encoder Offset
   public static final double freo = Math.toRadians(-0.081); //Front Right Encoder Offset
   public static final double rreo = Math.toRadians(-251.190); //Rear Right Encoder Offset
-  public static final double rleo = Math.toRadians(-196.433); //Rear Left Encoder Offset
+  public static final double rleo = Math.toRadians(-205.433); //Rear Left Encoder Offset
+   */
   //Turn wheels to 0
   //Get encoder abs offset
   //input values
@@ -61,6 +66,33 @@ public final class Constants {
   //turn off
   //turn on
   //verify
+
+
+
+
+
+  // Offset in degrees
+  public static final double angleOffsetL = 0;
+
+  // Gear ratio
+  public static final double gearRatioL = 450; //450:1 on the lower arm
+
+  
+
+  // Constraints for motion profiling
+  public static final double velConstraint = 0.5;
+  public static final double accelConstraint = 0.5; //setting this to 0.5 for testing purposes 
+
+  // Offset in degrees
+  public static final double angleOffsetH = 0;
+
+  // Gear ratio
+  public static final double gearRatioH = 247.5; //247.5:1 on the higher arm
+
+
+  // Constraints for motion profiling
+  public static final double velConstraintH = 0.5;
+  public static final double accelConstraintH = 0.5; //setting this to 0.5 for testing purposes 
 
 
   public static final String rickBot = "CANivore";
@@ -102,14 +134,23 @@ public final class Constants {
   public static final int rightStickXboxButton = 10;
 
   //Axis / sticks
-  public static int XboxLeftXstick = 0;
-  public static int XboxRightXstick = 4;
-  public static int XboxLeftYstick = 1;
-  public static int XboxRightYstick = 5;
+  public static final int XboxLeftXstick = 0;
+  public static final int XboxLeftYstick = 1;
+  public static final int XboxLeftTriger = 2;
+  public static final int XboxRightTriger = 3;
+  public static final int XboxRightXstick = 4;
+  public static final int XboxRightYstick = 5;
 
-  //Triggers
-  public static int XboxLeftTriger = 2;
-  public static int XboxRightTriger = 3;
+  //POV
+  public static final int povUp = 0;
+  public static final int povUpRight = 45;
+  public static final int povRight = 90;
+  public static final int povDownRight = 135;
+  public static final int povDown = 180;
+  public static final int povDownLeft = 225;
+  public static final int povLeft = 270;
+  public static final int povUpLeft = 315;
+  
 
 
   public static double translationRateLimit = 2.5;

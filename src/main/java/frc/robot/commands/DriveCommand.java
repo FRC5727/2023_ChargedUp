@@ -24,7 +24,7 @@ public class DriveCommand extends CommandBase {
   private double translationYPercent;
   private double rotationPercent;
   
-  private int gearShift = 1;
+  //private int gearShift = 1;
 
   public DriveCommand(DriveSubsystem drive) {
     this.drive = drive;
@@ -63,9 +63,9 @@ public class DriveCommand extends CommandBase {
     // translationYPercent *= multiplicationValue;
     // rotationPercent *= multiplicationValue;
 
-      translationXPercent *= .75;
-      translationYPercent *= .75;
-      rotationPercent *= .4;
+      translationXPercent *= 1.00;
+      translationYPercent *= 1.00;
+      rotationPercent *= 1.00;
     // if(Constants.dXboxController.getRawButtonReleased(Constants.startXboxButton)){
     //   translationXPercent *= 11.00; //gotta crank it to 11
     //   translationYPercent *= 11.00;
@@ -84,9 +84,15 @@ public class DriveCommand extends CommandBase {
         rotationPercent = 0.0;
       }
       drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-        translationXPercent * Constants.maxVelocity,
-        translationYPercent * Constants.maxVelocity,
-        rotationPercent * Constants.maxAngularVelocity,
+        translationXPercent * Constants.maxVelocity * 0.80
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
+        translationYPercent * Constants.maxVelocity * 0.80
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
+        rotationPercent * Constants.maxAngularVelocity * 0.35
+        // (drive.isHalfSpeed() ? 0.35 : 1.00)
+        ,
         drive.getGyroscopeRotation()
         )
       );

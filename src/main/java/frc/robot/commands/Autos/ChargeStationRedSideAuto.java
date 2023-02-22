@@ -8,7 +8,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -38,7 +37,6 @@ public class ChargeStationRedSideAuto extends SequentialCommandGroup {
         driveSubsystem::setModuleStates, //makes the swerve move according to the path
         driveSubsystem //it needs this so it can actually drive
       ),
-      new InstantCommand(() -> driveSubsystem.eBrakeMode()), //new brake mode
       new InstantCommand(() -> driveSubsystem.stop()),
       new WaitCommand(0.5)
       );
