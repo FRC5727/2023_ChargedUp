@@ -48,10 +48,10 @@ public final class Constants {
   public static final int highCoder = 4;
   public static final int lowCoder = 5;
   
-  public static final double fleo = -Math.toRadians(225.443); //Front Left Encoder Offset
-  public static final double freo = -Math.toRadians(0.081); //Front Right Encoder Offset
-  public static final double rreo = -Math.toRadians(251.190); //Rear Right Encoder Offset
-  public static final double rleo = -Math.toRadians(196.433); //Rear Left Encoder Offset -202og
+  public static final double fleo = -Math.toRadians(236.77); //Front Left Encoder Offset
+  public static final double freo = -Math.toRadians(264.90); //Front Right Encoder Offset
+  public static final double rreo = -Math.toRadians(105.99); //Rear Right Encoder Offset
+  public static final double rleo = -Math.toRadians(221.39); //Rear Left Encoder Offset -202og
 
   /*
    * public static final double fleo = Math.toRadians(-240.443); //Front Left Encoder Offset
@@ -97,9 +97,9 @@ public final class Constants {
 
   public static final String rickBot = "CANivore";
 
-  public static PIDController translationXController = new PIDController(0, 0, 0); //10
-  public static PIDController translationYController = new PIDController(0, 0, 0);
-  public static PIDController rotationController = new PIDController(0, 0, 0);
+  public static PIDController translationXController = new PIDController(0.50, 0.1, 0); //10
+  public static PIDController translationYController = new PIDController(0.50, 0.1, 0);
+  public static PIDController rotationController = new PIDController(0.50, 0.1, 0);
 
   public static double maxVelocity = (6380.0 / 60.0 * 
         SdsModuleConfigurations.MK4I_L2.getDriveReduction() * 

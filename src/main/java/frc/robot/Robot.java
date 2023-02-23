@@ -219,16 +219,16 @@ public class Robot extends TimedRobot {
       // highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
     //}
     
-    if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-      intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
-    } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-      intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
-    } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
-      intakeNeo.set(-.08);
-      intakeNeo.setIdleMode(IdleMode.kBrake);
-    } 
+    // if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    //   intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
+    // } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    //   intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
+    // } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
+    //   intakeNeo.set(-.08);
+    //   intakeNeo.setIdleMode(IdleMode.kBrake);
+    // } 
     // else if(Constants.dXboxController.getLeftTriggerAxis() < 0.1){
     //   intakeNeo.set(0);
     //   intakeNeo.setIdleMode(IdleMode.kBrake);

@@ -50,7 +50,7 @@ public class RobotContainer {
 
   //Commands
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
-  // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   
   SendableChooser<Command> chooser = new SendableChooser<>();
@@ -68,26 +68,14 @@ public class RobotContainer {
   // private final Megalovania megalovania = new Megalovania(driveSubsystem);
   // private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
 
-  //Driver Buttons
-  // private final JoystickButton lowButton = new JoystickButton(Constants.dXboxController, Constants.aXboxButton);
-  // private final JoystickButton midButton = new JoystickButton(Constants.dXboxController, Constants.bXboxButton);
-  // private final JoystickButton highButton = new JoystickButton(Constants.dXboxController, Constants.xXboxButton);
-  // private final JoystickButton groundButton = new JoystickButton(Constants.dXboxController, Constants.yXboxButton);
-  // private final JoystickButton chassisPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povDown)); //180
-  // private final JoystickButton lowPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povLeft)); //270
-  // private final JoystickButton midPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povUp)); //0
-  // private final JoystickButton highPosition = new JoystickButton(Constants.dXboxController, Constants.dXboxController.getPOV(Constants.povRight)); //90
-  // private final JoystickButton chassis = new JoystickButton(Constants.dXboxController, 8);
-  // private final JoystickButton intakeGroundPosition = new JoystickButton(Constants.dXboxController, Constants.lbXboxBumper);
-  // private final JoystickButton stationPickupPosition = new JoystickButton(Constants.dXboxController, Constants.rbXboxBumper);
-  // private final JoystickButton halfSpeed = new JoystickButton(Constants.dXboxController, Constants.backXboxButton);
+  
   //Manip buttons 
   private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
 
   
 	public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveCommand);
-    // armSubsystem.setDefaultCommand(armCommand);
+    armSubsystem.setDefaultCommand(armCommand);
     // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
@@ -127,31 +115,36 @@ public class RobotContainer {
     // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
     // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
     // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
+    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value).whileTrue(intakeCommand);
+    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value).whileTrue(intakeCommand);
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
-      .whileTrue(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
-        .andThen(new ArmCommand(armSubsystem)))
-      .onFalse(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-        .andThen(new ArmCommand(armSubsystem)));
+    // JoystickButton button = new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value);
+    // JoystickButton button1 = new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value);
+    // button.and(button1).whileFalse(intakeCommand);
+
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
+    // // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
+    //   .whileTrue(
+    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+    //     .andThen(new ArmCommand(armSubsystem)))
+    //   .onFalse(
+    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+    //     .andThen(new ArmCommand(armSubsystem)));
 
     // TODO Move the TriggerButton, and make the intakeCommand actually work (runs forever, stops when command terminates, nice to have if finished when piece acquired)
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(
-      Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
-      .andThen(new ArmCommand(armSubsystem))
-      .alongWith(intakeCommand))
-    .onFalse(
-      Commands.runOnce(() -> intakeCommand.cancel())
-      .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
-      .andThen(new ArmCommand(armSubsystem)));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
+    // .whileTrue(
+    //   Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+    //   .andThen(new ArmCommand(armSubsystem)))
+    // .onFalse(
+    //   Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+    //   .andThen(new ArmCommand(armSubsystem)));
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeCommand.toggleCube()));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
+
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
     /* MANIP BINDS */

@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -26,7 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveModule rrm;
   
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-  private Pose2d robotPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+  private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
   private Translation2d offsetPose = new Translation2d(0.0, 0.0);
 
   private final ShuffleboardTab mTab;
@@ -37,6 +39,9 @@ public class DriveSubsystem extends SubsystemBase {
   private boolean halfSpeed = false;
 
   private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
+
+  
+  
 
   public final static SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       // Front left
@@ -106,6 +111,8 @@ public class DriveSubsystem extends SubsystemBase {
             Constants.rreo
     );
   }
+  
+  
   /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
@@ -125,10 +132,17 @@ public class DriveSubsystem extends SubsystemBase {
   public Translation2d getTranslation(){
     return getPose().getTranslation();
   }
+  public double getGyroPitch(){
+    return pigeon2.getPitch();
+  }
 
   public Pose2d getPose(){
     return new Pose2d(robotPose.getTranslation().minus(offsetPose), robotPose.getRotation());
   }
+  
+  // public Pose2d getPose(){
+  //   return new Pose2d(robotPose.getTranslation(), robotPose.getRotation());
+  // }
 
   public void resetPose(double xValue, double yValue){
     offsetPose = new Translation2d(xValue, yValue);
@@ -161,6 +175,12 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(ChassisSpeeds chassisSpeeds) {
     mChassisSpeeds = chassisSpeeds;
   }
+  public void driveAuto(double speed){
+    flm.set(speed, 0);
+    frm.set(speed, 0);
+    rlm.set(speed, 0);
+    rrm.set(speed, 0);
+  }
   public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxVelocity);
     
@@ -168,7 +188,10 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
+    // robotPose = odometry.getPoseMeters();
   }
+  
+  
   @Override
   public void periodic() {
 
@@ -180,6 +203,13 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
+    // robotPose = odometry.getPoseMeters();
+    getPose();
+    
+    SmartDashboard.putNumber("X Pose", robotPose.getX());
+    SmartDashboard.putNumber("Y Pose", robotPose.getY());
+    
+    
     
   }
   public void stop(){
@@ -191,8 +221,5 @@ public class DriveSubsystem extends SubsystemBase {
     rlm.set(0.0, Math.toRadians(0.0));
     rrm.set(0.0, Math.toRadians(0.0));
   }
-  
 }
-
-//
 

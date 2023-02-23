@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -13,11 +14,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.cscore.CameraServerJNI.LoggerFunction;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -220,10 +223,11 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
     SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
 
-    SmartDashboard.putNumber("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage());
+    SmartDashboard.putString("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage() + " / " + L_maxVoltage);
+    SmartDashboard.putString("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage() + " / " + L_maxVoltage);
 
-    SmartDashboard.putNumber("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage());
-    SmartDashboard.putNumber("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage());
+    SmartDashboard.putString("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
+    SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
+    
   }
 }
