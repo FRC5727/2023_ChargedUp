@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import frc.omegabytes.library.OmegaLib.SwervyStuff.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -30,6 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
   private Translation2d offsetPose = new Translation2d(0.0, 0.0);
+  
+  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0)); 
 
   private final ShuffleboardTab mTab;
 
@@ -188,9 +190,9 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-    // robotPose = odometry.getPoseMeters();
+    robotPose = odometry.getPoseMeters();
   }
-  
+
   
   @Override
   public void periodic() {
@@ -203,7 +205,7 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-    // robotPose = odometry.getPoseMeters();
+    robotPose = odometry.getPoseMeters();
     getPose();
     
     SmartDashboard.putNumber("X Pose", robotPose.getX());
