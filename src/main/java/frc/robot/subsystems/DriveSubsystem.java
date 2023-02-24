@@ -27,11 +27,25 @@ public class DriveSubsystem extends SubsystemBase {
   private final SwerveModule rlm;
   private final SwerveModule rrm;
   
+
+
+  public final static SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+      // Front left
+      new Translation2d(Constants.swerveWidth / 2.0, Constants.swerveLength / 2.0),
+      // Front right
+      new Translation2d(Constants.swerveWidth / 2.0, -Constants.swerveLength / 2.0),
+      // Back left
+      new Translation2d(-Constants.swerveWidth / 2.0, Constants.swerveLength / 2.0),
+      // Back right
+      new Translation2d(-Constants.swerveWidth / 2.0, -Constants.swerveLength / 2.0)
+  );
+
   private ChassisSpeeds mChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0)); 
   private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
   private Translation2d offsetPose = new Translation2d(0.0, 0.0);
   
-  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0)); 
+  
 
   private final ShuffleboardTab mTab;
 
@@ -45,16 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
   
   
 
-  public final static SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-      // Front left
-      new Translation2d(Constants.swerveWidth / 2.0, Constants.swerveLength / 2.0),
-      // Front right
-      new Translation2d(Constants.swerveWidth / 2.0, -Constants.swerveLength / 2.0),
-      // Back left
-      new Translation2d(-Constants.swerveWidth / 2.0, Constants.swerveLength / 2.0),
-      // Back right
-      new Translation2d(-Constants.swerveWidth / 2.0, -Constants.swerveLength / 2.0)
-  );
+  
   
   public DriveSubsystem() {
     mTab = Shuffleboard.getTab("Drivetrain");
@@ -190,6 +195,7 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
+    odometry.update(Rotation2d.fromDegrees(pigeon2.getYaw()), states);
     robotPose = odometry.getPoseMeters();
   }
 
@@ -205,11 +211,14 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(-states[1].speedMetersPerSecond / maxVelocity * maxVoltage, states[1].angle.getRadians()); //Inverted the rear so that it moves correctly
     rlm.set(states[2].speedMetersPerSecond / maxVelocity * maxVoltage, states[2].angle.getRadians());
     rrm.set(-states[3].speedMetersPerSecond / maxVelocity * maxVoltage, states[3].angle.getRadians()); //Inverted the rear so that it moves correctly
-    robotPose = odometry.getPoseMeters();
-    getPose();
     
-    SmartDashboard.putNumber("X Pose", robotPose.getX());
-    SmartDashboard.putNumber("Y Pose", robotPose.getY());
+    odometry.update(Rotation2d.fromDegrees(pigeon2.getYaw()), states);
+    robotPose = odometry.getPoseMeters();
+    Pose2d poseData = getPose();
+    
+    SmartDashboard.putNumber("Pose X", poseData.getTranslation().getX());
+    SmartDashboard.putNumber("Pose Y", poseData.getTranslation().getY());
+    SmartDashboard.putNumber("Pose Rotation", poseData.getRotation().getDegrees());
     
     
     
@@ -222,6 +231,8 @@ public class DriveSubsystem extends SubsystemBase {
     frm.set(0.0, Math.toRadians(0.0));
     rlm.set(0.0, Math.toRadians(0.0));
     rrm.set(0.0, Math.toRadians(0.0));
+    odometry.update(Rotation2d.fromDegrees(pigeon2.getYaw()), states);
+    robotPose = odometry.getPoseMeters();
   }
 }
 

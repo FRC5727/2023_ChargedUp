@@ -79,9 +79,9 @@ public class RobotContainer {
     // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
-    chooser.setDefaultOption("Go forward and come back", auto);
-    chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", straightLineAuto1);
-    chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", straightLineRedToCargo4Auto);
+    chooser.setDefaultOption("Go forward and come back", chargeStationRedSideAuto);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", chargeStationRedSideAuto);
+    chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", chargeStationRedSideAuto);
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     //Songs
