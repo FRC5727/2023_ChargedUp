@@ -1,20 +1,20 @@
 package frc.robot.subsystems;
 
-import frc.robot.SwerveModule;
-import frc.lib.util.SwerveModuleConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.SwerveModule;
+import frc.lib.util.SwerveModuleConstants;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -61,7 +61,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-        gyro.addYaw(180);
+        gyro.addYaw(180); // TODO Should this depending on the starting orientation?
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -101,8 +101,6 @@ public class Swerve extends SubsystemBase {
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
     }
-    
-    
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -133,15 +131,9 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
-    public void add180Yaw(){
-        gyro.addYaw(180);
-    }
 
     public void stop() {
         // TODO Add convenience code to stop the robot -- see old DriveSubsystem::stop() for example
-    }
-    public double getYaw1(){
-        return gyro.getYaw();
     }
 
     @Override
@@ -154,11 +146,9 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
         SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
-        getPose();
     
-        robotPose = swerveOdometry.getPoseMeters();
+        robotPose = getPose();
         SmartDashboard.putNumber("Pose X", robotPose.getX());
         SmartDashboard.putNumber("Pose Y", robotPose.getY());
-        
     }
 }

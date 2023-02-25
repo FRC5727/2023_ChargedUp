@@ -20,5 +20,7 @@ public class SwerveModuleConstants {
         this.angleMotorID = angleMotorID;
         this.cancoderID = canCoderID;
         this.angleOffset = angleOffset;
+
+        System.out.println("Initialized (" + driveMotorID + ", " + angleMotorID + ", " + canCoderID + ") with offset " + angleOffset.getDegrees());
     }
 }
