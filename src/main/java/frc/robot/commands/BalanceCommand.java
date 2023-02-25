@@ -6,19 +6,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Swerve;
 
 public class BalanceCommand extends CommandBase {
   /** Creates a new BalanceCommand. */
   private double m_tolerance = 3.5; // degrees
     private final PIDController m_balancePID = new PIDController(-0.025, 0, 0);
 
-    private DriveSubsystem m_driveSubsystem;
+    private Swerve m_driveSubsystem;
 
     private double m_pitchAngle = 0;
 
-    public BalanceCommand(DriveSubsystem driveSubsystem) {
-        m_driveSubsystem = driveSubsystem;
+    public BalanceCommand(Swerve s_Swerve) {
+        m_driveSubsystem = s_Swerve;
         addRequirements(m_driveSubsystem);
     }
 
@@ -31,10 +31,11 @@ public class BalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      m_pitchAngle = m_driveSubsystem.getGyroPitch();
+      // TODO Develop implementation
+      // m_pitchAngle = m_driveSubsystem.getGyroPitch();
         
-      if (Math.abs(m_pitchAngle) > m_tolerance)
-        m_driveSubsystem.driveAuto(m_balancePID.calculate(m_pitchAngle, 0));
+      // if (Math.abs(m_pitchAngle) > m_tolerance)
+      //   m_driveSubsystem.driveAuto(m_balancePID.calculate(m_pitchAngle, 0));
     }
 
     // Called once the command ends or is interrupted.

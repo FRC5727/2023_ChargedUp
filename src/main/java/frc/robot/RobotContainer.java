@@ -62,7 +62,7 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   // Driver Buttons
-  // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton robotCentric = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
 
   // Manip buttons 
   private final JoystickButton zeroGyro = new JoystickButton(Constants.mXboxController, XboxController.Button.kBack.value);
@@ -74,7 +74,7 @@ public class RobotContainer {
         () -> -Constants.dXboxController.getRawAxis(translationAxis),
         () -> -Constants.dXboxController.getRawAxis(strafeAxis),
         () -> -Constants.dXboxController.getRawAxis(rotationAxis),
-        () -> false //robotCentric.getAsBoolean()
+        () -> false // robotCentric.getAsBoolean()
       )
     );
     // armSubsystem.setDefaultCommand(armCommand);
@@ -97,7 +97,9 @@ public class RobotContainer {
 
   }
   public Command getAutonomousCommand() {
-    return chooser.getSelected();
+    // TODO Re-enable auto selection
+    // return chooser.getSelected();
+    return new exampleAuto(s_Swerve);
   }
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the

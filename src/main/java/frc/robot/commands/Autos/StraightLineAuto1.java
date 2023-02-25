@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Swerve;
 
 public class StraightLineAuto1 extends SequentialCommandGroup {
   /** Creates a new StraightLineAuto1. */
-  public StraightLineAuto1(DriveSubsystem driveSubsystem) {
+  public StraightLineAuto1(Swerve s_Swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     Constants.translationXController.reset();
     Constants.translationYController.reset();
@@ -25,20 +25,20 @@ public class StraightLineAuto1 extends SequentialCommandGroup {
     PathPlannerTrajectory a_straightLineAuto1 = PathPlanner.loadPath("StraightLineRedToCargo1", 1.00, 1.00);
 
     addCommands(
-      new InstantCommand(() -> driveSubsystem.zeroGyroscope()),
+      new InstantCommand(() -> s_Swerve.zeroGyro()),
       new WaitCommand(1.0),
-      new InstantCommand(() -> driveSubsystem.resetPose(0, 0)),
+      // new InstantCommand(() -> driveSubsystem.resetPose(0, 0)),
       new PPSwerveControllerCommand(
         a_straightLineAuto1,
-        driveSubsystem::getPose, //it figures out where it is at
-        driveSubsystem.getKinematics(), //gets the kinematics
+        s_Swerve::getPose, //it figures out where it is at
+        Constants.Swerve.swerveKinematics, //gets the kinematics
         Constants.translationXController, //X Movement PID controller
         Constants.translationYController, //Y Movement PID controller
         Constants.rotationController, //Rotation PID controller
-        driveSubsystem::setModuleStates, //makes the swerve move according to the path
-        driveSubsystem //it needs this so it can actually drive
+        s_Swerve::setModuleStates, //makes the swerve move according to the path
+        s_Swerve //it needs this so it can actually drive
       ),
-      new InstantCommand(() -> driveSubsystem.stop()),
+      new InstantCommand(() -> s_Swerve.stop()),
       new WaitCommand(0.5)
       );
 
