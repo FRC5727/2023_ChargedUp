@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -16,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
+  public static boolean practice = false;
 
   private Command m_autonomousCommand;
 
@@ -34,6 +38,23 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     //driveSubsystem.zeroGyroscope();
+
+    // Identify on which robot the code is running
+    String robotID = null;
+    try {
+      robotID = Files.readString(Constants.robotIDPath).trim();
+    } catch (IOException e) {
+      System.out.println("Missing robot ID file from RoboRIO");
+      System.exit(1);
+    }
+    System.out.println("Robot ID = " + robotID);
+    if (robotID.equals(Constants.practiceRobotID)) {
+      practice = true;
+    } else if (!robotID.equals(Constants.compRobotID)) {
+      System.err.println("Robot ID (" + robotID + ") matches neither competition (" + Constants.compRobotID + ") nor practice (" + Constants.practiceRobotID + ") values");
+      System.exit(1);
+    }
+    SmartDashboard.putBoolean("Practice Bot?", practice);
   }
 
   /**

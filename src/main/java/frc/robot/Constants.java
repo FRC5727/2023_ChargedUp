@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -34,6 +36,11 @@ public final class Constants {
   public static int pigeon2IMU = 0;
 
   public static final double stickDeadband = 0.1; // TODO We have used 0.05 previously
+
+  // Read a unique file dropped on each robot to identify them
+  public static Path robotIDPath = Path.of("/.robotID");
+  public static final String practiceRobotID = "5727-practice";
+  public static final String compRobotID =     "5727-competition";
 
   public static final class Swerve {
     public static final int pigeonID = 0;
