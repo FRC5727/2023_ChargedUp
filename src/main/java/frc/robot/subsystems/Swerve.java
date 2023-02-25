@@ -22,6 +22,8 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
+    private Translation2d offsetPose = new Translation2d(0.0, 0.0);
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.CANivoreName);
@@ -42,6 +44,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        gyro.addYaw(180);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -77,10 +80,12 @@ public class Swerve extends SubsystemBase {
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
-
+    
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
     }
+    
+    
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -111,9 +116,15 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
+    public void add180Yaw(){
+        gyro.addYaw(180);
+    }
 
     public void stop() {
         // TODO Add convenience code to stop the robot -- see old DriveSubsystem::stop() for example
+    }
+    public double getYaw1(){
+        return gyro.getYaw();
     }
 
     @Override
@@ -126,5 +137,11 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
         SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
+        getPose();
+    
+        robotPose = swerveOdometry.getPoseMeters();
+        SmartDashboard.putNumber("Pose X", robotPose.getX());
+        SmartDashboard.putNumber("Pose Y", robotPose.getY());
+        
     }
 }

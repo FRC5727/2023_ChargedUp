@@ -99,7 +99,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // TODO Re-enable auto selection
     // return chooser.getSelected();
-    return new exampleAuto(s_Swerve);
+    return new ChargeStationRedSideAuto(s_Swerve);
   }
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the

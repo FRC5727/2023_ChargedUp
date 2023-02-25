@@ -9,6 +9,9 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -24,12 +27,12 @@ public class ChargeStationRedSideAuto extends SequentialCommandGroup {
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
-    PathPlannerTrajectory a_ChargeStationRedCenter1 = PathPlanner.loadPath("ChargeStationRedCenter1", 0.5, 0.5);
-    
+    PathPlannerTrajectory a_ChargeStationRedCenter1 = PathPlanner.loadPath("bruh3", 3, 3);
+    //ChargeStationRedCenter1
     addCommands(
+      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.55, 2.75), new Rotation2d(0)))),
       new WaitCommand(1.0),
-      // new InstantCommand(() -> s_Swerve.resetPose(14.13, 2.75)),
-      // new InstantCommand(() -> driveSubsystem.getPose()),
+      new InstantCommand(() -> s_Swerve.getPose()),
       new PPSwerveControllerCommand(
         a_ChargeStationRedCenter1,
         s_Swerve::getPose, //it figures out where it is at
