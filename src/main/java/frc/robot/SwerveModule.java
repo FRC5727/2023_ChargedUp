@@ -80,6 +80,9 @@ public class SwerveModule {
 
     public void resetToAbsolute(){
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
+        SmartDashboard.putNumber("Mod " + moduleNumber + " angleOffset", angleOffset.getDegrees());
+        SmartDashboard.putNumber("Mod " + moduleNumber + " abs deg", (getCanCoder().getDegrees() - angleOffset.getDegrees()));
+        System.out.println("====== Module " + moduleNumber + " resetToAbsolute based on CANCoder deg " + getCanCoder().getDegrees() + " and angleOffset deg " + angleOffset.getDegrees());
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }
 
@@ -91,12 +94,7 @@ public class SwerveModule {
     private void configAngleMotor(){
         mAngleMotor.configFactoryDefault();
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-        // TODO Remove this experimentation hack
-        // if (moduleNumber > 1) {
-        //     mAngleMotor.setInverted(!Constants.Swerve.angleMotorInvert);
-        // } else {
-            mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
-        // }
+        mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
         resetToAbsolute();
     }
