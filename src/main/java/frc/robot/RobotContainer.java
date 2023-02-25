@@ -47,7 +47,9 @@ public class RobotContainer {
   // private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(s_Swerve);
   // private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(s_Swerve);
   private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
-
+  private final RED2CubeAutoLeft red2CubeAutoLeft = new RED2CubeAutoLeft(s_Swerve);
+  private final DoNothin doNothin = new DoNothin(s_Swerve);
+  private final ChargeStationRedMobility chargeStationRedMobility = new ChargeStationRedMobility(s_Swerve);
   //Songs
   // private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
   // private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
@@ -81,9 +83,9 @@ public class RobotContainer {
     // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
-    chooser.setDefaultOption("Go forward and come back", chargeStationRedSideAuto);
-    // chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", chargeStationRedSideAuto);
-    // chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", chargeStationRedSideAuto);
+    chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
+    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
+    chooser.addOption("Do Nothin", doNothin);
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     //Songs
