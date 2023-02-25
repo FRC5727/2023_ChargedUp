@@ -136,7 +136,7 @@ public final class Constants {
       //   - Verify results
 
     public static final double[] practiceOffsets = { 238.75, 84.55, 222.22, 286.17 };
-    public static final double[] compOffsets = { 0.0, 1.0, 2.0, 3.0 };
+    public static final double[] compOffsets = { 291.88, 66.62, 160.22, 95.00 };
 
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
