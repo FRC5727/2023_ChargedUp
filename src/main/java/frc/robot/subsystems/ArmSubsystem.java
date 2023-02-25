@@ -119,14 +119,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() {
     // TODO Get the device numbers from centrally defined constants
-    this.lowerArmMaster = new WPI_TalonFX(9, Constants.rickBot);
-    this.lowerArmSlave = new WPI_TalonFX(11, Constants.rickBot);
-    this.lowerArmCoder = new CANCoder(4, Constants.rickBot);
+    this.lowerArmMaster = new WPI_TalonFX(9, Constants.CANivoreName);
+    this.lowerArmSlave = new WPI_TalonFX(11, Constants.CANivoreName);
+    this.lowerArmCoder = new CANCoder(4, Constants.CANivoreName);
 
     // TODO Get the device numbers from centrally defined constants
-    this.highArmMaster = new WPI_TalonFX(8, Constants.rickBot);
-    this.highArmSlave = new WPI_TalonFX(10, Constants.rickBot);
-    this.highArmCoder = new CANCoder(5, Constants.rickBot);
+    this.highArmMaster = new WPI_TalonFX(8, Constants.CANivoreName);
+    this.highArmSlave = new WPI_TalonFX(10, Constants.CANivoreName);
+    this.highArmCoder = new CANCoder(5, Constants.CANivoreName);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
@@ -228,6 +228,5 @@ public class ArmSubsystem extends SubsystemBase {
 
     SmartDashboard.putString("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
     SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
-    
   }
 }

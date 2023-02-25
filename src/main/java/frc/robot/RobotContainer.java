@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,27 +11,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
-import frc.robot.commands.ArmCommand;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.Autos.Auto;
-import frc.robot.commands.Autos.ChargeStationRedSideAuto;
-import frc.robot.commands.Autos.StraightLineAuto1;
-import frc.robot.commands.Autos.StraightLineRedToCargo4Auto;
-import frc.robot.commands.Songs.GiornosTheme;
-import frc.robot.commands.Songs.ItsBeenSoLong;
-import frc.robot.commands.Songs.Megalovania;
-import frc.robot.commands.Songs.MichaelHunterThemeFromSanAndreas;
-import frc.robot.commands.Songs.SwedenC418;
-import frc.robot.commands.Songs.bohemianRhapsody;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+// import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
+import frc.robot.commands.*;
+import frc.robot.commands.Autos.*;
+// import frc.robot.commands.Songs.*;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
-
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,24 +28,25 @@ import frc.robot.subsystems.ArmSubsystem.Position;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  //Subsystems
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  // Subsystems
+//  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final Swerve s_Swerve = new Swerve();
 
   private Position driverTargetPosition = Position.CHASSIS;
 
-  //Commands
-  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  // Commands
+  // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   
   SendableChooser<Command> chooser = new SendableChooser<>();
-  //Auto Routines 
-  private final Auto auto = new Auto(driveSubsystem);
-  private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(driveSubsystem);
-  private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(driveSubsystem);
-  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(driveSubsystem);
+  // Auto Routines 
+  // private final Auto auto = new Auto(s_Swerve);
+  // private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(s_Swerve);
+  // private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(s_Swerve);
+  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
 
   //Songs
   // private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
@@ -68,20 +56,34 @@ public class RobotContainer {
   // private final Megalovania megalovania = new Megalovania(driveSubsystem);
   // private final bohemianRhapsody bohemianRhapsody = new bohemianRhapsody(driveSubsystem);
 
-  
-  //Manip buttons 
-  private final JoystickButton zeroGyroscope = new JoystickButton(Constants.mXboxController, Constants.backXboxButton);
+  // Drive Controls
+  private final int translationAxis = XboxController.Axis.kLeftY.value;
+  private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+  // Driver Buttons
+  // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
+  // Manip buttons 
+  private final JoystickButton zeroGyro = new JoystickButton(Constants.mXboxController, XboxController.Button.kBack.value);
   
 	public RobotContainer() {
-    driveSubsystem.setDefaultCommand(driveCommand);
-    armSubsystem.setDefaultCommand(armCommand);
+    s_Swerve.setDefaultCommand(
+      new TeleopSwerve(
+        s_Swerve,
+        () -> -Constants.dXboxController.getRawAxis(translationAxis),
+        () -> -Constants.dXboxController.getRawAxis(strafeAxis),
+        () -> -Constants.dXboxController.getRawAxis(rotationAxis),
+        () -> false //robotCentric.getAsBoolean()
+      )
+    );
+    // armSubsystem.setDefaultCommand(armCommand);
     // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("Go forward and come back", chargeStationRedSideAuto);
-    chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", chargeStationRedSideAuto);
-    chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", chargeStationRedSideAuto);
+    // chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", chargeStationRedSideAuto);
+    // chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", chargeStationRedSideAuto);
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     //Songs
@@ -122,6 +124,8 @@ public class RobotContainer {
     // JoystickButton button1 = new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value);
     // button.and(button1).whileFalse(intakeCommand);
 
+    // Driver arm controls
+    // TODO Re-enable arm controls
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
@@ -147,11 +151,11 @@ public class RobotContainer {
 
     //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
 
-    /* MANIP BINDS */
-    //zeroGyroscope.onTrue(new InstantCommand(() -> driveSubsystem.zeroGyroscope()));
+    /* Manip Buttons */
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
 
-  public void updateAngle() {
-    driveSubsystem.updateAngle();
-  }
+  // public void updateAngle() {
+  //   driveSubsystem.updateAngle();
+  // }
 }

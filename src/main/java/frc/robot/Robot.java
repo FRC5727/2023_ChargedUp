@@ -4,20 +4,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
-//import com.ctre.phoenix.sensors.Pigeon2;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +15,8 @@ import frc.robot.subsystems.DriveSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static CTREConfigs ctreConfigs;
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -38,6 +29,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -51,27 +43,6 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
-  private static final CANCoder fre = new CANCoder(Constants.frePort, Constants.rickBot);
-  private static final CANCoder rre = new CANCoder(Constants.rrePort, Constants.rickBot);
-  private static final CANCoder rle = new CANCoder(Constants.rlePort, Constants.rickBot);
-  private static final CANCoder fle = new CANCoder(Constants.flePort, Constants.rickBot);
-
-  // private static final CANCoder lowerArm = new CANCoder(4,Constants.rickBot);
-  // private static final CANCoder highArm = new CANCoder(5, Constants.rickBot);
-  // private static final TalonFX FLDMTalon = new TalonFX(Constants.fldmPort, Constants.rickBot); 
-  // private static final TalonFX FLSMTalon = new TalonFX(Constants.flsmPort, Constants.rickBot);
-
-  // private static final TalonFX FRDMTalon = new TalonFX(Constants.frdmPort, Constants.rickBot); 
-  // private static final TalonFX FRSMTalon = new TalonFX(Constants.frsmPort, Constants.rickBot); 
-
-  // private static final TalonFX RRDMTalon = new TalonFX(Constants.rrdmPort, Constants.rickBot); 
-  // private static final TalonFX RRSMTalon = new TalonFX(Constants.rrsmPort, Constants.rickBot);
-
-  // private static final TalonFX RLDMTalon = new TalonFX(Constants.rldmPort, Constants.rickBot); 
-  // private static final TalonFX RLSMTalon = new TalonFX(Constants.rlsmPort, Constants.rickBot); 
-
-  // private Pigeon2 pigeon2 = new Pigeon2(Constants.pigeon2IMU, Constants.rickBot);
-
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -80,10 +51,10 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //CANCoders Absolute Position Values
-    SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
-    SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
-    SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
-    SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
+    // SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
+    // SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
+    // SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
+    // SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
     // SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
     // SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
     // SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
@@ -169,8 +140,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -185,9 +155,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -200,7 +168,7 @@ public class Robot extends TimedRobot {
     }
     //driveSubsystem.unPark();
   }
-  private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+//  private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
   
   /** This function is called periodically during operator control. */
   @Override
