@@ -28,7 +28,6 @@ public class RED2CubeAutoLeft extends SequentialCommandGroup {
     Constants.translationYController.reset();
     Constants.rotationController.reset();
     PathPlannerTrajectory a_ChargeStationRedCenter1 = PathPlanner.loadPath("bruh1", 1.75, 1.75);
-    //ChargeStationRedCenter1
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.67, 0.77), new Rotation2d(0)))),
       new WaitCommand(1.0),

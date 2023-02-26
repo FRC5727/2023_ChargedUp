@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.*;
@@ -40,7 +41,8 @@ public class RobotContainer {
   // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
-  
+  private final PlaceCommand placeCommand = new PlaceCommand(intakeSubsystem);
+  private final IdleCommand idleCommand = new IdleCommand(intakeSubsystem);
   SendableChooser<Command> chooser = new SendableChooser<>();
   // Auto Routines 
   // private final Auto auto = new Auto(s_Swerve);
@@ -115,19 +117,6 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /* DRIVER BINDS */
-    // cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
-    // coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
-
-    // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
-    // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
-    // // stationPickupPosition.onTrue(new InstantCommand(() -> armCommand.stationPickupPos()));
-    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value).whileTrue(intakeCommand);
-    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value).whileTrue(intakeCommand);
-
-    // JoystickButton button = new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value);
-    // JoystickButton button1 = new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value);
-    // button.and(button1).whileFalse(intakeCommand);
-
     // Driver arm controls
     // TODO Re-enable arm controls
     new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
@@ -151,10 +140,23 @@ public class RobotContainer {
       Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
       .andThen(new ArmCommand(armSubsystem)));
 
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
-    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value).whileTrue(null).onFalse(null);
-    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value).whileTrue(null);
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
+    new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value).whileTrue(intakeCommand);
+    new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value).whileTrue(placeCommand);
 
+    Trigger driverLeftTrigger = new Trigger(
+        () -> Constants.dXboxController.getLeftTriggerAxis() > 0.05);
+    Trigger driverRightTrigger = new Trigger(
+        () -> Constants.dXboxController.getRightTriggerAxis() > 0.05);
+
+    driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
+    .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
+
+    // TODO Place (expel) currently held piece
+    driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
+      .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
+    
+    driverLeftTrigger.and(driverLeftTrigger).whileFalse(idleCommand);
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
