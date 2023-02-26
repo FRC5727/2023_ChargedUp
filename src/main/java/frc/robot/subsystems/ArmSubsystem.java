@@ -23,7 +23,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private boolean armDebug = false;
+  private boolean armDebug = true;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
@@ -187,14 +187,17 @@ public class ArmSubsystem extends SubsystemBase {
   public void beginMovement() {
     ArmPosition nextPosition = armPositions.get(targetPosition.peek());
 
+    System.out.println("=== Beginning movement to " + targetPosition.peek().toString());
     lowPidController.setSetpoint(nextPosition.lowerArmAngle);
     lowPidController.reset();
     highPidController.setSetpoint(nextPosition.upperArmAngle);
     highPidController.reset();
+    System.out.println("Setpoints = " + nextPosition.lowerArmAngle + ", " + nextPosition.upperArmAngle);
   }
 
   public void updateMovement() {
     if (lowPidController.atSetpoint() && highPidController.atSetpoint()) {
+      System.out.println("=== Set point reached for current target: " + targetPosition.peek().toString());
       targetPosition.remove();
       if (targetPosition.size() > 0) {
         beginMovement();
@@ -223,7 +226,8 @@ public class ArmSubsystem extends SubsystemBase {
     // Update dashboard to help monitor and debug
 
     if (armDebug) {
-      SmartDashboard.putString("Target Position", targetPosition.peek().toString());
+      SmartDashboard.putNumber("Target queue depth", targetPosition.size());
+      SmartDashboard.putString("Target Position", targetPosition.size() > 0 ? targetPosition.peek().toString() : "<none>");
       SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
       SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
       SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());

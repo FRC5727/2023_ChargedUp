@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
+import static frc.robot.Constants.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -41,7 +43,8 @@ public class RobotContainer {
   // Commands
   // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
-  // private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
+  // private final IntakeCommand intakeCommand = new
+  // IntakeCommand(intakeSubsystem);
 
   // Auto Chooser
   private final SendableChooser<Command> chooser = new SendableChooser<>();
@@ -143,27 +146,21 @@ public class RobotContainer {
     // button.and(button1).whileFalse(intakeCommand);
 
     // Driver arm controls
-    // TODO Re-enable arm controls
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kA.value).onTrue(Commands.runOnce(() ->
-    // driverTargetPosition = Position.GRID_LOW));
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kB.value).onTrue(Commands.runOnce(() ->
-    // driverTargetPosition = Position.GRID_MID));
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kY.value).onTrue(Commands.runOnce(() ->
-    // driverTargetPosition = Position.GRID_HIGH));
-    // // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kX.value).onTrue(Commands.runOnce(() ->
-    // driverTargetPosition = Position.CHASSIS));
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kRightBumper.value)
-    // .whileTrue(
-    // Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
-    // .andThen(new ArmCommand(armSubsystem)))
-    // .onFalse(
-    // Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-    // .andThen(new ArmCommand(armSubsystem)));
+    new JoystickButton(dXboxController, XboxController.Button.kA.value)
+      .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
+    new JoystickButton(dXboxController, XboxController.Button.kB.value)
+      .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
+    new JoystickButton(dXboxController, XboxController.Button.kY.value)
+      .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value)
+    //   .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
+    new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
+      .whileTrue(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+          .andThen(new ArmCommand(armSubsystem)))
+      .onFalse(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+          .andThen(new ArmCommand(armSubsystem)));
 
     // TODO Move the TriggerButton, and make the intakeCommand actually work (runs
     // forever, stops when command terminates, nice to have if finished when piece
