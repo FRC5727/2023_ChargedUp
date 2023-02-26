@@ -30,6 +30,9 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class ArmSubsystem extends SubsystemBase {
+  // Controls whether or not to update SmartDashboard
+  private boolean armDebug = false;
+
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
     double lowerArmAngle;
@@ -63,12 +66,12 @@ public class ArmSubsystem extends SubsystemBase {
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       Position.CHASSIS, new ArmPosition(0, 0),
       Position.MIDDLE, new ArmPosition(-11, 31),
-      Position.GRID_LOW, new ArmPosition(65, 2), //og: 27, 2
+      Position.GRID_LOW, new ArmPosition(65, 2), // og: 27, 2
       Position.GRID_MID, new ArmPosition(26, 90),
       Position.GRID_HIGH, new ArmPosition(54, 163),
       Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150) //upper old: 154
-    ));
+      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150) // upper old: 154
+  ));
 
   private WPI_TalonFX lowerArmMaster;
   private WPI_TalonFX lowerArmSlave;
@@ -134,10 +137,11 @@ public class ArmSubsystem extends SubsystemBase {
     this.lowArmAngleOffset = 0;
     this.highArmAngleOffset = 287.92;
 
-    // Jimmy, why are we overriding this?  This is confusing, and I don't know why it's necessary
+    // Jimmy, why are we overriding this? This is confusing, and I don't know why
+    // it's necessary
     this.lowerArmGearRatio = 0.40; // 4.125
     this.highArmGearRatio = 0.10;
-    
+
     // TODO Define tolerance elsewhere
     lowPidController.disableContinuousInput();
     lowPidController.setTolerance(1, .5);
@@ -159,7 +163,6 @@ public class ArmSubsystem extends SubsystemBase {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
 
- 
   // public Rotation2d getHighCanCoder(){
   // return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
   // }
@@ -214,19 +217,23 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // Update dashboard to help monitor and debug
 
-    SmartDashboard.putString("Target Position", targetPosition.toString());
-    SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
-    SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
-    SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
-    SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
+    if (armDebug) {
+      SmartDashboard.putString("Target Position", targetPosition.toString());
+      SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
+      SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
+      SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
+      SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
 
-    SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
-    SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
+      SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
+      SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
 
-    SmartDashboard.putString("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage() + " / " + L_maxVoltage);
-    SmartDashboard.putString("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage() + " / " + L_maxVoltage);
+      SmartDashboard.putString("Low Arm Master Voltage:",
+          lowerArmMaster.getMotorOutputVoltage() + " / " + L_maxVoltage);
+      SmartDashboard.putString("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage() + " / " + L_maxVoltage);
 
-    SmartDashboard.putString("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
-    SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
+      SmartDashboard.putString("High Arm Master Voltage:",
+          highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
+      SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
+    }
   }
 }

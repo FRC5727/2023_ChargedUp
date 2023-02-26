@@ -41,12 +41,8 @@ public class RobotContainer {
   private final ArmCommand armCommand = new ArmCommand(armSubsystem);
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   
-  SendableChooser<Command> chooser = new SendableChooser<>();
-  // Auto Routines 
-  // private final Auto auto = new Auto(s_Swerve);
-  // private final StraightLineAuto1 straightLineAuto1 = new StraightLineAuto1(s_Swerve);
-  // private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(s_Swerve);
-  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
+  // Auto Chooser
+  private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   //Songs
   // private final ItsBeenSoLong itsBeenSoLong = new ItsBeenSoLong(driveSubsystem);
@@ -80,11 +76,11 @@ public class RobotContainer {
     // armSubsystem.setDefaultCommand(armCommand);
     // intakeSubsystem.setDefaultCommand(intakeCommand);
     configureBindings();
-    //Auto Routines
-    chooser.setDefaultOption("Go forward and come back", chargeStationRedSideAuto);
-    // chooser.addOption("RED SIDE: Straight Line To Cargo 1 Auto", chargeStationRedSideAuto);
-    // chooser.addOption("RED SIDE: Straight Line To Cargo 4 Auto", chargeStationRedSideAuto);
-    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+
+    // Auto Routines
+    chooser.addOption("No auto", null);
+    chooser.setDefaultOption("Mobility", new StraightLineAuto1(s_Swerve));
+    chooser.addOption("Charge Station", new ChargeStationRedSideAuto(s_Swerve));
 
     //Songs
     // chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
@@ -93,14 +89,13 @@ public class RobotContainer {
     // chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
     // chooser.addOption("Megalovania", megalovania);
     // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
-    SmartDashboard.putData(chooser);
 
+    SmartDashboard.putData("Autonomous routine", chooser);
   }
   public Command getAutonomousCommand() {
-    // TODO Re-enable auto selection
-    // return chooser.getSelected();
-    return new ChargeStationRedSideAuto(s_Swerve);
+    return chooser.getSelected();
   }
+
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
