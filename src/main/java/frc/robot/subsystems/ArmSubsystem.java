@@ -63,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       Position.CHASSIS, new ArmPosition(-21, -60),
       Position.MIDDLE, new ArmPosition(-25, -31),
-      Position.GRID_LOW, new ArmPosition(8, -60), //og: 27, 2
+      Position.GRID_LOW, new ArmPosition(11, -70), //og: 27, 2
       Position.GRID_MID, new ArmPosition(3, -1),
       Position.GRID_HIGH, new ArmPosition(36, 0),
       Position.INTAKE_GROUND, new ArmPosition(69, -16),

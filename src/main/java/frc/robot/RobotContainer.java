@@ -152,8 +152,8 @@ public class RobotContainer {
       .andThen(new ArmCommand(armSubsystem)));
 
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
-
-    //halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
+    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kLeftTrigger.value).whileTrue(null).onFalse(null);
+    // new JoystickButton(Constants.dXboxController, XboxController.Axis.kRightTrigger.value).whileTrue(null);
 
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
