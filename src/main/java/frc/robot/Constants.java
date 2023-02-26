@@ -34,6 +34,7 @@ public final class Constants {
   public static int pigeon2IMU = 0;
 
   public static final double stickDeadband = 0.1; // TODO We have used 0.05 previously
+  public static final double triggerAxisThreshold = 0.10; // Threshold to consider a trigger pulled
 
   public static final class Swerve {
     public static final int pigeonID = 0;
