@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -173,6 +175,7 @@ public class Robot extends TimedRobot {
 //  private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
   
   /** This function is called periodically during operator control. */
+
   @Override
   public void teleopPeriodic() {
     //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){

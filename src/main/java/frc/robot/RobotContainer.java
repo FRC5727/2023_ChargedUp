@@ -84,9 +84,9 @@ public class RobotContainer {
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
-    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
-    chooser.addOption("Do Nothin", doNothin);
-    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+    // chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
+    // chooser.addOption("Do Nothin", doNothin);
+    // chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     //Songs
     // chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
@@ -130,26 +130,26 @@ public class RobotContainer {
 
     // Driver arm controls
     // TODO Re-enable arm controls
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
-    //   .whileTrue(
-    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
-    //     .andThen(new ArmCommand(armSubsystem)))
-    //   .onFalse(
-    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-    //     .andThen(new ArmCommand(armSubsystem)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
+      .whileTrue(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+        .andThen(new ArmCommand(armSubsystem)))
+      .onFalse(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+        .andThen(new ArmCommand(armSubsystem)));
 
     // TODO Move the TriggerButton, and make the intakeCommand actually work (runs forever, stops when command terminates, nice to have if finished when piece acquired)
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
-    // .whileTrue(
-    //   Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
-    //   .andThen(new ArmCommand(armSubsystem)))
-    // .onFalse(
-    //   Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
-    //   .andThen(new ArmCommand(armSubsystem)));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
+    .whileTrue(
+      Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+      .andThen(new ArmCommand(armSubsystem)))
+    .onFalse(
+      Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+      .andThen(new ArmCommand(armSubsystem)));
 
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 

@@ -61,13 +61,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
-      Position.CHASSIS, new ArmPosition(0, 0),
-      Position.MIDDLE, new ArmPosition(-11, 31),
-      Position.GRID_LOW, new ArmPosition(65, 2), //og: 27, 2
-      Position.GRID_MID, new ArmPosition(26, 90),
-      Position.GRID_HIGH, new ArmPosition(54, 163),
-      Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150) //upper old: 154
+      Position.CHASSIS, new ArmPosition(-21, -60),
+      Position.MIDDLE, new ArmPosition(-25, -31),
+      Position.GRID_LOW, new ArmPosition(8, -60), //og: 27, 2
+      Position.GRID_MID, new ArmPosition(3, -1),
+      Position.GRID_HIGH, new ArmPosition(36, 0),
+      Position.INTAKE_GROUND, new ArmPosition(69, -16),
+      Position.INTAKE_SUBSTATION, new ArmPosition(1, 19) //upper old: 154
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -92,12 +92,12 @@ public class ArmSubsystem extends SubsystemBase {
   private ArmFeedforward lowArmFeedforward;
 
   // TODO Tune this
-  private double L_kp = 0.90,
+  private double L_kp = 1.10,
       L_ki = 0.00,
-      L_kd = 0.10;
+      L_kd = 0.00;
 
   // TODO Tune this
-  private double H_kp = 0.80,
+  private double H_kp = 1.10,
       H_ki = 0.00,
       H_kd = 0.00;
 
@@ -121,12 +121,12 @@ public class ArmSubsystem extends SubsystemBase {
     // TODO Get the device numbers from centrally defined constants
     this.lowerArmMaster = new WPI_TalonFX(9, Constants.CANivoreName);
     this.lowerArmSlave = new WPI_TalonFX(11, Constants.CANivoreName);
-    this.lowerArmCoder = new CANCoder(4, Constants.CANivoreName);
+    this.lowerArmCoder = new CANCoder(Constants.lowCoder, Constants.CANivoreName);
 
     // TODO Get the device numbers from centrally defined constants
     this.highArmMaster = new WPI_TalonFX(8, Constants.CANivoreName);
     this.highArmSlave = new WPI_TalonFX(10, Constants.CANivoreName);
-    this.highArmCoder = new CANCoder(5, Constants.CANivoreName);
+    this.highArmCoder = new CANCoder(Constants.highCoder, Constants.CANivoreName);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
@@ -148,7 +148,8 @@ public class ArmSubsystem extends SubsystemBase {
     lowerArmSlave.follow(lowerArmMaster);
     lowerArmSlave.setInverted(true);
     highArmSlave.follow(highArmMaster);
-    highArmSlave.setInverted(true);
+    highArmSlave.setInverted(false);
+    highArmMaster.setInverted(true);
 
     lowerArmMaster.setNeutralMode(NeutralMode.Brake);
     highArmMaster.setNeutralMode(NeutralMode.Brake);
@@ -184,6 +185,13 @@ public class ArmSubsystem extends SubsystemBase {
     return highArmCoder.getPosition() * (360.0 / (highArmGearRatio * 4096.0));
   }
 
+  public double getLowAbsoluteAngle(){
+    return lowerArmCoder.getAbsolutePosition();
+  }
+  public double getHighAbsoluteAngle(){
+    return highArmCoder.getAbsolutePosition();
+  }
+
   public void setTargetPosition(Position position) {
     this.targetPosition = position;
   }
@@ -196,8 +204,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void updateMovement() {
-    lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowRelativeAngle()), L_maxVoltage));
-    highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighRelativeAngle()), H_maxVoltage));
+    lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowAbsoluteAngle()), L_maxVoltage));
+    highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighAbsoluteAngle()), H_maxVoltage));
   }
 
   public void stopMovement() {
@@ -223,10 +231,13 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
     SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
 
-    SmartDashboard.putString("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage() + " / " + L_maxVoltage);
-    SmartDashboard.putString("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage() + " / " + L_maxVoltage);
+    SmartDashboard.putNumber("Low Angle ABSOLUTE", lowerArmCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("High Angle ABSOLUTE", highArmCoder.getAbsolutePosition());
 
-    SmartDashboard.putString("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
-    SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
+    SmartDashboard.putNumber("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage());
+
+    SmartDashboard.putNumber("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage());
+    SmartDashboard.putNumber("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage());
   }
 }
