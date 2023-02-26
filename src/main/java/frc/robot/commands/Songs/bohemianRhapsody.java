@@ -9,16 +9,15 @@ import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Swerve;
+
+// TODO Parameterize this class so that a single implementation can play multiple files
 
 public class bohemianRhapsody extends CommandBase {
   /** Creates a new bohemianRhapsody. */
   private Orchestra orchestra;
-  private DriveSubsystem driveSubsystem;
-  public bohemianRhapsody(DriveSubsystem driveSubsystem) {
-    this.driveSubsystem = driveSubsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(driveSubsystem);
+  public bohemianRhapsody(Swerve s_Swerve) {
+    addRequirements(s_Swerve);
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +41,6 @@ public class bohemianRhapsody extends CommandBase {
   public void end(boolean interrupted) {
     orchestra.stop();
     orchestra = null;
-    driveSubsystem.start();
   }
 
   // Returns true when the command should end.

@@ -9,26 +9,22 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.omegabytes.library.math.Conversions;
-import frc.robot.CTREConfigs;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 public class ArmSubsystem extends SubsystemBase {
+  // Controls whether or not to update SmartDashboard
+  private boolean armDebug = false;
+
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
     double lowerArmAngle;
@@ -117,14 +113,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() {
     // TODO Get the device numbers from centrally defined constants
-    this.lowerArmMaster = new WPI_TalonFX(9, Constants.rickBot);
-    this.lowerArmSlave = new WPI_TalonFX(11, Constants.rickBot);
-    this.lowerArmCoder = new CANCoder(4, Constants.rickBot);
+    this.lowerArmMaster = new WPI_TalonFX(9, Constants.CANivoreName);
+    this.lowerArmSlave = new WPI_TalonFX(11, Constants.CANivoreName);
+    this.lowerArmCoder = new CANCoder(4, Constants.CANivoreName);
 
     // TODO Get the device numbers from centrally defined constants
-    this.highArmMaster = new WPI_TalonFX(8, Constants.rickBot);
-    this.highArmSlave = new WPI_TalonFX(10, Constants.rickBot);
-    this.highArmCoder = new CANCoder(5, Constants.rickBot);
+    this.highArmMaster = new WPI_TalonFX(8, Constants.CANivoreName);
+    this.highArmSlave = new WPI_TalonFX(10, Constants.CANivoreName);
+    this.highArmCoder = new CANCoder(5, Constants.CANivoreName);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
@@ -132,10 +128,11 @@ public class ArmSubsystem extends SubsystemBase {
     this.lowArmAngleOffset = 0;
     this.highArmAngleOffset = 287.92;
 
-    // Jimmy, why are we overriding this?  This is confusing, and I don't know why it's necessary
+    // Jimmy, why are we overriding this? This is confusing, and I don't know why
+    // it's necessary
     this.lowerArmGearRatio = 0.40; // 4.125
     this.highArmGearRatio = 0.10;
-    
+
     // TODO Define tolerance elsewhere
     lowPidController.disableContinuousInput();
     lowPidController.setTolerance(1, .5);
@@ -157,7 +154,6 @@ public class ArmSubsystem extends SubsystemBase {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
 
- 
   // public Rotation2d getHighCanCoder(){
   // return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
   // }
@@ -226,19 +222,23 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // Update dashboard to help monitor and debug
 
-    SmartDashboard.putString("Target Position", targetPosition.peek().toString());
-    SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
-    SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
-    SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
-    SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
+    if (armDebug) {
+      SmartDashboard.putString("Target Position", targetPosition.peek().toString());
+      SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
+      SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
+      SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
+      SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
 
-    SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
-    SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
+      SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
+      SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
 
-    SmartDashboard.putNumber("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage());
+      SmartDashboard.putString("Low Arm Master Voltage:",
+          lowerArmMaster.getMotorOutputVoltage() + " / " + L_maxVoltage);
+      SmartDashboard.putString("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage() + " / " + L_maxVoltage);
 
-    SmartDashboard.putNumber("High Arm Master Voltage:", highArmMaster.getMotorOutputVoltage());
-    SmartDashboard.putNumber("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage());
+      SmartDashboard.putString("High Arm Master Voltage:",
+          highArmMaster.getMotorOutputVoltage() + " / " + H_maxVoltage);
+      SmartDashboard.putString("High Arm Slave Voltage:", highArmSlave.getMotorOutputVoltage() + " / " + H_maxVoltage);
+    }
   }
 }

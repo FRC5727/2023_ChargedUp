@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Swerve;
 
 public class Auto extends SequentialCommandGroup {
   /** Creates a new Auto. */
-  public Auto(DriveSubsystem driveSubsystem) {
+  public Auto(Swerve s_Swerve) {
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
@@ -29,20 +29,20 @@ public class Auto extends SequentialCommandGroup {
     */
     
     addCommands(
-      new InstantCommand(() -> driveSubsystem.zeroGyroscope()),
+      new InstantCommand(() -> s_Swerve.zeroGyro()),
       new WaitCommand(1.0),
-      new InstantCommand(() -> driveSubsystem.resetPose(0, 0)),
+      // new InstantCommand(() -> s_Swerve.resetPose(0, 0)),
       new PPSwerveControllerCommand(
         test1,
-        driveSubsystem::getPose,
-        driveSubsystem.getKinematics(),
+        s_Swerve::getPose,
+        Constants.Swerve.swerveKinematics,
         Constants.translationXController,
         Constants.translationYController,
         Constants.rotationController, //Constants.rotationController
-        driveSubsystem::setModuleStates,
-        driveSubsystem
+        s_Swerve::setModuleStates,
+        s_Swerve
       ),
-      new InstantCommand(() -> driveSubsystem.stop()),
+      new InstantCommand(() -> s_Swerve.stop()),
       new WaitCommand(0.5)
       );
   }
