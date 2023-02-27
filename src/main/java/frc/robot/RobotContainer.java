@@ -78,17 +78,10 @@ public class RobotContainer {
     configureBindings();
     //Auto Routines
     chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
-    // chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
-    // chooser.addOption("Do Nothin", doNothin);
-    // chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
-
-    //Songs
-    // chooser.addOption("It's Been So Long by The Living Tombstone", itsBeenSoLong);
-    // chooser.addOption("Ginornos Theme", giornosTheme);
-    // chooser.addOption("Sweden by C418", swedenC418);
-    // chooser.addOption("Michael Hunter Theme From San Andreas", michaelHunterThemeFromSanAndreas);
-    // chooser.addOption("Megalovania", megalovania);
-    // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
+    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
+    chooser.addOption("Do Nothin", null);
+    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+   
     SmartDashboard.putData(chooser);
 
   }
@@ -123,7 +116,6 @@ public class RobotContainer {
         Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
         .andThen(new ArmCommand(armSubsystem)));
 
-    // TODO Move the TriggerButton, and make the intakeCommand actually work (runs forever, stops when command terminates, nice to have if finished when piece acquired)
     new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
     .whileTrue(
       Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
@@ -135,14 +127,13 @@ public class RobotContainer {
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     Trigger driverLeftTrigger = new Trigger(
-        () -> Constants.dXboxController.getLeftTriggerAxis() > 0.05);
+      () -> Constants.dXboxController.getLeftTriggerAxis() > 0.05);
     Trigger driverRightTrigger = new Trigger(
-        () -> Constants.dXboxController.getRightTriggerAxis() > 0.05);
+      () -> Constants.dXboxController.getRightTriggerAxis() > 0.05);
 
     driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
     .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
 
-    // TODO Place (expel) currently held piece
     driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
       .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
     

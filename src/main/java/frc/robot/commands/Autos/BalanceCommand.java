@@ -5,6 +5,7 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve;
 
@@ -32,11 +33,12 @@ public class BalanceCommand extends CommandBase {
     @Override
     public void execute() {
       // TODO Develop implementation
-      // m_pitchAngle = m_driveSubsystem.getGyroPitch();
+      m_pitchAngle = m_driveSubsystem.getGyroPitch();
         
-      // if (Math.abs(m_pitchAngle) > m_tolerance)
-      //   m_driveSubsystem.driveAuto(m_balancePID.calculate(m_pitchAngle, 0));
-    }
+      if (Math.abs(m_pitchAngle) > m_tolerance)
+      m_driveSubsystem
+      .drive(new Translation2d(0, (m_balancePID.calculate(m_pitchAngle, 0))), 0, false, false);
+            }
 
     // Called once the command ends or is interrupted.
     @Override
