@@ -37,8 +37,8 @@ public class BalanceCommand extends CommandBase {
         
       if (Math.abs(m_pitchAngle) > m_tolerance)
       m_driveSubsystem
-      .drive(new Translation2d(0, (m_balancePID.calculate(m_pitchAngle, 0))), 0, false, false);
-            }
+      .drive(new Translation2d((m_balancePID.calculate(m_pitchAngle, 0)), 0), 0, false, false);
+        }
 
     // Called once the command ends or is interrupted.
     @Override
