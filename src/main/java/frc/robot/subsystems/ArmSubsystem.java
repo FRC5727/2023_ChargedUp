@@ -79,8 +79,6 @@ public class ArmSubsystem extends SubsystemBase {
   private CANCoder lowerArmCoder;
   private CANCoder highArmCoder;
 
-  private double lowArmAngleOffset;
-  private double highArmAngleOffset;
 
   private double lowerArmGearRatio = 66.0 / 16.0;
   private double highArmGearRatio = 44.0 / 16.0;
@@ -131,9 +129,6 @@ public class ArmSubsystem extends SubsystemBase {
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
 
-    this.lowArmAngleOffset = 0;
-    this.highArmAngleOffset = 287.92;
-
     // Jimmy, why are we overriding this?  This is confusing, and I don't know why it's necessary
     this.lowerArmGearRatio = 0.40; // 4.125
     this.highArmGearRatio = 0.10;
@@ -159,23 +154,6 @@ public class ArmSubsystem extends SubsystemBase {
   private double constrainValue(double value, double max) {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
-
- 
-  // public Rotation2d getHighCanCoder(){
-  // return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
-  // }
-  // public Rotation2d getLowCanCoder(){
-  // return Rotation2d.fromDegrees(highArmCoder.getAbsolutePosition());
-  // }
-
-  // public double getHighAbsoluteAngle(){
-  // return Conversions.CANcoderToDegrees(highArmCoder.getAbsolutePosition(),
-  // highArmGearRatio);
-  // }
-  // public double getLowAbsoluteAngle(){
-  // return Conversions.CANcoderToDegrees(lowerArmCoder.getAbsolutePosition(),
-  // lowerArmGearRatio);
-  // }
 
   public double getLowRelativeAngle() {
     return lowerArmCoder.getPosition() * (360.0 / (lowerArmGearRatio * 4096.0));
@@ -227,9 +205,6 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
     SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
     SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
-
-    SmartDashboard.putNumber("Low Relative Angle (CANcoder): ", getLowRelativeAngle());
-    SmartDashboard.putNumber("High Relative Angle (CANcoder): ", getHighRelativeAngle());
 
     SmartDashboard.putNumber("Low Angle ABSOLUTE", lowerArmCoder.getAbsolutePosition());
     SmartDashboard.putNumber("High Angle ABSOLUTE", highArmCoder.getAbsolutePosition());

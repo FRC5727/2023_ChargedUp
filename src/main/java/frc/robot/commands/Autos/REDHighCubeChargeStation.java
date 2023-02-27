@@ -16,21 +16,42 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PlaceCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.ArmSubsystem.Position;
 
-public class ChargeStationRedMobility extends SequentialCommandGroup {
+public class REDHighCubeChargeStation extends SequentialCommandGroup {
   /** Creates a new ChargeStationRedSideAuto. */
-  public ChargeStationRedMobility(Swerve s_Swerve) {
+  public REDHighCubeChargeStation(Swerve s_Swerve, ArmCommand armCommand, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, IntakeCommand intakeCommand, PlaceCommand placeCommand) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Swerve);
+    addCommands(armCommand);
+    addCommands(intakeCommand);
+    addCommands(placeCommand);
+    addRequirements(intakeSubsystem);
+    addRequirements(armSubsystem);
     
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
-    PathPlannerTrajectory path = PathPlanner.loadPath("bruh3", 1.75, 1.75);
+    PathPlannerTrajectory path = PathPlanner.loadPath("ChargeStationRedCenter1", 1.75, 1.75);
     //ChargeStationRedCenter1
     addCommands(
-      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.55, 2.75), new Rotation2d(0)))),
+      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.MIDDLE)),
+      new InstantCommand(() -> new ArmCommand(armSubsystem)),
+      new WaitCommand(2),
+      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH)),
+      new InstantCommand(() -> new ArmCommand(armSubsystem)),
+      new WaitCommand(2),
+      new InstantCommand(() -> new PlaceCommand(intakeSubsystem)),
+      new WaitCommand(1),
+      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.CHASSIS)),
+      new InstantCommand(() -> new ArmCommand(armSubsystem)),
+      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.72, 2.75), new Rotation2d(0)))),
       new WaitCommand(1.0),
       new InstantCommand(() -> s_Swerve.getPose()),
       new PPSwerveControllerCommand(
