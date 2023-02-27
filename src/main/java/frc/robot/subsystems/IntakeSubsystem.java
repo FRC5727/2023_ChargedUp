@@ -7,13 +7,14 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private final CANSparkMax intakeNeo; 
 
-  private boolean cube = true; //cone = 1, cube = 0
+  private boolean cube = true; 
  
 
   public IntakeSubsystem() {
@@ -38,19 +39,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void place(){
-    if(!cube) coneOuttake();
-    if(cube) cubeOuttake();
+    if(cube) cubeOuttake(); else coneOuttake();
   }
 
   public void intake(){
-    if(!cube) coneIntake();
-    if(cube) cubeIntake();
-  }
-  public void setCube(){
-    cube = true;
-  }
-  public void setCone(){
-    cube = false;
+    if(cube) cubeIntake(); else coneIntake();
   }
 
   public void cubeIdle(){
@@ -68,11 +61,10 @@ public class IntakeSubsystem extends SubsystemBase {
     return cube;
   }
   public void intakeIdle(){
-    if(!cube) coneIdle();
-    if(cube) cubeIdle();
+    if(cube) cubeIdle(); else coneIdle();
   }
   @Override
   public void periodic() {
-    
+    SmartDashboard.putBoolean("Cube?", cube);
   }
 }
