@@ -129,6 +129,9 @@ public class Swerve extends SubsystemBase {
     public double getYaw1() {
         return gyro.getYaw();
     }
+    public double getGyroPitch(){
+        return gyro.getPitch();
+    }
 
     @Override
     public void periodic() {

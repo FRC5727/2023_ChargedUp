@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.*;
-// import frc.robot.commands.Songs.*;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -43,25 +41,19 @@ public class RobotContainer {
   // Commands
   // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
-  // private final IntakeCommand intakeCommand = new
-  // IntakeCommand(intakeSubsystem);
+  // private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
+  private final PlaceCommand placeCommand = new PlaceCommand(intakeSubsystem);
+  private final IdleCommand idleCommand = new IdleCommand(intakeSubsystem);
 
   // Auto Chooser
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private final SendableChooser<ArmSubsystem.Position> positionChooser = new SendableChooser<>();
-
-  // Songs
-  // private final ItsBeenSoLong itsBeenSoLong = new
-  // ItsBeenSoLong(driveSubsystem);
-  // private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
-  // private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
-  // private final MichaelHunterThemeFromSanAndreas
-  // michaelHunterThemeFromSanAndreas = new
-  // MichaelHunterThemeFromSanAndreas(driveSubsystem);
-  // private final Megalovania megalovania = new Megalovania(driveSubsystem);
-  // private final bohemianRhapsody bohemianRhapsody = new
-  // bohemianRhapsody(driveSubsystem);
+  // Auto Routines 
+  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
+  private final RED2CubeAutoLeft red2CubeAutoLeft = new RED2CubeAutoLeft(s_Swerve);
+  private final DoNothin doNothin = new DoNothin(s_Swerve);
+  private final ChargeStationRedMobility chargeStationRedMobility = new ChargeStationRedMobility(s_Swerve);
 
   // Drive Controls
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -88,22 +80,14 @@ public class RobotContainer {
         ));
     // armSubsystem.setDefaultCommand(armCommand);
     // intakeSubsystem.setDefaultCommand(intakeCommand);
+    intakeSubsystem.setDefaultCommand(idleCommand);
     configureBindings();
 
     // Auto Routines
+    chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
+    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
     chooser.addOption("No auto", null);
-    chooser.setDefaultOption("Mobility", new StraightLineAuto1(s_Swerve));
-    chooser.addOption("Charge Station", new ChargeStationRedSideAuto(s_Swerve));
-
-    // Songs
-    // chooser.addOption("It's Been So Long by The Living Tombstone",
-    // itsBeenSoLong);
-    // chooser.addOption("Ginornos Theme", giornosTheme);
-    // chooser.addOption("Sweden by C418", swedenC418);
-    // chooser.addOption("Michael Hunter Theme From San Andreas",
-    // michaelHunterThemeFromSanAndreas);
-    // chooser.addOption("Megalovania", megalovania);
-    // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
+    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     SmartDashboard.putData("Autonomous routine", chooser);
 
@@ -136,33 +120,13 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /* DRIVER BINDS */
-    // cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
-    // coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
-
-    // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
-    // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
-    // // stationPickupPosition.onTrue(new InstantCommand(() ->
-    // armCommand.stationPickupPos()));
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kLeftTrigger.value).whileTrue(intakeCommand);
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kRightTrigger.value).whileTrue(intakeCommand);
-
-    // JoystickButton button = new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kLeftTrigger.value);
-    // JoystickButton button1 = new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kRightTrigger.value);
-    // button.and(button1).whileFalse(intakeCommand);
-
     // Driver arm controls
-    new JoystickButton(dXboxController, XboxController.Button.kA.value)
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
-    new JoystickButton(dXboxController, XboxController.Button.kB.value)
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
-    new JoystickButton(dXboxController, XboxController.Button.kY.value)
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value)
-    //   .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
 
     Trigger armTrigger = 
       new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
@@ -174,45 +138,30 @@ public class RobotContainer {
           .andThen(new ArmCommand(armSubsystem)));
     }
 
+    // TODO Should also run intake in parallel
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
+      .whileTrue(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+        .andThen(new ArmCommand(armSubsystem)))
+      .onFalse(
+        Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+        .andThen(new ArmCommand(armSubsystem)));
 
-    // TODO Move the TriggerButton, and make the intakeCommand actually work (runs
-    // forever, stops when command terminates, nice to have if finished when piece
-    // acquired)
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kLeftBumper.value)
-    // .whileTrue(
-    // Commands.runOnce(() ->
-    // armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
-    // .andThen(new ArmCommand(armSubsystem)))
-    // .onFalse(
-    // Commands.runOnce(() -> Commands.runOnce(() ->
-    // armSubsystem.setTargetPosition(Position.CHASSIS)))
-    // .andThen(new ArmCommand(armSubsystem)));
-
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kX.value).onTrue(Commands.runOnce(() ->
-    // intakeSubsystem.toggleCube()));
-
-    // halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     Trigger driverLeftTrigger = new Trigger(
         () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
     Trigger driverRightTrigger = new Trigger(
         () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
 
-    // TODO Ground intake
-    driverLeftTrigger.onTrue(new InstantCommand(() -> System.out.println("Driver left trigger pulled")))
-        .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
+    // TODO Should also place into ground intake position
+    driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
+      .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
 
-    // TODO Place (expel) currently held piece
-    driverRightTrigger.onTrue(new InstantCommand(() -> System.out.println("Driver right trigger pulled")))
-        .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
-
+    driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
+      .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
+    
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
-
-  // public void updateAngle() {
-  // driveSubsystem.updateAngle();
-  // }
 }

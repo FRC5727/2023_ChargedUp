@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +36,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DriverStation.silenceJoystickConnectionWarning(true);
     ctreConfigs = new CTREConfigs();
+    DriverStation.silenceJoystickConnectionWarning(true);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -174,6 +179,7 @@ public class Robot extends TimedRobot {
 //  private final CANSparkMax intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
   
   /** This function is called periodically during operator control. */
+
   @Override
   public void teleopPeriodic() {
     //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){

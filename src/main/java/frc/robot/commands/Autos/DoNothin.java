@@ -18,23 +18,23 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class ChargeStationRedSideAuto extends SequentialCommandGroup {
+public class DoNothin extends SequentialCommandGroup {
   /** Creates a new ChargeStationRedSideAuto. */
-  public ChargeStationRedSideAuto(Swerve s_Swerve) {
+  public DoNothin(Swerve s_Swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Swerve);
     
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
-    PathPlannerTrajectory path = PathPlanner.loadPath("ChargeStationRedCenter1", 1.75, 1.75);
+    PathPlannerTrajectory a_ChargeStationRedCenter1 = PathPlanner.loadPath("DoNothin", 1.75, 1.75);
     //ChargeStationRedCenter1
     addCommands(
-      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.72, 2.75), new Rotation2d(0)))),
+      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.61, 2.85), new Rotation2d(0)))),
       new WaitCommand(1.0),
       new InstantCommand(() -> s_Swerve.getPose()),
       new PPSwerveControllerCommand(
-        path,
+        a_ChargeStationRedCenter1,
         s_Swerve::getPose, //it figures out where it is at
         Constants.Swerve.swerveKinematics, //gets the kinematics
         new PIDController(0.7, 0, 0), //X
