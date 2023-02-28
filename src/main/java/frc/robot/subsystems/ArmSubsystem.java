@@ -154,18 +154,19 @@ public class ArmSubsystem extends SubsystemBase {
   private double constrainValue(double value, double max) {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
-
+  //for demo bot (atm)
   public double getLowRelativeAngle() {
     return lowerArmCoder.getPosition() * (360.0 / (lowerArmGearRatio * 4096.0));
   }
-
+  //for demo bot (atm)
   public double getHighRelativeAngle() {
     return highArmCoder.getPosition() * (360.0 / (highArmGearRatio * 4096.0));
   }
-
+  //for comp bot 
   public double getLowAbsoluteAngle(){
     return lowerArmCoder.getAbsolutePosition();
   }
+  //for comp bot
   public double getHighAbsoluteAngle(){
     return highArmCoder.getAbsolutePosition();
   }

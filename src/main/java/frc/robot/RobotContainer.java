@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.*;
+import frc.robot.commands.Autos.RED.ChargeStationRedSideAuto;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -48,7 +49,6 @@ public class RobotContainer {
   // private final StraightLineRedToCargo4Auto straightLineRedToCargo4Auto = new StraightLineRedToCargo4Auto(s_Swerve);
   private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
   private final RED2CubeAutoLeft red2CubeAutoLeft = new RED2CubeAutoLeft(s_Swerve);
-  private final DoNothin doNothin = new DoNothin(s_Swerve);
   private final ChargeStationRedMobility chargeStationRedMobility = new ChargeStationRedMobility(s_Swerve);
 
   // Drive Controls
@@ -72,23 +72,21 @@ public class RobotContainer {
         () -> false // robotCentric.getAsBoolean()
       )
     );
-    // armSubsystem.setDefaultCommand(armCommand);
-    // intakeSubsystem.setDefaultCommand(intakeCommand);
     intakeSubsystem.setDefaultCommand(idleCommand);
     configureBindings();
+
     //Auto Routines
-    chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
-    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
-    chooser.addOption("Do Nothin", null);
+    chooser.setDefaultOption("Do Nothin", null);
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+    chooser.addOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
+    chooser.addOption("RED SIDE: 1 Cube Mobility", red2CubeAutoLeft);
+    
    
     SmartDashboard.putData(chooser);
 
   }
   public Command getAutonomousCommand() {
-    // TODO Re-enable auto selection
-    // return chooser.getSelected();
-    return new ChargeStationRedSideAuto(s_Swerve);
+    return chooser.getSelected();
   }
   /* 
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -104,25 +102,25 @@ public class RobotContainer {
     /* DRIVER BINDS */
     // Driver arm controls
     // TODO Re-enable arm controls
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
-      .whileTrue(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
-        .andThen(new ArmCommand(armSubsystem)))
-      .onFalse(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-        .andThen(new ArmCommand(armSubsystem)));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
+    // // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value)
+    //   .whileTrue(
+    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
+    //     .andThen(new ArmCommand(armSubsystem)))
+    //   .onFalse(
+    //     Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+    //     .andThen(new ArmCommand(armSubsystem)));
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(
-      Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
-      .andThen(new ArmCommand(armSubsystem)))
-    .onFalse(
-      Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
-      .andThen(new ArmCommand(armSubsystem)));
+    // new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
+    // .whileTrue(
+    //   Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+    //   .andThen(new ArmCommand(armSubsystem)))
+    // .onFalse(
+    //   Commands.runOnce(() -> Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+    //   .andThen(new ArmCommand(armSubsystem)));
 
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
@@ -136,6 +134,7 @@ public class RobotContainer {
 
     driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
       .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
+      if(Constants.dXboxController.getLeftTriggerAxis() > 0.05)
     
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
