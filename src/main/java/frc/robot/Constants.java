@@ -30,6 +30,11 @@ import frc.lib.util.SwerveModuleConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  // Debug arm position by getting position from Chooser
+  public static boolean armPositionDebugChooser = true;
+
+  // Debug arm position by moving directly there
+  public static boolean armPositionDebugDirect = false;
 
   public static int pigeon2IMU = 0;
 

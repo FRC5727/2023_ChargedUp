@@ -5,9 +5,9 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Queue;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -23,7 +23,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private boolean armDebug = true;
+  private static final boolean armDebug = true;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
@@ -38,30 +38,35 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Enumeration of all defined arm positions
   public enum Position {
+    STARTING,
     CHASSIS,
-    MIDDLE,
+    SAFE,
     GRID_LOW,
     GRID_MID,
     GRID_HIGH,
+    INTAKE_PREGROUND,
     INTAKE_GROUND,
     INTAKE_SUBSTATION,
   };
 
   // Next positions for the Arm to target
-  private Queue<Position> targetPosition = new ArrayDeque<Position>();
+  private Deque<Position> targetPosition = new ArrayDeque<Position>();
+  private Position lastPosition = Position.STARTING;
 
   // Whether or not Arm is currently enabled to move to a position
   private boolean enabled = false;
 
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
-      Position.CHASSIS, new ArmPosition(0, 0),
-      Position.MIDDLE, new ArmPosition(-11, 31),
-      Position.GRID_LOW, new ArmPosition(65, 2),
-      Position.GRID_MID, new ArmPosition(26, 90),
-      Position.GRID_HIGH, new ArmPosition(54, 163),
-      Position.INTAKE_GROUND, new ArmPosition(36, -29),
-      Position.INTAKE_SUBSTATION, new ArmPosition(8, 150)
+      Position.STARTING, new ArmPosition(0, 0),
+      Position.CHASSIS, new ArmPosition(-18, 60),
+      Position.SAFE, new ArmPosition(-11, 180),
+      Position.GRID_LOW, new ArmPosition(0, 60),
+      Position.GRID_MID, new ArmPosition(19, 135),
+      Position.GRID_HIGH, new ArmPosition(50, 200),
+      Position.INTAKE_PREGROUND, new ArmPosition(20.0, 0),
+      Position.INTAKE_GROUND, new ArmPosition(33.0, -27),
+      Position.INTAKE_SUBSTATION, new ArmPosition(16, 170)
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -180,30 +185,77 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setTargetPosition(Position position) {
     targetPosition.clear();
-    targetPosition.add(Position.MIDDLE);
-    targetPosition.add(position);
+    if (!Constants.armPositionDebugDirect && lastPosition != position) {
+      // Determine first step based on last known position
+      switch (lastPosition) {
+        case STARTING:
+        case CHASSIS:
+          targetPosition.add(Position.CHASSIS);
+          break;
+        case GRID_LOW:
+        case GRID_MID:
+        case GRID_HIGH:
+        case INTAKE_SUBSTATION:
+        case SAFE:
+          targetPosition.add(Position.SAFE);
+          break;
+        case INTAKE_PREGROUND:
+        case INTAKE_GROUND:
+          targetPosition.add(Position.INTAKE_PREGROUND);
+          break;
+      }
+
+      // Now we know we are transitioning from either CHASSIS, SAFE, or INTAKE_PREGROUND
+      // Determine any prequisites for final position
+      switch (position) {
+        case STARTING:
+          if (targetPosition.isEmpty() || targetPosition.getLast() != Position.CHASSIS) {
+            targetPosition.add(Position.CHASSIS);
+          }
+          break;
+        case INTAKE_GROUND:
+        case INTAKE_PREGROUND:
+          if (targetPosition.isEmpty() || targetPosition.getLast() != Position.INTAKE_PREGROUND) {
+            targetPosition.add(Position.GRID_LOW);
+            targetPosition.add(Position.INTAKE_PREGROUND);
+          }
+          break;
+        case GRID_MID:
+        case GRID_HIGH:
+        case INTAKE_SUBSTATION:
+          if (targetPosition.isEmpty() || targetPosition.getLast() != Position.SAFE) {
+            targetPosition.add(Position.SAFE);
+          }
+          break;
+        case GRID_LOW:
+        case CHASSIS:
+        case SAFE:
+          // Safe directly from any of the previous positions
+          break;
+      }
+    }
+    if (targetPosition.isEmpty() || targetPosition.getLast() != position) {
+      targetPosition.add(position);
+    }
   }
 
   public void beginMovement() {
     ArmPosition nextPosition = armPositions.get(targetPosition.peek());
 
-    System.out.println("=== Beginning movement to " + targetPosition.peek().toString());
     lowPidController.setSetpoint(nextPosition.lowerArmAngle);
     lowPidController.reset();
     highPidController.setSetpoint(nextPosition.upperArmAngle);
     highPidController.reset();
-    System.out.println("Setpoints = " + nextPosition.lowerArmAngle + ", " + nextPosition.upperArmAngle);
   }
 
   public void updateMovement() {
     if (lowPidController.atSetpoint() && highPidController.atSetpoint()) {
-      System.out.println("=== Set point reached for current target: " + targetPosition.peek().toString());
-      targetPosition.remove();
-      if (targetPosition.size() > 0) {
+      lastPosition = targetPosition.remove();
+      if (!doneMovement()) {
         beginMovement();
       }
     }
-    if (targetPosition.size() > 0) {
+    if (!doneMovement()) {
       lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowRelativeAngle()), L_maxVoltage));
       highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighRelativeAngle()), H_maxVoltage));
     } else {
@@ -211,13 +263,13 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+  public boolean doneMovement() {
+    return targetPosition.isEmpty();
+  }
+
   public void stopMovement() {
     lowerArmMaster.stopMotor();
     highArmMaster.stopMotor();
-  }
-
-  public boolean doneMovement() {
-    return targetPosition.size() == 0;
   }
 
   @Override
@@ -227,7 +279,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     if (armDebug) {
       SmartDashboard.putNumber("Target queue depth", targetPosition.size());
-      SmartDashboard.putString("Target Position", targetPosition.size() > 0 ? targetPosition.peek().toString() : "<none>");
+      SmartDashboard.putString("Target Position", targetPosition.isEmpty() ? "<none>" : targetPosition.peek().toString());
       SmartDashboard.putNumber("Low Arm Setpoint: ", lowPidController.getSetpoint());
       SmartDashboard.putNumber("High Arm Setpoint: ", highPidController.getSetpoint());
       SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());

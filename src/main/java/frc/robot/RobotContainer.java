@@ -49,6 +49,8 @@ public class RobotContainer {
   // Auto Chooser
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
+  private final SendableChooser<ArmSubsystem.Position> positionChooser = new SendableChooser<>();
+
   // Songs
   // private final ItsBeenSoLong itsBeenSoLong = new
   // ItsBeenSoLong(driveSubsystem);
@@ -104,6 +106,13 @@ public class RobotContainer {
     // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
 
     SmartDashboard.putData("Autonomous routine", chooser);
+
+    if (Constants.armPositionDebugChooser) {
+      for (Position pos : Position.values()) {
+        positionChooser.addOption(pos.toString(), pos);
+      }
+      SmartDashboard.putData("Position chooser", positionChooser);
+    }
   }
 
   public Command getAutonomousCommand() {
@@ -154,13 +163,17 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
     // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value)
     //   .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
-    new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
-      .whileTrue(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
-          .andThen(new ArmCommand(armSubsystem)))
-      .onFalse(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+
+    Trigger armTrigger = 
+      new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
+        .whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition))
           .andThen(new ArmCommand(armSubsystem)));
+    if (!armPositionDebugDirect) {
+      armTrigger
+        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+          .andThen(new ArmCommand(armSubsystem)));
+    }
+
 
     // TODO Move the TriggerButton, and make the intakeCommand actually work (runs
     // forever, stops when command terminates, nice to have if finished when piece
