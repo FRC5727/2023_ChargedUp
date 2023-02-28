@@ -46,6 +46,9 @@ public class RobotContainer {
   // private final IntakeCommand intakeCommand = new
   // IntakeCommand(intakeSubsystem);
 
+  private final PlaceCommand placeCommand = new PlaceCommand(intakeSubsystem);
+  private final IdleCommand idleCommand = new IdleCommand(intakeSubsystem);
+
   // Auto Chooser
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -86,8 +89,7 @@ public class RobotContainer {
             () -> -Constants.dXboxController.getRawAxis(rotationAxis),
             () -> false // robotCentric.getAsBoolean()
         ));
-    // armSubsystem.setDefaultCommand(armCommand);
-    // intakeSubsystem.setDefaultCommand(intakeCommand);
+    intakeSubsystem.setDefaultCommand(idleCommand);
     configureBindings();
 
     // Auto Routines
@@ -136,23 +138,6 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /* DRIVER BINDS */
-    // cubeMode.onTrue(new InstantCommand(() -> intakeCommand.setCube()));
-    // coneMode.onTrue(new InstantCommand(() -> intakeCommand.setCone()));
-
-    // intake.onTrue(new InstantCommand(() -> intakeCommand.intake()));
-    // place.onTrue(new InstantCommand(() -> intakeCommand.place()));
-    // // stationPickupPosition.onTrue(new InstantCommand(() ->
-    // armCommand.stationPickupPos()));
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kLeftTrigger.value).whileTrue(intakeCommand);
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kRightTrigger.value).whileTrue(intakeCommand);
-
-    // JoystickButton button = new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kLeftTrigger.value);
-    // JoystickButton button1 = new JoystickButton(Constants.dXboxController,
-    // XboxController.Axis.kRightTrigger.value);
-    // button.and(button1).whileFalse(intakeCommand);
 
     // Driver arm controls
     new JoystickButton(dXboxController, XboxController.Button.kA.value)
@@ -193,26 +178,21 @@ public class RobotContainer {
     // XboxController.Button.kX.value).onTrue(Commands.runOnce(() ->
     // intakeSubsystem.toggleCube()));
 
-    // halfSpeed.onTrue(new InstantCommand(() -> driveSubsystem.toggleHalfSpeed()));
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     Trigger driverLeftTrigger = new Trigger(
         () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
     Trigger driverRightTrigger = new Trigger(
         () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
 
-    // TODO Ground intake
-    driverLeftTrigger.onTrue(new InstantCommand(() -> System.out.println("Driver left trigger pulled")))
-        .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
-
-    // TODO Place (expel) currently held piece
-    driverRightTrigger.onTrue(new InstantCommand(() -> System.out.println("Driver right trigger pulled")))
-        .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
+    // TODO Move to ground intake position as well
+    driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
+      .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
+    
+    driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
+      .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
 
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
-
-  // public void updateAngle() {
-  // driveSubsystem.updateAngle();
-  // }
 }
