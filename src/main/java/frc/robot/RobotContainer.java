@@ -40,15 +40,6 @@ public class RobotContainer {
 
   private Position driverTargetPosition = Position.CHASSIS;
 
-  // Commands
-  // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
-  // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
-  // private final IntakeCommand intakeCommand = new
-  // IntakeCommand(intakeSubsystem);
-
-  private final PlaceCommand placeCommand = new PlaceCommand(intakeSubsystem);
-  private final IdleCommand idleCommand = new IdleCommand(intakeSubsystem);
-
   // Auto Chooser
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -89,7 +80,7 @@ public class RobotContainer {
             () -> -Constants.dXboxController.getRawAxis(rotationAxis),
             () -> false // robotCentric.getAsBoolean()
         ));
-    intakeSubsystem.setDefaultCommand(idleCommand);
+    intakeSubsystem.setDefaultCommand(new IdleCommand(intakeSubsystem));
     configureBindings();
 
     // Auto Routines
@@ -146,8 +137,6 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
     new JoystickButton(dXboxController, XboxController.Button.kY.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
-    // new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value)
-    //   .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.CHASSIS));
 
     Trigger armTrigger = 
       new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
@@ -159,38 +148,39 @@ public class RobotContainer {
           .andThen(new ArmCommand(armSubsystem)));
     }
 
-
-    // TODO Move the TriggerButton, and make the intakeCommand actually work (runs
-    // forever, stops when command terminates, nice to have if finished when piece
-    // acquired)
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kLeftBumper.value)
-    // .whileTrue(
-    // Commands.runOnce(() ->
-    // armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
-    // .andThen(new ArmCommand(armSubsystem)))
-    // .onFalse(
-    // Commands.runOnce(() -> Commands.runOnce(() ->
-    // armSubsystem.setTargetPosition(Position.CHASSIS)))
-    // .andThen(new ArmCommand(armSubsystem)));
-
-    // new JoystickButton(Constants.dXboxController,
-    // XboxController.Button.kX.value).onTrue(Commands.runOnce(() ->
-    // intakeSubsystem.toggleCube()));
-
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
+    Trigger driverLeftBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
     Trigger driverLeftTrigger = new Trigger(
         () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
     Trigger driverRightTrigger = new Trigger(
         () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
 
-    // TODO Move to ground intake position as well
-    driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
-      .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
+    Trigger intakeSubstationTrigger = 
+      driverLeftBumper.whileTrue(new IntakeCommand(intakeSubsystem)
+        .alongWith(
+            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+              .andThen(new ArmCommand(armSubsystem))));
+ 
+    if (!armPositionDebugDirect) {
+      intakeSubstationTrigger
+        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+          .andThen(new ArmCommand(armSubsystem)));
+    }
+        
+    Trigger intakeGroundTrigger = 
+      driverLeftTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
+        .alongWith(
+          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_GROUND))
+            .andThen(new ArmCommand(armSubsystem))));
     
-    driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
-      .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
+    if (!armPositionDebugDirect) {
+      intakeGroundTrigger
+        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+          .andThen(new ArmCommand(armSubsystem)));
+    }
+
+    driverRightTrigger.whileTrue(new PlaceCommand(intakeSubsystem));
 
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));

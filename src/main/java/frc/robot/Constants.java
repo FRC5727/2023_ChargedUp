@@ -31,7 +31,7 @@ import frc.lib.util.SwerveModuleConstants;
  */
 public final class Constants {
   // Debug arm position by getting position from Chooser
-  public static boolean armPositionDebugChooser = true;
+  public static boolean armPositionDebugChooser = false;
 
   // Debug arm position by moving directly there
   public static boolean armPositionDebugDirect = false;

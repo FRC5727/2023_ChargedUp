@@ -227,8 +227,12 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.SAFE);
           }
           break;
-        case GRID_LOW:
         case CHASSIS:
+          if (targetPosition.isEmpty() || targetPosition.getLast() == Position.INTAKE_PREGROUND) {
+            targetPosition.add(Position.GRID_LOW);
+          }
+          break;
+        case GRID_LOW:
         case SAFE:
           // Safe directly from any of the previous positions
           break;
