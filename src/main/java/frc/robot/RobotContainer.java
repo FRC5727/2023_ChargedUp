@@ -138,26 +138,25 @@ public class RobotContainer {
     new JoystickButton(dXboxController, XboxController.Button.kY.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
 
+    Trigger driverLeftBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
+    Trigger driverRightBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value);
+    Trigger driverLeftTrigger = new Trigger(
+        () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
+    Trigger driverRightTrigger = new Trigger(
+        () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
+  
+    // Move to selected position
     Trigger armTrigger = 
-      new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
-        .whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition))
-          .andThen(new ArmCommand(armSubsystem)));
+      driverRightBumper.whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition))
+        .andThen(new ArmCommand(armSubsystem)));
     if (!armPositionDebugDirect) {
       armTrigger
         .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
           .andThen(new ArmCommand(armSubsystem)));
     }
 
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
-
-    Trigger driverLeftBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
-    Trigger driverLeftTrigger = new Trigger(
-        () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
-    Trigger driverRightTrigger = new Trigger(
-        () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
-
     Trigger intakeSubstationTrigger = 
-      driverLeftBumper.whileTrue(new IntakeCommand(intakeSubsystem)
+      driverRightTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
         .alongWith(
             Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
               .andThen(new ArmCommand(armSubsystem))));
@@ -180,7 +179,12 @@ public class RobotContainer {
           .andThen(new ArmCommand(armSubsystem)));
     }
 
-    driverRightTrigger.whileTrue(new PlaceCommand(intakeSubsystem));
+    // Place currently held game piece
+    // TODO If we can align automatically, add this to arm commands
+    driverLeftBumper.whileTrue(new PlaceCommand(intakeSubsystem));
+
+    // Toggle between cones and cubes
+    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     /* Manip Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
