@@ -41,7 +41,7 @@ public class RobotContainer {
   // Commands
   // private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   // private final ArmCommand armCommand = new ArmCommand(armSubsystem);
-  // private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   private final PlaceCommand placeCommand = new PlaceCommand(intakeSubsystem);
   private final IdleCommand idleCommand = new IdleCommand(intakeSubsystem);
 
@@ -91,12 +91,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Autonomous routine", chooser);
 
-    if (Constants.armPositionDebugChooser) {
-      for (Position pos : Position.values()) {
-        positionChooser.addOption(pos.toString(), pos);
-      }
-      SmartDashboard.putData("Position chooser", positionChooser);
-    }
+    
   }
 
   public Command getAutonomousCommand() {
@@ -130,13 +125,9 @@ public class RobotContainer {
 
     Trigger armTrigger = 
       new JoystickButton(dXboxController, XboxController.Button.kRightBumper.value)
-        .whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition))
+        .whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(driverTargetPosition))
           .andThen(new ArmCommand(armSubsystem)));
-    if (!armPositionDebugDirect) {
-      armTrigger
-        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-          .andThen(new ArmCommand(armSubsystem)));
-    }
+    
 
     // TODO Should also run intake in parallel
     new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value)
@@ -155,10 +146,10 @@ public class RobotContainer {
         () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
 
     // TODO Should also place into ground intake position
-    driverLeftTrigger.whileTrue(new InstantCommand(() -> new IntakeCommand(intakeSubsystem)))
+    driverLeftTrigger.whileTrue(intakeCommand)
       .onFalse(new InstantCommand(() -> System.out.println("Driver left trigger released")));
 
-    driverRightTrigger.onTrue(new InstantCommand(() -> new PlaceCommand(intakeSubsystem)))
+    driverRightTrigger.whileTrue(placeCommand)
       .onFalse(new InstantCommand(() -> System.out.println("Driver right trigger released")));
     
     /* Manip Buttons */
