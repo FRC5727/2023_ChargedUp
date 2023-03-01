@@ -78,7 +78,9 @@ public class RobotContainer {
             () -> -Constants.dXboxController.getRawAxis(translationAxis),
             () -> -Constants.dXboxController.getRawAxis(strafeAxis),
             () -> -Constants.dXboxController.getRawAxis(rotationAxis),
-            () -> false // robotCentric.getAsBoolean()
+            () -> false, // robotCentric.getAsBoolean()
+            () -> s_Swerve.getSpeedLimitXY(),
+            () -> s_Swerve.getSpeedLimitRot()
         ));
     intakeSubsystem.setDefaultCommand(new IdleCommand(intakeSubsystem));
     configureBindings();
@@ -147,24 +149,31 @@ public class RobotContainer {
   
     // Move to selected position
     Trigger armTrigger = 
-      driverRightBumper.whileTrue(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition))
-        .andThen(new ArmCommand(armSubsystem)));
+      driverRightBumper.whileTrue(
+        Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
+          .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
+          .andThen(new ArmCommand(armSubsystem)));
     if (!armPositionDebugDirect) {
       armTrigger
-        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-          .andThen(new ArmCommand(armSubsystem)));
+        .onFalse(
+          Commands.runOnce(() -> s_Swerve.disableSpeedLimit())
+            .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+            .andThen(new ArmCommand(armSubsystem)));
     }
 
     Trigger intakeSubstationTrigger = 
       driverRightTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
         .alongWith(
-            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION))
+            Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
+              .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION)))
               .andThen(new ArmCommand(armSubsystem))));
  
     if (!armPositionDebugDirect) {
       intakeSubstationTrigger
-        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-          .andThen(new ArmCommand(armSubsystem)));
+        .onFalse(
+          Commands.runOnce(() -> s_Swerve.disableSpeedLimit())
+            .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
+            .andThen(new ArmCommand(armSubsystem)));
     }
         
     Trigger intakeGroundTrigger = 
