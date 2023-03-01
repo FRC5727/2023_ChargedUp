@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autos;
+package frc.robot.commands.Autos.RED;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -18,19 +18,20 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class ChargeStationRedSideAuto extends SequentialCommandGroup {
+public class Red1CubeMobilityLeft extends SequentialCommandGroup {
   /** Creates a new ChargeStationRedSideAuto. */
-  public ChargeStationRedSideAuto(Swerve s_Swerve) {
+  public Red1CubeMobilityLeft(Swerve s_Swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Swerve);
     
     Constants.translationXController.reset();
     Constants.translationYController.reset();
     Constants.rotationController.reset();
-    PathPlannerTrajectory path = PathPlanner.loadPath("ChargeStationRedCenter1", 1.75, 1.75);
+    PathPlannerTrajectory path = PathPlanner.loadPath("bruh3", 1.75, 1.75);
     //ChargeStationRedCenter1
     addCommands(
-      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.72, 2.75), new Rotation2d(0)))),
+        //TODO add in the Arm and placing commands
+      new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.55, 2.75), new Rotation2d(0)))),
       new WaitCommand(1.0),
       new InstantCommand(() -> s_Swerve.getPose()),
       new PPSwerveControllerCommand(

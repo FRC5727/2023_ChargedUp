@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autos;
+package frc.robot.commands.Autos.RED;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -16,24 +16,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.commands.ArmCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.PlaceCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.ArmSubsystem.Position;
 
-public class REDHighCubeChargeStation extends SequentialCommandGroup {
+public class ChargeStationRedSideAuto extends SequentialCommandGroup {
   /** Creates a new ChargeStationRedSideAuto. */
-  public REDHighCubeChargeStation(Swerve s_Swerve, ArmCommand armCommand, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, IntakeCommand intakeCommand, PlaceCommand placeCommand) {
+  public ChargeStationRedSideAuto(Swerve s_Swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(s_Swerve);
-    addCommands(armCommand);
-    addCommands(intakeCommand);
-    addCommands(placeCommand);
-    addRequirements(intakeSubsystem);
-    addRequirements(armSubsystem);
     
     Constants.translationXController.reset();
     Constants.translationYController.reset();
@@ -41,16 +30,6 @@ public class REDHighCubeChargeStation extends SequentialCommandGroup {
     PathPlannerTrajectory path = PathPlanner.loadPath("ChargeStationRedCenter1", 1.75, 1.75);
     //ChargeStationRedCenter1
     addCommands(
-      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.SAFE)),
-      new InstantCommand(() -> new ArmCommand(armSubsystem)),
-      new WaitCommand(2),
-      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH)),
-      new InstantCommand(() -> new ArmCommand(armSubsystem)),
-      new WaitCommand(2),
-      new InstantCommand(() -> new PlaceCommand(intakeSubsystem)),
-      new WaitCommand(1),
-      new InstantCommand(() -> armSubsystem.setTargetPosition(Position.CHASSIS)),
-      new InstantCommand(() -> new ArmCommand(armSubsystem)),
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(14.72, 2.75), new Rotation2d(0)))),
       new WaitCommand(1.0),
       new InstantCommand(() -> s_Swerve.getPose()),
