@@ -54,15 +54,15 @@ public class ArmSubsystem extends SubsystemBase {
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       // TODO Compare all positions to practice bot definitions
-      Position.STARTING, new ArmPosition(-21, -60),
-      Position.CHASSIS, new ArmPosition(-21, -60), // TODO Measure and define
-      Position.SAFE, new ArmPosition(-25, -31),
-      Position.GRID_LOW, new ArmPosition(11, -70),
-      Position.GRID_MID, new ArmPosition(3, -1),
-      Position.GRID_HIGH, new ArmPosition(36, 0),
-      Position.INTAKE_PREGROUND, new ArmPosition(69, -16), // TODO Measure and define
-      Position.INTAKE_GROUND, new ArmPosition(69, -16),
-      Position.INTAKE_SUBSTATION, new ArmPosition(1, 19)
+      Position.STARTING, new ArmPosition(-17, -46),
+      Position.CHASSIS, new ArmPosition(-22, -47), // TODO Measure and define
+      Position.SAFE, new ArmPosition(26, -1),
+      Position.GRID_LOW, new ArmPosition(-10, -49),
+      Position.GRID_MID, new ArmPosition(0, -4), //todo make comment about lower arm
+      Position.GRID_HIGH, new ArmPosition(20, 16),
+      Position.INTAKE_PREGROUND, new ArmPosition(-6, -50), // TODO Measure and define
+      Position.INTAKE_GROUND, new ArmPosition(9, -67),
+      Position.INTAKE_SUBSTATION, new ArmPosition(-15, 10)
     ));
 
   private WPI_TalonFX lowerArmMaster;
