@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class PlaceCommand extends CommandBase {
-  /** Creates a new PlaceCommand. */
+  /* Creates a new PlaceCommand */
   private final IntakeSubsystem intake;
 
   public PlaceCommand(IntakeSubsystem intake) {

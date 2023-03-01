@@ -26,8 +26,6 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
-    private Translation2d offsetPose = new Translation2d(0.0, 0.0);
-
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.CANivoreName);
         gyro.configFactoryDefault();
@@ -137,6 +135,10 @@ public class Swerve extends SubsystemBase {
     public void stop() {
         // TODO Add convenience code to stop the robot -- see old DriveSubsystem::stop()
         // for example
+    }
+
+    public double getGyroPitch(){
+        return gyro.getPitch();
     }
 
     @Override

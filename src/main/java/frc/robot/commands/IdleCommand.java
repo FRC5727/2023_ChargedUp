@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IdleCommand extends CommandBase {
-  /** Creates a new IdleCommand. */
+  /* Creates a new IdleCommand */
   private final IntakeSubsystem intake;
+  
   public IdleCommand(IntakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
@@ -24,9 +25,7 @@ public class IdleCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    intake.intakeIdle();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

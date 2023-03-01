@@ -12,10 +12,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.omegabytes.library.OmegaLib.ControllerTypeBeat.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.*;
-// import frc.robot.commands.Songs.*;
+import frc.robot.commands.Autos.RED.ChargeStationRedSideAuto;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -44,18 +43,10 @@ public class RobotContainer {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   private final SendableChooser<ArmSubsystem.Position> positionChooser = new SendableChooser<>();
-
-  // Songs
-  // private final ItsBeenSoLong itsBeenSoLong = new
-  // ItsBeenSoLong(driveSubsystem);
-  // private final GiornosTheme giornosTheme = new GiornosTheme(driveSubsystem);
-  // private final SwedenC418 swedenC418 = new SwedenC418(driveSubsystem);
-  // private final MichaelHunterThemeFromSanAndreas
-  // michaelHunterThemeFromSanAndreas = new
-  // MichaelHunterThemeFromSanAndreas(driveSubsystem);
-  // private final Megalovania megalovania = new Megalovania(driveSubsystem);
-  // private final bohemianRhapsody bohemianRhapsody = new
-  // bohemianRhapsody(driveSubsystem);
+  // Auto Routines 
+  private final ChargeStationRedSideAuto chargeStationRedSideAuto = new ChargeStationRedSideAuto(s_Swerve);
+  private final RED2CubeAutoLeft red2CubeAutoLeft = new RED2CubeAutoLeft(s_Swerve);
+  private final ChargeStationRedMobility chargeStationRedMobility = new ChargeStationRedMobility(s_Swerve);
 
   // Drive Controls
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -86,19 +77,10 @@ public class RobotContainer {
     configureBindings();
 
     // Auto Routines
+    chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
+    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
     chooser.addOption("No auto", null);
-    chooser.setDefaultOption("Mobility", new StraightLineAuto1(s_Swerve));
-    chooser.addOption("Charge Station", new ChargeStationRedSideAuto(s_Swerve));
-
-    // Songs
-    // chooser.addOption("It's Been So Long by The Living Tombstone",
-    // itsBeenSoLong);
-    // chooser.addOption("Ginornos Theme", giornosTheme);
-    // chooser.addOption("Sweden by C418", swedenC418);
-    // chooser.addOption("Michael Hunter Theme From San Andreas",
-    // michaelHunterThemeFromSanAndreas);
-    // chooser.addOption("Megalovania", megalovania);
-    // chooser.addOption("Bohemian Rhapsody by Queen", bohemianRhapsody);
+    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     SmartDashboard.putData("Autonomous routine", chooser);
 
