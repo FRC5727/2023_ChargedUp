@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
     private boolean swerveDebug = false;
+    private boolean speedLimit = false;
     
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
@@ -117,8 +118,20 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void add180Yaw() {
-        gyro.addYaw(180);
+    public void enableSpeedLimit() {
+        speedLimit = true;
+    }
+
+    public void disableSpeedLimit() {
+        speedLimit = false;
+    }
+
+    public double getSpeedLimitXY() {
+        return speedLimit ? Constants.Swerve.speedLimitXY : 1.0;
+    }
+
+    public double getSpeedLimitRot() {
+        return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
     public void stop() {
@@ -126,9 +139,6 @@ public class Swerve extends SubsystemBase {
         // for example
     }
 
-    public double getYaw1() {
-        return gyro.getYaw();
-    }
     public double getGyroPitch(){
         return gyro.getPitch();
     }

@@ -31,7 +31,7 @@ import frc.lib.util.SwerveModuleConstants;
  */
 public final class Constants {
   // Debug arm position by getting position from Chooser
-  public static boolean armPositionDebugChooser = true;
+  public static boolean armPositionDebugChooser = false;
 
   // Debug arm position by moving directly there
   public static boolean armPositionDebugDirect = false;
@@ -44,6 +44,10 @@ public final class Constants {
   public static final class Swerve {
     public static final int pigeonID = 0;
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+
+    // Multipliers when speed limit is in effect;
+    public static final double speedLimitXY = 0.2;
+    public static final double speedLimitRot = 0.15;
 
     public static final COTSFalconSwerveConstants chosenModule =
         COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);

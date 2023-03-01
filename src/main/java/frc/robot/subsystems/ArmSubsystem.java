@@ -15,8 +15,6 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -52,9 +50,6 @@ public class ArmSubsystem extends SubsystemBase {
   // Next positions for the Arm to target
   private Deque<Position> targetPosition = new ArrayDeque<Position>();
   private Position lastPosition = Position.STARTING;
-
-  // Whether or not Arm is currently enabled to move to a position
-  private boolean enabled = false;
 
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
@@ -214,8 +209,12 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.SAFE);
           }
           break;
-        case GRID_LOW:
         case CHASSIS:
+          if (targetPosition.isEmpty() || targetPosition.getLast() == Position.INTAKE_PREGROUND) {
+            targetPosition.add(Position.GRID_LOW);
+          }
+          break;
+        case GRID_LOW:
         case SAFE:
           // Safe directly from any of the previous positions
           break;

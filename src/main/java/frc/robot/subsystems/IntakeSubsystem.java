@@ -36,10 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
     setSpeed(0.5);
   }
   public void place(){
-    if(isCube() == true) cubeOuttake(); else coneOuttake();
+    if(isCube()) cubeOuttake(); else coneOuttake();
   }
   public void intake(){
-    if(isCube() == true) cubeIntake(); else coneIntake();
+    if(isCube()) cubeIntake(); else coneIntake();
   }
   public void cubeIdle(){
     setSpeed(-.08);
@@ -54,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return cube;
   }
   public void intakeIdle(){
-    if(isCube() == true) cubeIdle(); else coneIdle();
+    if(isCube()) cubeIdle(); else coneIdle();
   }
   @Override
   public void periodic() {
