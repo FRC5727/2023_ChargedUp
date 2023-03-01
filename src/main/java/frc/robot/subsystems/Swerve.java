@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import frc.lib.util.SwerveModuleConstants;
 import frc.robot.Constants;
-
+import frc.robot.Robot;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -30,12 +31,28 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.CANivoreName);
         gyro.configFactoryDefault();
         zeroGyro();
-
+        
         mSwerveMods = new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Mod0.constants),
-                new SwerveModule(1, Constants.Swerve.Mod1.constants),
-                new SwerveModule(2, Constants.Swerve.Mod2.constants),
-                new SwerveModule(3, Constants.Swerve.Mod3.constants)
+            new SwerveModule(0, new SwerveModuleConstants(
+                Constants.Swerve.Mod0.driveMotorID,
+                Constants.Swerve.Mod0.angleMotorID,
+                Constants.Swerve.Mod0.canCoderID,
+                Rotation2d.fromDegrees(Robot.practice ? Constants.Swerve.practiceOffsets[0] : Constants.Swerve.compOffsets[0]))),
+            new SwerveModule(1, new SwerveModuleConstants(
+                Constants.Swerve.Mod1.driveMotorID,
+                Constants.Swerve.Mod1.angleMotorID,
+                Constants.Swerve.Mod1.canCoderID,
+                Rotation2d.fromDegrees(Robot.practice ? Constants.Swerve.practiceOffsets[1] : Constants.Swerve.compOffsets[1]))),
+            new SwerveModule(2, new SwerveModuleConstants(
+                Constants.Swerve.Mod2.driveMotorID,
+                Constants.Swerve.Mod2.angleMotorID,
+                Constants.Swerve.Mod2.canCoderID,
+                Rotation2d.fromDegrees(Robot.practice ? Constants.Swerve.practiceOffsets[2] : Constants.Swerve.compOffsets[2]))),
+            new SwerveModule(3, new SwerveModuleConstants(
+                Constants.Swerve.Mod3.driveMotorID,
+                Constants.Swerve.Mod3.angleMotorID,
+                Constants.Swerve.Mod3.canCoderID,
+                Rotation2d.fromDegrees(Robot.practice ? Constants.Swerve.practiceOffsets[3] : Constants.Swerve.compOffsets[3])))
         };
 
         /*
