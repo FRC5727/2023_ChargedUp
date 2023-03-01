@@ -156,9 +156,11 @@ public class RobotContainer {
     if (!armPositionDebugDirect) {
       armTrigger
         .onFalse(
-          Commands.runOnce(() -> s_Swerve.disableSpeedLimit())
-            .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
-            .andThen(new ArmCommand(armSubsystem)));
+          Commands.waitSeconds(0.5)
+            .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+          .alongWith(
+            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+              .andThen(new ArmCommand(armSubsystem))));
     }
 
     Trigger intakeSubstationTrigger = 
@@ -171,9 +173,11 @@ public class RobotContainer {
     if (!armPositionDebugDirect) {
       intakeSubstationTrigger
         .onFalse(
-          Commands.runOnce(() -> s_Swerve.disableSpeedLimit())
-            .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS)))
-            .andThen(new ArmCommand(armSubsystem)));
+          Commands.waitSeconds(0.5)
+            .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+          .alongWith(
+            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+              .andThen(new ArmCommand(armSubsystem))));
     }
         
     Trigger intakeGroundTrigger = 
@@ -184,7 +188,8 @@ public class RobotContainer {
     
     if (!armPositionDebugDirect) {
       intakeGroundTrigger
-        .onFalse(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+        .onFalse(
+          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
           .andThen(new ArmCommand(armSubsystem)));
     }
 
