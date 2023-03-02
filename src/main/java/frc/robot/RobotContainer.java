@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -57,10 +56,6 @@ public class RobotContainer {
   // private final JoystickButton robotCentric = new
   // JoystickButton(Constants.dXboxController,
   // XboxController.Button.kLeftBumper.value);
-
-  // Manip buttons
-  private final JoystickButton zeroGyro = new JoystickButton(Constants.mXboxController,
-      XboxController.Button.kBack.value);
 
   public RobotContainer() {
     s_Swerve.setDefaultCommand(
@@ -183,6 +178,6 @@ public class RobotContainer {
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     /* Manip Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }
 }
