@@ -68,7 +68,7 @@ public class RobotContainer {
             s_Swerve,
             () -> -Constants.dXboxController.getRawAxis(translationAxis),
             () -> -Constants.dXboxController.getRawAxis(strafeAxis),
-            () -> -Constants.dXboxController.getRawAxis(rotationAxis),
+            () -> Constants.dXboxController.getRawAxis(rotationAxis),
             () -> false, // robotCentric.getAsBoolean()
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()

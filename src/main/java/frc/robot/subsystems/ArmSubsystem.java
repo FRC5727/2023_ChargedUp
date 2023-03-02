@@ -54,15 +54,15 @@ public class ArmSubsystem extends SubsystemBase {
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       // TODO Compare all positions to practice bot definitions
-      Position.STARTING, new ArmPosition(-17, -46),
-      Position.CHASSIS, new ArmPosition(-22, -47), // TODO Measure and define
-      Position.SAFE, new ArmPosition(26, -1),
-      Position.GRID_LOW, new ArmPosition(-10, -49),
-      Position.GRID_MID, new ArmPosition(0, -4), //todo make comment about lower arm
-      Position.GRID_HIGH, new ArmPosition(20, 16),
-      Position.INTAKE_PREGROUND, new ArmPosition(-6, -50), // TODO Measure and define
-      Position.INTAKE_GROUND, new ArmPosition(9, -67),
-      Position.INTAKE_SUBSTATION, new ArmPosition(-15, 10)
+      Position.STARTING, new ArmPosition(-20, -53),
+      Position.CHASSIS, new ArmPosition(-32, -38), // TODO Measure and define
+      Position.SAFE, new ArmPosition(-32, 17),
+      Position.GRID_LOW, new ArmPosition(-19, -33),
+      Position.GRID_MID, new ArmPosition(1, -3), //lower arm is the one conncted directly to the chassis
+      Position.GRID_HIGH, new ArmPosition(26, 24),
+      Position.INTAKE_PREGROUND, new ArmPosition(-1, -58), // TODO Measure and define
+      Position.INTAKE_GROUND, new ArmPosition(10, -68),
+      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 8)
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -85,12 +85,12 @@ public class ArmSubsystem extends SubsystemBase {
   private ArmFeedforward lowArmFeedforward;
 
   // TODO Tune this
-  private double L_kp = 1.10,
+  private double L_kp = 0.90,
       L_ki = 0.00,
       L_kd = 0.00;
 
   // TODO Tune this
-  private double H_kp = 1.10,
+  private double H_kp = 0.40,
       H_ki = 0.00,
       H_kd = 0.00;
 
@@ -130,10 +130,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TODO Define tolerance elsewhere
     lowPidController.disableContinuousInput();
-    lowPidController.setTolerance(1, .5);
+    lowPidController.setTolerance(2, .5);
 
     highPidController.disableContinuousInput();
-    highPidController.setTolerance(1, .5);
+    highPidController.setTolerance(2, .5);
 
     lowerArmSlave.follow(lowerArmMaster);
     lowerArmSlave.setInverted(true);
