@@ -89,8 +89,8 @@ public class RobotContainer {
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
 
     String pathName = "Blue Simple Test";
-    double autoMaxVel = 0.75;
-    double autoMaxAccel = 0.5;
+    double autoMaxVel = 0.5;
+    double autoMaxAccel = 0.3;
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
     HashMap<String, Command> eventMap = new HashMap<>();
 

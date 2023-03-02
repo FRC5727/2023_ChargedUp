@@ -42,7 +42,7 @@ public class Auto extends SequentialCommandGroup {
         s_Swerve::setModuleStates,
         s_Swerve
       ),
-      new InstantCommand(() -> s_Swerve.stop()),
+      new InstantCommand(() -> s_Swerve.stopDrive()),
       new WaitCommand(0.5)
       );
   }

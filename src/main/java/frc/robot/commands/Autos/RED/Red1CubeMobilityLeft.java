@@ -47,7 +47,7 @@ public class Red1CubeMobilityLeft extends SequentialCommandGroup {
         s_Swerve::setModuleStates, //makes the swerve move according to the path
         s_Swerve //it needs this so it can actually drive
       ),
-      new InstantCommand(() -> s_Swerve.stop()),
+      new InstantCommand(() -> s_Swerve.stopDrive()),
       new WaitCommand(0.5)
     );
   }

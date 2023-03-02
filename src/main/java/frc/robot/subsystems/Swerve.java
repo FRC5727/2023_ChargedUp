@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    private boolean swerveDebug = false;
+    private static final boolean swerveDebug = true;
     private boolean speedLimit = false;
     
     public SwerveDriveOdometry swerveOdometry;
@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-        gyro.addYaw(180); // TODO Review this code
+        // gyro.addYaw(180); // TODO Review this code
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
