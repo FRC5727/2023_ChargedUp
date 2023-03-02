@@ -10,6 +10,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IdleCommand extends CommandBase {
   /* Creates a new IdleCommand */
   private final IntakeSubsystem intake;
+  private boolean lastCube;
   
   public IdleCommand(IntakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -20,12 +21,18 @@ public class IdleCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lastCube = intake.isCube();
     intake.intakeIdle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (intake.isCube() != lastCube) {
+      lastCube = intake.isCube();
+      intake.intakeIdle();      
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
