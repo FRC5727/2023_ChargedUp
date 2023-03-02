@@ -244,8 +244,13 @@ public class ArmSubsystem extends SubsystemBase {
     lowPidController.setSetpoint(nextPosition.lowerArmAngle);
     highPidController.setSetpoint(nextPosition.upperArmAngle);
     if (targetPosition.size() > 1) {
-      lowPidController.setTolerance(10, 5);
-      highPidController.setTolerance(10, 5);
+      if (targetPosition.peek() == Position.SAFE) {
+        lowPidController.setTolerance(25, 50);
+        highPidController.setTolerance(25, 50);
+      } else {
+        lowPidController.setTolerance(7, 10);
+        highPidController.setTolerance(7, 10);
+      }
     } else {
       lowPidController.setTolerance(1, .5);
       highPidController.setTolerance(1, .5);
