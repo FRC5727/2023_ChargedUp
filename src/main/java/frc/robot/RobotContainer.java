@@ -85,8 +85,10 @@ public class RobotContainer {
 
     // Auto Routines
     String[] autoPaths = {
-      "Blue Simple Test",
-      "Blue Second Test"
+      "Simple Test",
+      "Second Test",
+      "Mobility only",
+      "Cube plus Mobility"
     };
     autoChooser.setDefaultOption("No auto (intake faces Red)", null);
     for (String pathName : autoPaths) {
@@ -109,10 +111,11 @@ public class RobotContainer {
     if (pathName == null)
       return null;
 
-    double autoMaxVel = 0.75;
+    double autoMaxVel = 1.0;
     double autoMaxAccel = 0.5;
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
     HashMap<String, Command> eventMap = new HashMap<>();
+    eventMap.put("Place cube low", new PlaceCommand(intakeSubsystem));
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       s_Swerve::getPose, // Pose2d supplier
       s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
