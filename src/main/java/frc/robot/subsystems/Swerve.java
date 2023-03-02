@@ -145,6 +145,7 @@ public class Swerve extends SubsystemBase {
         return gyro.getPitch();
     }
 
+    // TOOD Remove if unused
     public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory traj) {
         SmartDashboard.putString("First pose", traj.getInitialHolonomicPose().toString());
         PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
