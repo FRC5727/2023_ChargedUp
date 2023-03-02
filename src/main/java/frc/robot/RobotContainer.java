@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +21,15 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
+
+import java.util.HashMap;
+import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -76,6 +87,27 @@ public class RobotContainer {
     chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
     chooser.addOption("No auto", null);
     chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+
+    String pathName = "Blue Simple Test";
+    double autoMaxVel = 0.75;
+    double autoMaxAccel = 0.5;
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
+    HashMap<String, Command> eventMap = new HashMap<>();
+
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+      (() -> s_Swerve.getPose()), // Pose2d supplier
+      ((Pose2d pose) -> s_Swerve.resetOdometry(pose)), // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      ((SwerveModuleState[] desiredStates) -> s_Swerve.setModuleStates(desiredStates)), // Module states consumer used to output to the drive subsystem
+      eventMap,
+      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
+    );
+
+    Command simpleAuto = autoBuilder.fullAuto(pathGroup);
+    chooser.addOption(pathName, simpleAuto);
 
     SmartDashboard.putData("Autonomous routine", chooser);
 

@@ -25,7 +25,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    private Pose2d robotPose = new Pose2d(0, 0.0, Rotation2d.fromDegrees(0.0));
+
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.CANivoreName);
         gyro.configFactoryDefault();
@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-        gyro.addYaw(180);
+        gyro.addYaw(180); // TODO Review this code
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -66,6 +66,10 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
+    }
+    
+    public void stopDrive() {
+        drive(new Translation2d(0, 0), 0, false, true);
     }
 
     /* Used by SwerveControllerCommand in Auto */
@@ -132,10 +136,6 @@ public class Swerve extends SubsystemBase {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
-    public void stop() {
-        // TODO Add convenience code to stop the robot -- see old DriveSubsystem::stop()
-        // for example
-    }
 
     public double getGyroPitch(){
         return gyro.getPitch();
@@ -153,7 +153,7 @@ public class Swerve extends SubsystemBase {
                 SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             }
             SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
-            robotPose = swerveOdometry.getPoseMeters();
+            Pose2d robotPose = swerveOdometry.getPoseMeters();
             SmartDashboard.putNumber("Pose X", robotPose.getX());
             SmartDashboard.putNumber("Pose Y", robotPose.getY());
         }
