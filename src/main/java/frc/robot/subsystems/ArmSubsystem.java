@@ -53,14 +53,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
-      // TODO Compare all positions to practice bot definitions
       Position.STARTING, new ArmPosition(-20, -53),
-      Position.CHASSIS, new ArmPosition(-32, -38), // TODO Measure and define
+      Position.CHASSIS, new ArmPosition(-32, -38),
       Position.SAFE, new ArmPosition(-32, 17),
       Position.GRID_LOW, new ArmPosition(-19, -33),
-      Position.GRID_MID, new ArmPosition(1, -3), //lower arm is the one conncted directly to the chassis
+      Position.GRID_MID, new ArmPosition(1, -3),
       Position.GRID_HIGH, new ArmPosition(26, 24),
-      Position.INTAKE_PREGROUND, new ArmPosition(-1, -58), // TODO Measure and define
+      Position.INTAKE_PREGROUND, new ArmPosition(-1, -58),
       Position.INTAKE_GROUND, new ArmPosition(10, -68),
       Position.INTAKE_SUBSTATION, new ArmPosition(-8, 8)
     ));
