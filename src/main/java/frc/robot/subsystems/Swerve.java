@@ -119,6 +119,11 @@ public class Swerve extends SubsystemBase {
                 : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
+    // TODO Remove
+    public void hack() {
+        gyro.setYaw(gyro.getYaw() + 180);
+    }
+
     public void resetModulesToAbsolute() {
         for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();

@@ -27,7 +27,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -219,5 +218,11 @@ public class RobotContainer {
 
     /* Manip Buttons */
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
+  }
+
+  // TODO Replace this ugly hack
+  // For some reason, after auto, the teleop controls are inverted
+  public void hack() {
+    s_Swerve.hack();
   }
 }

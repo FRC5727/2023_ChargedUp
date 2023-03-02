@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.ejml.dense.row.decomposition.svd.SafeSvd_DDRM;
+
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -174,6 +176,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+      m_robotContainer.hack();
     }
     //driveSubsystem.unPark();
   }
