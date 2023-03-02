@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -22,6 +27,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +36,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -50,7 +57,7 @@ public class RobotContainer {
   private Position driverTargetPosition = Position.CHASSIS;
 
   // Auto Chooser
-  private final SendableChooser<Command> chooser = new SendableChooser<>();
+  private final SendableChooser<String> autoChooser = new SendableChooser<>();
 
   private final SendableChooser<ArmSubsystem.Position> positionChooser = new SendableChooser<>();
   // Auto Routines 
@@ -63,11 +70,6 @@ public class RobotContainer {
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  // Driver Buttons
-  // private final JoystickButton robotCentric = new
-  // JoystickButton(Constants.dXboxController,
-  // XboxController.Button.kLeftBumper.value);
-
   public RobotContainer() {
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -75,7 +77,7 @@ public class RobotContainer {
             () -> -Constants.dXboxController.getRawAxis(translationAxis),
             () -> -Constants.dXboxController.getRawAxis(strafeAxis),
             () -> -Constants.dXboxController.getRawAxis(rotationAxis),
-            () -> false, // robotCentric.getAsBoolean()
+            () -> false, // always field relative
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()
         ));
@@ -83,34 +85,17 @@ public class RobotContainer {
     configureBindings();
 
     // Auto Routines
-    chooser.setDefaultOption("RED SIDE: Charge Station + Mobility", chargeStationRedMobility);
-    chooser.addOption("RED SIDE: 2 Cube Auto Left (Untested)", red2CubeAutoLeft);
-    chooser.addOption("No auto", null);
-    chooser.addOption("RED SIDE: Charge Station Auto", chargeStationRedSideAuto);
+    String[] autoPaths = {
+      "Blue Simple Test",
+      "Blue Second Test"
+    };
+    autoChooser.setDefaultOption("No auto (intake faces Red)", null);
+    for (String pathName : autoPaths) {
+      autoChooser.addOption(pathName, pathName);
+    }
+    SmartDashboard.putData("Autonomous routine", autoChooser);
 
-    String pathName = "Blue Simple Test";
-    double autoMaxVel = 0.5;
-    double autoMaxAccel = 0.3;
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
-    HashMap<String, Command> eventMap = new HashMap<>();
-
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-      (() -> s_Swerve.getPose()), // Pose2d supplier
-      ((Pose2d pose) -> s_Swerve.resetOdometry(pose)), // Pose2d consumer, used to reset odometry at the beginning of auto
-      Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-      ((SwerveModuleState[] desiredStates) -> s_Swerve.setModuleStates(desiredStates)), // Module states consumer used to output to the drive subsystem
-      eventMap,
-      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-      s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
-    );
-
-    Command simpleAuto = autoBuilder.fullAuto(pathGroup);
-    chooser.addOption(pathName, simpleAuto);
-
-    SmartDashboard.putData("Autonomous routine", chooser);
-
+    // Arm position chooser
     if (Constants.armPositionDebugChooser) {
       for (Position pos : Position.values()) {
         positionChooser.addOption(pos.toString(), pos);
@@ -120,7 +105,30 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return chooser.getSelected();
+    String pathName = autoChooser.getSelected();
+
+    if (pathName == null)
+      return null;
+
+    double autoMaxVel = 0.75;
+    double autoMaxAccel = 0.5;
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
+    HashMap<String, Command> eventMap = new HashMap<>();
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+      s_Swerve::getPose, // Pose2d supplier
+      s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
+      eventMap,
+      true, // Mirror Blue path to Red automatically
+      s_Swerve
+    );
+
+    // PathPlannerTrajectory path = PathPlanner.loadPath(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
+    // return s_Swerve.followTrajectoryCommand(path);
+    return autoBuilder.fullAuto(pathGroup);
   }
 
   /*
