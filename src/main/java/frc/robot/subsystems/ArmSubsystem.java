@@ -16,6 +16,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -142,8 +143,23 @@ public class ArmSubsystem extends SubsystemBase {
     highArmSlave.setInverted(false);
     highArmMaster.setInverted(true);
 
+    brake();
+
+    if (armDebug) {
+      SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
+    }
+  }
+
+  private void brake() {
     lowerArmMaster.setNeutralMode(NeutralMode.Brake);
     highArmMaster.setNeutralMode(NeutralMode.Brake);
+    lowerArmMaster.stopMotor();
+    highArmMaster.stopMotor();
+  }
+
+  private void coast() {
+    lowerArmMaster.setNeutralMode(NeutralMode.Coast);
+    highArmMaster.setNeutralMode(NeutralMode.Coast);
   }
 
   // Limit a value (positive or negative)
