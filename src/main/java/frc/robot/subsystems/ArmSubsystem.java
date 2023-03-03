@@ -53,15 +53,17 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
-      Position.STARTING, new ArmPosition(-20, -53),
-      Position.CHASSIS, new ArmPosition(-32, -38),
-      Position.SAFE, new ArmPosition(-32, 17),
-      Position.GRID_LOW, new ArmPosition(-19, -33),
-      Position.GRID_MID, new ArmPosition(1, -3),
-      Position.GRID_HIGH, new ArmPosition(26, 24),
-      Position.INTAKE_PREGROUND, new ArmPosition(-1, -58),
-      Position.INTAKE_GROUND, new ArmPosition(10, -68),
-      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 8)
+      // All positions are low arm first, high arm second
+      // Commented angles measured with intake facing right, using Bubble Level Android app
+      Position.STARTING, new ArmPosition(-20, -53), // 19, 33
+      Position.CHASSIS, new ArmPosition(-32, -38), // 30, 45
+      Position.SAFE, new ArmPosition(-32, 17), // 130, 10 (H)
+      Position.GRID_LOW, new ArmPosition(-19, -33), // 18, 52
+      Position.GRID_MID, new ArmPosition(1, -3), // -3, -11 (H)
+      Position.GRID_HIGH, new ArmPosition(26, 24), // 62, 16 (H)
+      Position.INTAKE_PREGROUND, new ArmPosition(-1, -58), // 0, 29
+      Position.INTAKE_GROUND, new ArmPosition(10, -68), // -11, 18
+      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 8) // 7, 89
     ));
 
   private WPI_TalonFX lowerArmMaster;
