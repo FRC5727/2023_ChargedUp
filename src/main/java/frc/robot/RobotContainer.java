@@ -4,18 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -35,7 +28,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -85,12 +77,15 @@ public class RobotContainer {
 
     // Auto Routines
     String[] autoPaths = {
-      "Simple Test",
-      "Second Test",
+      // "Simple Test",
+      // "Second Test",
       "Mobility only",
-      "Cube plus Mobility"
+      "Cube plus Mobility",
+      "Charge station direct",
+      "Cube plus Charge station",
+      "Cube and mobility and CS"
     };
-    autoChooser.setDefaultOption("No auto (intake faces Red)", null);
+    autoChooser.setDefaultOption("No auto (intake faces away)", null);
     for (String pathName : autoPaths) {
       autoChooser.addOption(pathName, pathName);
     }
@@ -111,8 +106,8 @@ public class RobotContainer {
     if (pathName == null)
       return null;
 
-    double autoMaxVel = 1.0;
-    double autoMaxAccel = 0.5;
+    double autoMaxVel = 3.0;
+    double autoMaxAccel = 1.0;
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("Place cube low", new PlaceCommand(intakeSubsystem));
