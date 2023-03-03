@@ -61,7 +61,7 @@ public class RobotContainer {
             s_Swerve,
             () -> -Constants.dXboxController.getRawAxis(translationAxis),
             () -> -Constants.dXboxController.getRawAxis(strafeAxis),
-            () -> Constants.dXboxController.getRawAxis(rotationAxis), // TODO Why is comp-bot different?
+            () -> -Constants.dXboxController.getRawAxis(rotationAxis),
             () -> false, // always field relative
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()
