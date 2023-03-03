@@ -31,12 +31,12 @@ import frc.lib.util.SwerveModuleConstants;
  */
 public final class Constants {
   // Debug arm position by getting position from Chooser
-  public static boolean armPositionDebugChooser = false;
+  public static final boolean armPositionDebugChooser = false;
 
   // Debug arm position by moving directly there
-  public static boolean armPositionDebugDirect = false;
+  public static final boolean armPositionDebugDirect = false;
 
-  public static int pigeon2IMU = 0;
+  public static final int pigeon2IMU = 0;
 
   public static final double stickDeadband = 0.1; // TODO We have used 0.05 previously
   public static final double triggerAxisThreshold = 0.10; // Threshold to consider a trigger pulled

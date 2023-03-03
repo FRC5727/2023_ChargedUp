@@ -21,7 +21,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private static final boolean armDebug = true;
+  private static final boolean armDebug = false;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {

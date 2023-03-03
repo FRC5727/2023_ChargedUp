@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import org.ejml.dense.row.decomposition.svd.SafeSvd_DDRM;
+
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +41,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     //driveSubsystem.zeroGyroscope();
+
+    if (!DriverStation.isFMSAttached())
+      PathPlannerServer.startServer(5811);
   }
 
   /**
@@ -169,6 +176,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+      m_robotContainer.hack();
     }
     //driveSubsystem.unPark();
   }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.subsystems.Swerve;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -62,23 +63,25 @@ public class SwerveModule {
         }
     }
 
-    private void setAngle(SwerveModuleState desiredState){
+    private void setAngle(SwerveModuleState desiredState) {
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
         mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
         lastAngle = angle;
-        SmartDashboard.putNumber("Mod " + moduleNumber + " setAngle", angle.getDegrees());
+        if (Swerve.swerveDebug) {
+            SmartDashboard.putNumber("Mod " + moduleNumber + " setAngle", angle.getDegrees());
+        }
     }
 
-    private Rotation2d getAngle(){
+    private Rotation2d getAngle() {
         return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
     }
 
-    public Rotation2d getCanCoder(){
+    public Rotation2d getCanCoder() {
         return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
     }
 
-    public void resetToAbsolute(){
+    public void resetToAbsolute() {
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }
@@ -91,12 +94,7 @@ public class SwerveModule {
     private void configAngleMotor(){
         mAngleMotor.configFactoryDefault();
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-        // TODO Remove this experimentation hack
-        // if (moduleNumber > 1) {
-        //     mAngleMotor.setInverted(!Constants.Swerve.angleMotorInvert);
-        // } else {
-            mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
-        // }
+        mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
         resetToAbsolute();
     }

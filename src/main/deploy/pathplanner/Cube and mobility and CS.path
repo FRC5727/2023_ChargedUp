@@ -2,46 +2,46 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 14.737754699122995,
-        "y": 4.35
+        "x": 1.8,
+        "y": 2.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.737754699122997,
-        "y": 4.35
+        "x": 2.8000000000000056,
+        "y": 2.75
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": false,
+      "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "j"
+          "Place cube low"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "deadline",
+        "waitTime": 4.0
       }
     },
     {
       "anchorPoint": {
-        "x": 9.991098622626582,
-        "y": 4.6606139723907365
+        "x": 7.0,
+        "y": 2.75
       },
       "prevControl": {
-        "x": 10.28593584542271,
-        "y": 5.386367136196589
+        "x": 6.0,
+        "y": 2.75
       },
       "nextControl": {
-        "x": 9.245400387044066,
-        "y": 2.8250490848030005
+        "x": 6.0,
+        "y": 2.75
       },
-      "holonomicAngle": -169.5400909070709,
-      "isReversal": false,
+      "holonomicAngle": 180.0,
+      "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -51,15 +51,15 @@
     },
     {
       "anchorPoint": {
-        "x": 12.67274420058679,
-        "y": 2.968452591645792
+        "x": 4.35,
+        "y": 2.75
       },
       "prevControl": {
-        "x": 11.67274420058679,
-        "y": 2.968452591645792
+        "x": 5.4693460824655915,
+        "y": 2.75
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
