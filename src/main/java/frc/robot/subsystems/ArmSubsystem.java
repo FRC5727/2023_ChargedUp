@@ -22,7 +22,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private static final boolean armDebug = false;
+  private static final boolean armDebug = true;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_HIGH, new ArmPosition(26, 24), // 62, 16 (H)
       Position.INTAKE_PREGROUND, new ArmPosition(-1, -58), // 0, 29
       Position.INTAKE_GROUND, new ArmPosition(10, -68), // -11, 18
-      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 8) // 7, 89
+      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 12) // 7, 89
     ));
 
   private WPI_TalonFX lowerArmMaster;

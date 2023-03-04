@@ -208,7 +208,6 @@ public class RobotContainer {
     // Toggle between cones and cubes
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
-    /* Manip Buttons */
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }
 
