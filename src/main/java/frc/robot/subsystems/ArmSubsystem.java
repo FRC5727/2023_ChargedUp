@@ -146,7 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
     brake();
 
     if (armDebug) {
-      SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
+      // SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
     }
   }
 
@@ -158,8 +158,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   private void coast() {
-    lowerArmMaster.setNeutralMode(NeutralMode.Coast);
-    highArmMaster.setNeutralMode(NeutralMode.Coast);
+    // lowerArmMaster.setNeutralMode(NeutralMode.Coast);
+    // highArmMaster.setNeutralMode(NeutralMode.Coast);
   }
 
   // Limit a value (positive or negative)
