@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -15,6 +16,9 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +26,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private static final boolean armDebug = true;
+  private boolean armDebug = false;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
@@ -143,11 +147,18 @@ public class ArmSubsystem extends SubsystemBase {
     highArmSlave.setInverted(false);
     highArmMaster.setInverted(true);
 
-    brake();
+    NetworkTableInstance nt = NetworkTableInstance.getDefault();
+    NetworkTable sdTable = nt.getTable("SmartDashboard");
 
-    if (armDebug) {
-      SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
-    }
+    SmartDashboard.putBoolean("Arm debug", armDebug);
+    sdTable.addListener("Arm debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
+      armDebug = event.valueData.value.getBoolean();
+      if (armDebug) {
+        SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
+      }
+    });
+
+    brake();
   }
 
   private void brake() {
