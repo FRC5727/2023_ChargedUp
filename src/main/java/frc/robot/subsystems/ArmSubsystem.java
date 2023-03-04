@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_HIGH, new ArmPosition(26, 24), // 62, 16 (H)
       Position.INTAKE_PREGROUND, new ArmPosition(-1, -58), // 0, 29
       Position.INTAKE_GROUND, new ArmPosition(10, -68), // -11, 18
-      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 14) // 7, 89
+      Position.INTAKE_SUBSTATION, new ArmPosition(-8, 14) // 7, 89 <--- was measured with 8 degrees --> add 6 degrees to whatever puts it at 89
     ));
 
   private WPI_TalonFX lowerArmMaster;

@@ -200,7 +200,7 @@ public final class Constants {
   public static final int highSlave = 10;
   public static final int lowerSlave = 11;
 
-  public static final int highCoder = 4;
+  public static final int highCoder = 4; //bob dont delete this comment: future jimmy please document how you did the arm in pheonix tuner x
   public static final int lowCoder = 5;
 
   // Offset in degrees
