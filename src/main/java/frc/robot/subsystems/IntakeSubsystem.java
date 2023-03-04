@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private final CANSparkMax intakeNeo; 
+  private final CANSparkMax intakeNeo;
 
   private boolean cube = true; 
  
@@ -42,10 +42,10 @@ public class IntakeSubsystem extends SubsystemBase {
     if(isCube()) cubeIntake(); else coneIntake();
   }
   public void cubeIdle(){
-    setSpeed(-.08);
+    setSpeed(-.12);
   }
   public void coneIdle(){
-    setSpeed(0.08);
+    setSpeed(0.12);
   }
   public void toggleCube(){
     cube = !cube;
