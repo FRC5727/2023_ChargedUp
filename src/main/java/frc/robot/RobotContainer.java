@@ -77,7 +77,8 @@ public class RobotContainer {
       "Cube plus Mobility",
       "Charge station direct",
       "Cube plus Charge station",
-      "Cube and mobility and CS"
+      "Cube and mobility and CS",
+      "High Cube plus Mobility"
     };
     autoChooser.setDefaultOption("No auto (intake faces away)", null);
     for (String pathName : autoPaths) {
@@ -105,6 +106,16 @@ public class RobotContainer {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("Place cube low", new PlaceCommand(intakeSubsystem));
+    eventMap.put("Place cube high",
+      new IdleCommand(intakeSubsystem).raceWith(
+        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH))
+        .andThen(new ArmCommand(armSubsystem).withTimeout(7.0)))
+      .andThen(new PlaceCommand(intakeSubsystem).withTimeout(2.0))
+      .andThen(
+        new IdleCommand(intakeSubsystem).raceWith(
+          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
+          .andThen(new ArmCommand(armSubsystem))))
+    );
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       s_Swerve::getPose, // Pose2d supplier
       s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
