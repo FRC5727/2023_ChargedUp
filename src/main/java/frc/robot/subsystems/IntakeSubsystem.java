@@ -42,10 +42,10 @@ public class IntakeSubsystem extends SubsystemBase {
     if(isCube()) cubeIntake(); else coneIntake();
   }
   public void cubeIdle(){
-    setSpeed(-.12);
+    setSpeed(-.18);
   }
   public void coneIdle(){
-    setSpeed(0.12);
+    setSpeed(0.18);
   }
   public void toggleCube(){
     cube = !cube;
