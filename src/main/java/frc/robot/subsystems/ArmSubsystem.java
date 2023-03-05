@@ -257,8 +257,8 @@ public class ArmSubsystem extends SubsystemBase {
         highPidController.setTolerance(3, 5);
       }
     } else {
-      lowPidController.setTolerance(1, .5);
-      highPidController.setTolerance(1, .5);
+      lowPidController.setTolerance(2, .5);
+      highPidController.setTolerance(2, .5);
     }
     lowPidController.reset();
     highPidController.reset();
