@@ -56,15 +56,15 @@ public class ArmSubsystem extends SubsystemBase {
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       // All positions are low arm first, high arm second
       // Commented angles measured with intake facing right, using Bubble Level Android app
-      Position.STARTING, new ArmPosition(-20, -96), // 19, 33
+      Position.STARTING, new ArmPosition(-100, -46), // 19, 33
       Position.CHASSIS, new ArmPosition(40, -85), // 30, 45   ==> (40, -89), 
       Position.SAFE, new ArmPosition(42, -20), // 130, 10 (H)
-      Position.GRID_LOW, new ArmPosition(60, -80), // 18, 52  ---> -76  ==> 76
-      Position.GRID_MID, new ArmPosition(59, -40), // -3, -11 (H)  ===> 57
-      Position.GRID_HIGH, new ArmPosition(87, -12), // 62, 16 (H) ---> -21 ===> 87
+      Position.GRID_LOW, new ArmPosition(56, -85), // 18, 52  ---> -76  ==> 76
+      Position.GRID_MID, new ArmPosition(65, -33), // -3, -11 (H)  ===> 57
+      Position.GRID_HIGH, new ArmPosition(87, -9), // 62, 16 (H) ---> -21 ===> 87
       Position.INTAKE_PREGROUND, new ArmPosition(63, -94), // 0, 29 -98
       Position.INTAKE_GROUND, new ArmPosition(72, -108), // -11, 18
-      Position.INTAKE_SUBSTATION, new ArmPosition(51, -23) // 7, 89 <--- was measured with 8 degrees --> add 6 degrees to whatever puts it at 89
+      Position.INTAKE_SUBSTATION, new ArmPosition(51, -21) // 7, 89 <--- was measured with 8 degrees --> add 6 degrees to whatever puts it at 89
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -87,7 +87,7 @@ public class ArmSubsystem extends SubsystemBase {
   private ArmFeedforward lowArmFeedforward;
 
   // TODO Tune this
-  private double L_kp = 0.90,
+  private double L_kp = 0.70,
       L_ki = 0.00,
       L_kd = 0.00;
 
