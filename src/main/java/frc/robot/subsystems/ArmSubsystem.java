@@ -153,6 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
   private void brake() {
     lowerArmMaster.setNeutralMode(NeutralMode.Brake);
     highArmMaster.setNeutralMode(NeutralMode.Brake);
+    lowerArmSlave.setNeutralMode(NeutralMode.Brake);
+    highArmSlave.setNeutralMode(NeutralMode.Brake);
     lowerArmMaster.stopMotor();
     highArmMaster.stopMotor();
   }
