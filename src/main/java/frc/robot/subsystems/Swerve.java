@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public static final boolean swerveDebug = true;
+    public static final boolean swerveDebug = false;
     private boolean speedLimit = false;
     
     public SwerveDriveOdometry swerveOdometry;
