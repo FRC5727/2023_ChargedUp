@@ -6,11 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.Position;
 
 public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   
   private final ArmSubsystem arm;
+  private final ArmSubsystem.Position position = Position.CHASSIS;
+  private final boolean positionSet = false;
 
   public ArmCommand(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -18,9 +21,20 @@ public class ArmCommand extends CommandBase {
     addRequirements(arm);
   }
 
+  public ArmCommand(ArmSubsystem arm, ArmSubsystem.Position position) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.arm = arm;
+    this.position = position;
+    positionSet = true;
+    addRequirements(arm);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (positionSet) {
+      arm.setTargetPosition(position);
+    }
     arm.beginMovement();
   }
 

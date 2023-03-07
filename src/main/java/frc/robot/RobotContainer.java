@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -179,39 +178,30 @@ public class RobotContainer {
         .onFalse(
           Commands.waitSeconds(0.5)
             .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(
-            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-              .andThen(new ArmCommand(armSubsystem))));
+          .alongWith(new ArmCommand(armSubsystem, Position.CHASSIS)));
     }
 
     Trigger intakeSubstationTrigger = 
       driverRightTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
         .alongWith(
             Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-              .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_SUBSTATION)))
-              .andThen(new ArmCommand(armSubsystem))));
+              .andThen(new ArmCommand(armSubsystem, Position.INTAKE_SUBSTATION))));
  
     if (!armPositionDebugDirect) {
       intakeSubstationTrigger
         .onFalse(
           Commands.waitSeconds(0.5)
             .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(
-            Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-              .andThen(new ArmCommand(armSubsystem))));
+          .alongWith(new ArmCommand(armSubsystem, Position.CHASSIS)));
     }
         
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
-        .alongWith(
-          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.INTAKE_GROUND))
-            .andThen(new ArmCommand(armSubsystem))));
+        .alongWith(new ArmCommand(armSubsystem, Position.INTAKE_GROUND)));
     
     if (!armPositionDebugDirect) {
       intakeGroundTrigger
-        .onFalse(
-          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-          .andThen(new ArmCommand(armSubsystem)));
+        .onFalse(new ArmCommand(armSubsystem, Position.CHASSIS));
     }
 
     // Place currently held game piece
