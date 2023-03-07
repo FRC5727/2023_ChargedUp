@@ -51,9 +51,9 @@ public class RobotContainer {
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
-            () -> -dXboxController.getRawAxis(translationAxis),
-            () -> -dXboxController.getRawAxis(strafeAxis),
-            () -> -dXboxController.getRawAxis(rotationAxis),
+            () -> -Controls.driver.getRawAxis(translationAxis),
+            () -> -Controls.driver.getRawAxis(strafeAxis),
+            () -> -Controls.driver.getRawAxis(rotationAxis),
             () -> false, // always field relative
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()
@@ -69,7 +69,7 @@ public class RobotContainer {
     SmartDashboard.putData("Autonomous routine", autoChooser);
 
     // Arm position chooser
-    if (Constants.armPositionDebugChooser) {
+    if (Arm.positionDebugChooser) {
       for (Position pos : Position.values()) {
         positionChooser.addOption(pos.toString(), pos);
       }
@@ -100,27 +100,25 @@ public class RobotContainer {
     /* DRIVER BINDS */
 
     // Driver arm controls
-    new JoystickButton(dXboxController, XboxController.Button.kA.value)
+    new JoystickButton(Controls.driver, XboxController.Button.kA.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_LOW));
-    new JoystickButton(dXboxController, XboxController.Button.kB.value)
+    new JoystickButton(Controls.driver, XboxController.Button.kB.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_MID));
-    new JoystickButton(dXboxController, XboxController.Button.kY.value)
+    new JoystickButton(Controls.driver, XboxController.Button.kY.value)
       .onTrue(Commands.runOnce(() -> driverTargetPosition = Position.GRID_HIGH));
 
-    Trigger driverLeftBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
-    Trigger driverRightBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value);
-    Trigger driverLeftTrigger = new Trigger(
-        () -> dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
-    Trigger driverRightTrigger = new Trigger(
-        () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
+    Trigger driverLeftBumper = new JoystickButton(Controls.driver, XboxController.Button.kLeftBumper.value);
+    Trigger driverRightBumper = new JoystickButton(Controls.driver, XboxController.Button.kRightBumper.value);
+    Trigger driverLeftTrigger = new Trigger(() -> Controls.driver.getLeftTriggerAxis() > Controls.triggerAxisThreshold);
+    Trigger driverRightTrigger = new Trigger(() -> Controls.driver.getRightTriggerAxis() > Controls.triggerAxisThreshold);
   
     // Move to selected position
     Trigger armTrigger = 
       driverRightBumper.whileTrue(
         Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-          .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(armPositionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
+          .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Arm.positionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
           .andThen(new ArmCommand(armSubsystem)));
-    if (!armPositionDebugDirect) {
+    if (!Arm.positionDebugDirect) {
       armTrigger
         .onFalse(
           Commands.waitSeconds(0.5)
@@ -134,7 +132,7 @@ public class RobotContainer {
             Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
               .andThen(new ArmCommand(armSubsystem, Position.INTAKE_SUBSTATION))));
  
-    if (!armPositionDebugDirect) {
+    if (!Arm.positionDebugDirect) {
       intakeSubstationTrigger
         .onFalse(
           Commands.waitSeconds(0.5)
@@ -146,7 +144,7 @@ public class RobotContainer {
       driverLeftTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
         .alongWith(new ArmCommand(armSubsystem, Position.INTAKE_GROUND)));
     
-    if (!armPositionDebugDirect) {
+    if (!Arm.positionDebugDirect) {
       intakeGroundTrigger
         .onFalse(new ArmCommand(armSubsystem, Position.CHASSIS));
     }
@@ -156,17 +154,17 @@ public class RobotContainer {
     driverLeftBumper.whileTrue(new PlaceCommand(intakeSubsystem));
 
     // Toggle between cones and cubes
-    new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
+    new JoystickButton(Controls.driver, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
 
     // Use D-Pad for manual motor control
-    new POVButton(dXboxController, 0)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(armManualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
-    new POVButton(dXboxController, 180)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(-armManualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
-    new POVButton(dXboxController, 90)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(armManualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
-    new POVButton(dXboxController, 270)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(-armManualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
+    new POVButton(Controls.driver, 0)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(Arm.manualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+    new POVButton(Controls.driver, 180)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(-Arm.manualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+    new POVButton(Controls.driver, 90)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(Arm.manualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
+    new POVButton(Controls.driver, 270)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(-Arm.manualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
 
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }

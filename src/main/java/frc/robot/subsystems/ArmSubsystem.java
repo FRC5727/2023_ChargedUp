@@ -113,14 +113,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() {
     // TODO Get the device numbers from centrally defined constants
-    this.lowerArmMaster = new WPI_TalonFX(9, Constants.CANivoreName);
-    this.lowerArmSlave = new WPI_TalonFX(11, Constants.CANivoreName);
-    this.lowerArmCoder = new CANCoder(Constants.lowCoder, Constants.CANivoreName);
+    this.lowerArmMaster = new WPI_TalonFX(Constants.Arm.lowerMaster, Constants.CANivoreName);
+    this.lowerArmSlave = new WPI_TalonFX(Constants.Arm.lowerSlave, Constants.CANivoreName);
+    this.lowerArmCoder = new CANCoder(Constants.Arm.lowCoder, Constants.CANivoreName);
 
     // TODO Get the device numbers from centrally defined constants
-    this.highArmMaster = new WPI_TalonFX(8, Constants.CANivoreName);
-    this.highArmSlave = new WPI_TalonFX(10, Constants.CANivoreName);
-    this.highArmCoder = new CANCoder(Constants.highCoder, Constants.CANivoreName);
+    this.highArmMaster = new WPI_TalonFX(Constants.Arm.highMaster, Constants.CANivoreName);
+    this.highArmSlave = new WPI_TalonFX(Constants.Arm.highSlave, Constants.CANivoreName);
+    this.highArmCoder = new CANCoder(Constants.Arm.highCoder, Constants.CANivoreName);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
@@ -186,7 +186,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setTargetPosition(Position position) {
     targetPosition.clear();
-    if (!Constants.armPositionDebugDirect && lastPosition != position) {
+    if (!Constants.Arm.positionDebugDirect && lastPosition != position) {
       // Determine first step based on last known position
       switch (lastPosition) {
         case STARTING:
