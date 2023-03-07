@@ -37,6 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Enumeration of all defined arm positions
   public enum Position {
+    CALIBRATION,
     STARTING,
     CHASSIS,
     SAFE,
@@ -55,7 +56,9 @@ public class ArmSubsystem extends SubsystemBase {
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       // All positions are low arm first, high arm second
-      // Commented angles measured with intake facing right, using Bubble Level Android app
+      // Angles are originally measured with respect to the calibration position using a digital level,
+      // and then tuned for precise positioning 
+      // Position.CALIBRATION, new ArmPosition(0, 0),
       Position.STARTING, new ArmPosition(-100, -46), // 19, 33
       Position.CHASSIS, new ArmPosition(40, -85), // 30, 45   ==> (40, -89), 
       Position.SAFE, new ArmPosition(42, -20), // 130, 10 (H)
