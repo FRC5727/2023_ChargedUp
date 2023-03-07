@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,17 +18,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -41,10 +29,10 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
  */
 public class RobotContainer {
   // Subsystems
-  // private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final Swerve s_Swerve = new Swerve();
+  private final Auto auto = new Auto(armSubsystem, intakeSubsystem, s_Swerve);
 
   private Position driverTargetPosition = Position.CHASSIS;
 
@@ -73,16 +61,8 @@ public class RobotContainer {
     configureBindings();
 
     // Auto Routines
-    List<String> autoPaths =
-      Stream.of(new File(Filesystem.getDeployDirectory(), "pathplanner").listFiles())
-        .filter(file -> !file.isDirectory())
-        .filter(file -> file.getName().matches("\\.path$"))
-        .map(File::getName)
-        .map(name -> name.substring(0, name.lastIndexOf(".")))
-        .collect(Collectors.toList());
-
     autoChooser.setDefaultOption("No auto (intake faces away)", null);
-    for (String pathName : autoPaths) {
+    for (String pathName : Auto.getPathnames()) {
       autoChooser.addOption(pathName, pathName);
     }
     SmartDashboard.putData("Autonomous routine", autoChooser);
@@ -97,41 +77,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    String pathName = autoChooser.getSelected();
-
-    if (pathName == null)
-      return null;
-
-    double autoMaxVel = 3.0;
-    double autoMaxAccel = 1.0;
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, autoMaxVel, autoMaxAccel);
-    HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("Place cube low", new PlaceCommand(intakeSubsystem));
-    eventMap.put("Place cube high",
-      new IdleCommand(intakeSubsystem).raceWith(
-        Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.GRID_HIGH))
-        .andThen(new ArmCommand(armSubsystem).withTimeout(7.0)))
-      .andThen(new PlaceCommand(intakeSubsystem).withTimeout(2.0))
-      .andThen(
-        new IdleCommand(intakeSubsystem).raceWith(
-          Commands.runOnce(() -> armSubsystem.setTargetPosition(Position.CHASSIS))
-          .andThen(new ArmCommand(armSubsystem))))
-    );
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-      s_Swerve::getPose, // Pose2d supplier
-      s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
-      Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-      s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
-      eventMap,
-      true, // Mirror Blue path to Red automatically
-      s_Swerve
-    );
-
-    // PathPlannerTrajectory path = PathPlanner.loadPath(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
-    // return s_Swerve.followTrajectoryCommand(path);
-    return autoBuilder.fullAuto(pathGroup);
+    return auto.buildCommand(autoChooser.getSelected());
   }
 
   /*

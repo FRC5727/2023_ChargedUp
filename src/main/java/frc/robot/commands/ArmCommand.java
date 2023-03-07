@@ -12,8 +12,8 @@ public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   
   private final ArmSubsystem arm;
-  private final ArmSubsystem.Position position = Position.CHASSIS;
-  private final boolean positionSet = false;
+  private ArmSubsystem.Position position = Position.CHASSIS;
+  private boolean positionSet = false;
 
   public ArmCommand(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
