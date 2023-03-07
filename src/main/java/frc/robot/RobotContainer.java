@@ -51,9 +51,9 @@ public class RobotContainer {
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
-            () -> -Constants.dXboxController.getRawAxis(translationAxis),
-            () -> -Constants.dXboxController.getRawAxis(strafeAxis),
-            () -> -Constants.dXboxController.getRawAxis(rotationAxis),
+            () -> -dXboxController.getRawAxis(translationAxis),
+            () -> -dXboxController.getRawAxis(strafeAxis),
+            () -> -dXboxController.getRawAxis(rotationAxis),
             () -> false, // always field relative
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()
@@ -110,7 +110,7 @@ public class RobotContainer {
     Trigger driverLeftBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kLeftBumper.value);
     Trigger driverRightBumper = new JoystickButton(Constants.dXboxController, XboxController.Button.kRightBumper.value);
     Trigger driverLeftTrigger = new Trigger(
-        () -> Constants.dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
+        () -> dXboxController.getLeftTriggerAxis() > Constants.triggerAxisThreshold);
     Trigger driverRightTrigger = new Trigger(
         () -> Constants.dXboxController.getRightTriggerAxis() > Constants.triggerAxisThreshold);
   
