@@ -14,7 +14,10 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private final CANSparkMax intakeNeo;
 
-  private boolean cube = true; 
+  private boolean cube = true;
+  private static final double intakeSpeed = 0.50;
+  private static final double outtakeSpeed = 0.50;
+  private static final double idleSpeed = 0.18; 
  
 
   public IntakeSubsystem() {
@@ -24,16 +27,16 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeNeo.set(speed);
   }
   public void coneIntake(){
-    setSpeed(0.5);
+    setSpeed(intakeSpeed);
   }
   public void cubeIntake(){
-    setSpeed(-0.5);
+    setSpeed(-1.0 * intakeSpeed);
   }
   public void coneOuttake(){
-    setSpeed(-0.5);
+    setSpeed(-1.0 * outtakeSpeed);;
   }
   public void cubeOuttake(){
-    setSpeed(0.5);
+    setSpeed(outtakeSpeed);
   }
   public void place(){
     if(isCube()) cubeOuttake(); else coneOuttake();
@@ -42,10 +45,10 @@ public class IntakeSubsystem extends SubsystemBase {
     if(isCube()) cubeIntake(); else coneIntake();
   }
   public void cubeIdle(){
-    setSpeed(-.18);
+    setSpeed(-1.0 * idleSpeed);
   }
   public void coneIdle(){
-    setSpeed(0.18);
+    setSpeed(idleSpeed);
   }
   public void toggleCube(){
     cube = !cube;
