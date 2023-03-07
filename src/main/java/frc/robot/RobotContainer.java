@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,8 +19,11 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -70,16 +74,14 @@ public class RobotContainer {
     configureBindings();
 
     // Auto Routines
-    String[] autoPaths = {
-      // "Simple Test",
-      // "Second Test",
-      "Mobility only",
-      "Cube plus Mobility",
-      "Charge station direct",
-      "Cube plus Charge station",
-      "Cube and mobility and CS",
-      "High Cube plus Mobility"
-    };
+    List<String> autoPaths =
+      Stream.of(new File(Filesystem.getDeployDirectory(), "pathplanner").listFiles())
+        .filter(file -> !file.isDirectory())
+        .filter(file -> file.getName().matches("\\.path$"))
+        .map(File::getName)
+        .map(name -> name.substring(0, name.lastIndexOf(".")))
+        .collect(Collectors.toList());
+
     autoChooser.setDefaultOption("No auto (intake faces away)", null);
     for (String pathName : autoPaths) {
       autoChooser.addOption(pathName, pathName);
@@ -103,7 +105,7 @@ public class RobotContainer {
 
     double autoMaxVel = 3.0;
     double autoMaxAccel = 1.0;
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(autoMaxVel, autoMaxAccel));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, autoMaxVel, autoMaxAccel);
     HashMap<String, Command> eventMap = new HashMap<>();
     eventMap.put("Place cube low", new PlaceCommand(intakeSubsystem));
     eventMap.put("Place cube high",
