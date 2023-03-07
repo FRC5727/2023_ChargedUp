@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Swerve;
@@ -156,6 +157,16 @@ public class RobotContainer {
 
     // Toggle between cones and cubes
     new JoystickButton(Constants.dXboxController, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
+
+    // Use D-Pad for manual motor control
+    new POVButton(dXboxController, 0)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(armManualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+    new POVButton(dXboxController, 180)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(-armManualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+    new POVButton(dXboxController, 90)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(armManualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
+    new POVButton(dXboxController, 270)
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(-armManualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
 
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }

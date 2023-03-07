@@ -16,7 +16,6 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -288,6 +287,20 @@ public class ArmSubsystem extends SubsystemBase {
   public void stopMovement() {
     lowerArmMaster.stopMotor();
     highArmMaster.stopMotor();
+  }
+
+  public void lowArmDirect(double voltage) {
+    lowerArmMaster.setVoltage(voltage);
+    if (voltage == 0) {
+      lowerArmMaster.stopMotor();
+    }
+  }
+
+  public void highArmDirect(double voltage) {
+    highArmMaster.setVoltage(voltage);
+    if (voltage == 0) {
+      highArmMaster.stopMotor();
+    }
   }
 
   @Override
