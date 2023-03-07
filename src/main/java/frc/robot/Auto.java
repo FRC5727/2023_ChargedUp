@@ -12,6 +12,8 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -23,6 +25,9 @@ public class Auto {
 
     private HashMap<String, Command> eventMap = new HashMap<>();
     private SwerveAutoBuilder autoBuilder;
+
+    private final SendableChooser<Boolean> pieceChooser = new SendableChooser<>();
+    private final SendableChooser<ArmSubsystem.Position> placeChooser = new SendableChooser<>();
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
         eventMap.put("Place cube low", new PlaceCommand(s_Intake));
@@ -43,6 +48,15 @@ public class Auto {
             eventMap,
             true, // Mirror Blue path to Red automatically
             s_Swerve);
+
+        pieceChooser.addOption("Cube", Boolean.TRUE);
+        pieceChooser.addOption("Cone", Boolean.FALSE);
+        SmartDashboard.putData("Starting game piece", pieceChooser);
+
+        placeChooser.addOption("High", Position.GRID_HIGH);
+        placeChooser.addOption("Middle", Position.GRID_MID);
+        placeChooser.addOption("Low", Position.GRID_LOW);
+        SmartDashboard.putData("First placement location", placeChooser);
     }
 
     public Command buildCommand(String pathName) {
