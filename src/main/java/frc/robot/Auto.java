@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
@@ -37,6 +38,16 @@ public class Auto {
             .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
             .andThen(new IdleCommand(s_Intake)
                 .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
+        eventMap.put("Place piece",
+            Commands.runOnce(() -> { if (!pieceChooser.getSelected().booleanValue()) s_Intake.toggleCube(); })
+                .andThen(new IdleCommand(s_Intake))
+                .raceWith(
+                    Commands.runOnce(() -> s_Arm.setTargetPosition(placeChooser.getSelected()))
+                        .andThen(new ArmCommand(s_Arm).withTimeout(7.0)))
+                .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
+                .andThen(new IdleCommand(s_Intake)
+                    .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
+                    // TODO Return to chassis later, while driving
 
         autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
@@ -49,13 +60,14 @@ public class Auto {
             true, // Mirror Blue path to Red automatically
             s_Swerve);
 
-        pieceChooser.addOption("Cube", Boolean.TRUE);
+        pieceChooser.setDefaultOption("Cube", Boolean.TRUE);
         pieceChooser.addOption("Cone", Boolean.FALSE);
         SmartDashboard.putData("Starting game piece", pieceChooser);
 
         placeChooser.addOption("High", Position.GRID_HIGH);
         placeChooser.addOption("Middle", Position.GRID_MID);
         placeChooser.addOption("Low", Position.GRID_LOW);
+        placeChooser.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("First placement location", placeChooser);
     }
 
