@@ -30,6 +30,26 @@ public class Auto {
 
     private final SendableChooser<Boolean> pieceChooser = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser = new SendableChooser<>();
+    private final SendableChooser<ArmSubsystem.Position> placeChooser2 = new SendableChooser<>();
+
+    private Command toggleCommand(IntakeSubsystem s_Intake) {
+        return Commands.runOnce(() -> { if (!pieceChooser.getSelected()) s_Intake.toggleCube(); });
+    }
+
+    private Command placePieceCommand(IntakeSubsystem s_Intake, ArmSubsystem s_Arm, Position position)
+    {
+        return new IdleCommand(s_Intake)
+            .raceWith(
+                Commands.runOnce(() -> s_Arm.setTargetPosition(position))
+                    .andThen(new ArmCommand(s_Arm).withTimeout(7.0)))
+            .andThen(justPlaceCommand(s_Intake));
+    }
+
+    private Command justPlaceCommand(IntakeSubsystem s_Intake)
+    {
+        return new PlaceCommand(s_Intake).withTimeout(1.0)
+            .andThen(new IdleCommand(s_Intake));
+    }
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
         eventMap.put("Place cube low", new PlaceCommand(s_Intake));
@@ -39,21 +59,12 @@ public class Auto {
             .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
             .andThen(new IdleCommand(s_Intake)
                 .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
-        eventMap.put("Place piece",
-            Commands.runOnce(() -> { if (!pieceChooser.getSelected().booleanValue()) s_Intake.toggleCube(); })
-                .andThen(new IdleCommand(s_Intake))
-                .raceWith(
-                    Commands.runOnce(() -> s_Arm.setTargetPosition(placeChooser.getSelected()))
-                        .andThen(new ArmCommand(s_Arm).withTimeout(7.0)))
-                .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
-                .andThen(new IdleCommand(s_Intake)
-                ));// .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
-                    // TODO Return to chassis later, while driving
-        eventMap.put("Place cube", new PrintCommand("TODO Place cube"));
-        eventMap.put("Place second cube", new PrintCommand("TODO Place second cube"));
-        eventMap.put("Prepare to place second piece", new PrintCommand("TODO Prepare to place second piece"));
-        eventMap.put("Chassis", new PrintCommand("TODO Return to chassis"));
-        eventMap.put("Ground intake", new PrintCommand("TODO Start ground intake"));
+        eventMap.put("Place piece", toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser.getSelected())));
+        eventMap.put("Place cube", placePieceCommand(s_Intake, s_Arm, placeChooser.getSelected()));
+        eventMap.put("Place second cube", justPlaceCommand(s_Intake));
+        eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2.getSelected()));
+        eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
+        eventMap.put("Ground intake", new IntakeCommand(s_Intake).alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
         eventMap.put("Balance", new PrintCommand("TODO Auto-balance"));
 
         autoBuilder = new SwerveAutoBuilder(
@@ -76,6 +87,12 @@ public class Auto {
         placeChooser.addOption("Low", Position.GRID_LOW);
         placeChooser.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("First placement location", placeChooser);
+
+        placeChooser2.addOption("High", Position.GRID_HIGH);
+        placeChooser2.addOption("Middle", Position.GRID_MID);
+        placeChooser2.addOption("Low", Position.GRID_LOW);
+        placeChooser2.setDefaultOption("Chassis", Position.CHASSIS);
+        SmartDashboard.putData("Second placement location", placeChooser);
     }
 
     public Command buildCommand(String pathName) {
