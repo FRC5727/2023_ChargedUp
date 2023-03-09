@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
@@ -46,8 +47,14 @@ public class Auto {
                         .andThen(new ArmCommand(s_Arm).withTimeout(7.0)))
                 .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
                 .andThen(new IdleCommand(s_Intake)
-                    .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
+                ));// .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
                     // TODO Return to chassis later, while driving
+        eventMap.put("Place cube", new PrintCommand("TODO Place cube"));
+        eventMap.put("Place second cube", new PrintCommand("TODO Place second cube"));
+        eventMap.put("Prepare to place second piece", new PrintCommand("TODO Prepare to place second piece"));
+        eventMap.put("Chassis", new PrintCommand("TODO Return to chassis"));
+        eventMap.put("Ground intake", new PrintCommand("TODO Start ground intake"));
+        eventMap.put("Balance", new PrintCommand("TODO Auto-balance"));
 
         autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
