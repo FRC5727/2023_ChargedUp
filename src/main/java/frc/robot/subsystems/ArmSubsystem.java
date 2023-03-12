@@ -39,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
   public enum Position {
     CALIBRATION,
     STARTING,
+    PRECHASSIS,
     CHASSIS,
     SAFE,
     GRID_LOW,
@@ -56,18 +57,17 @@ public class ArmSubsystem extends SubsystemBase {
   // Lookup "table" for each defined arm position
   private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
       // All positions are low arm first, high arm second
-      // Angles are originally measured with respect to the calibration position using a digital level,
-      // and then tuned for precise positioning 
-      // Position.CALIBRATION, new ArmPosition(0, 0),
-      Position.STARTING, new ArmPosition(-100, -46), // 19, 33
-      Position.CHASSIS, new ArmPosition(40, -85), // 30, 45   ==> (40, -89), 
-      Position.SAFE, new ArmPosition(42, -20), // 130, 10 (H)
-      Position.GRID_LOW, new ArmPosition(56, -85), // 18, 52  ---> -76  ==> 76
-      Position.GRID_MID, new ArmPosition(65, -33), // -3, -11 (H)  ===> 57
-      Position.GRID_HIGH, new ArmPosition(87, -9), // 62, 16 (H) ---> -21 ===> 87
-      Position.INTAKE_PREGROUND, new ArmPosition(63, -94), // 0, 29 -98
-      Position.INTAKE_GROUND, new ArmPosition(72, -108), // -11, 18
-      Position.INTAKE_SUBSTATION, new ArmPosition(51, -21) // 7, 89 <--- was measured with 8 degrees --> add 6 degrees to whatever puts it at 89
+      // Zero angles are with lower arm vertical and upper arm horizontal
+      Position.STARTING, new ArmPosition(-20, -58),
+      Position.PRECHASSIS, new ArmPosition(-32, -45),
+      Position.CHASSIS, new ArmPosition(-20, -48),
+      Position.SAFE, new ArmPosition(-19, 11),
+      Position.GRID_LOW, new ArmPosition(-12, -46),
+      Position.GRID_MID, new ArmPosition(-5, -4),
+      Position.GRID_HIGH, new ArmPosition(28, 22),
+      Position.INTAKE_PREGROUND, new ArmPosition(7, -56),
+      Position.INTAKE_GROUND, new ArmPosition(11, -67),
+      Position.INTAKE_SUBSTATION, new ArmPosition(-19, 11)
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -78,10 +78,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   private CANCoder lowerArmCoder;
   private CANCoder highArmCoder;
-
-
-  private double lowerArmGearRatio = 66.0 / 16.0;
-  private double highArmGearRatio = 44.0 / 16.0;
 
   private PIDController lowPidController;
   private PIDController highPidController;
@@ -116,22 +112,19 @@ public class ArmSubsystem extends SubsystemBase {
   private double HighCANcoderInitTime = 0.0;
 
   public ArmSubsystem() {
-    // TODO Get the device numbers from centrally defined constants
+    // Note that Map.of() only supports 10 key-value pairs, so calibration here
+    armPositions.put(Position.CALIBRATION, new ArmPosition(-20, 0));
+
     this.lowerArmMaster = new WPI_TalonFX(Constants.Arm.lowerMaster, Constants.CANivoreName);
     this.lowerArmSlave = new WPI_TalonFX(Constants.Arm.lowerSlave, Constants.CANivoreName);
     this.lowerArmCoder = new CANCoder(Constants.Arm.lowCoder, Constants.CANivoreName);
 
-    // TODO Get the device numbers from centrally defined constants
     this.highArmMaster = new WPI_TalonFX(Constants.Arm.highMaster, Constants.CANivoreName);
     this.highArmSlave = new WPI_TalonFX(Constants.Arm.highSlave, Constants.CANivoreName);
     this.highArmCoder = new CANCoder(Constants.Arm.highCoder, Constants.CANivoreName);
 
     this.lowPidController = new PIDController(L_kp, L_ki, L_kd);
     this.highPidController = new PIDController(H_kp, H_ki, H_kd);
-
-    // Jimmy, why are we overriding this?  This is confusing, and I don't know why it's necessary
-    this.lowerArmGearRatio = 0.40; // 4.125
-    this.highArmGearRatio = 0.10;
 
     // TODO Define tolerance elsewhere
     lowPidController.disableContinuousInput();
@@ -142,6 +135,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     lowerArmSlave.follow(lowerArmMaster);
     lowerArmSlave.setInverted(true);
+    lowerArmMaster.setInverted(false);
     highArmSlave.follow(highArmMaster);
     highArmSlave.setInverted(false);
     highArmMaster.setInverted(true);
@@ -165,25 +159,30 @@ public class ArmSubsystem extends SubsystemBase {
   private void coast() {
     lowerArmMaster.setNeutralMode(NeutralMode.Coast);
     highArmMaster.setNeutralMode(NeutralMode.Coast);
+    lowerArmSlave.setNeutralMode(NeutralMode.Coast);
+    highArmSlave.setNeutralMode(NeutralMode.Coast);
   }
 
   // Limit a value (positive or negative)
   private double constrainValue(double value, double max) {
     return Math.signum(value) * Math.min(Math.abs(value), max);
   }
-  //for demo bot (atm)
-  public double getLowRelativeAngle() {
-    return lowerArmCoder.getPosition() * (360.0 / (lowerArmGearRatio * 4096.0));
+
+  private double normalizeAngle(double angle) {
+    return (angle + 180) % 360 - 180;
   }
-  //for demo bot (atm)
-  public double getHighRelativeAngle() {
-    return highArmCoder.getPosition() * (360.0 / (highArmGearRatio * 4096.0));
+
+  public double getLowAngle() {
+    return normalizeAngle(lowerArmCoder.getAbsolutePosition() - Constants.Arm.lowerOffset + armPositions.get(Position.CALIBRATION).lowerArmAngle);
   }
-  //for comp bot 
+  public double getHighAngle() {
+    return normalizeAngle(highArmCoder.getAbsolutePosition() - Constants.Arm.highOffset + armPositions.get(Position.CALIBRATION).upperArmAngle);
+  }
+
   public double getLowAbsoluteAngle(){
     return lowerArmCoder.getAbsolutePosition();
   }
-  //for comp bot
+
   public double getHighAbsoluteAngle(){
     return highArmCoder.getAbsolutePosition();
   }
@@ -194,6 +193,8 @@ public class ArmSubsystem extends SubsystemBase {
       // Determine first step based on last known position
       switch (lastPosition) {
         case STARTING:
+          targetPosition.add(Position.PRECHASSIS);
+        case PRECHASSIS:
         case CHASSIS:
           targetPosition.add(Position.CHASSIS);
           break;
@@ -213,9 +214,13 @@ public class ArmSubsystem extends SubsystemBase {
       // Now we know we are transitioning from either CHASSIS, SAFE, or INTAKE_PREGROUND
       // Determine any prequisites for final position
       switch (position) {
+        case PRECHASSIS:
         case STARTING:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.CHASSIS) {
             targetPosition.add(Position.CHASSIS);
+            if (position == Position.STARTING) {
+              targetPosition.add(Position.PRECHASSIS);
+            }
           }
           break;
         case INTAKE_GROUND:
@@ -277,8 +282,8 @@ public class ArmSubsystem extends SubsystemBase {
       }
     }
     if (!doneMovement()) {
-      lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowAbsoluteAngle()), L_maxVoltage));
-      highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighAbsoluteAngle()), H_maxVoltage));
+      lowerArmMaster.setVoltage(constrainValue(lowPidController.calculate(getLowAngle()), L_maxVoltage));
+      highArmMaster.setVoltage(constrainValue(highPidController.calculate(getHighAngle()), H_maxVoltage));
     } else {
       stopMovement();
     }
@@ -320,8 +325,10 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("Low Arm set? ", lowPidController.atSetpoint());
       SmartDashboard.putBoolean("High Arm set? ", highPidController.atSetpoint());
 
-      SmartDashboard.putNumber("Low Angle ABSOLUTE", lowerArmCoder.getAbsolutePosition());
-      SmartDashboard.putNumber("High Angle ABSOLUTE", highArmCoder.getAbsolutePosition());
+      SmartDashboard.putNumber("Low Angle ABSOLUTE", getLowAbsoluteAngle());
+      SmartDashboard.putNumber("High Angle ABSOLUTE", getHighAbsoluteAngle());
+      SmartDashboard.putNumber("Low Angle", getLowAngle());
+      SmartDashboard.putNumber("High Angle", getHighAngle());
 
       SmartDashboard.putNumber("Low Arm Master Voltage:", lowerArmMaster.getMotorOutputVoltage());
       SmartDashboard.putNumber("Low Arm Slave Voltage:", lowerArmSlave.getMotorOutputVoltage());
