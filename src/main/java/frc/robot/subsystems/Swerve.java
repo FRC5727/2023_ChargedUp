@@ -72,7 +72,6 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
-    
     public void stopDrive() {
         drive(new Translation2d(0, 0), 0, false, true);
     }
