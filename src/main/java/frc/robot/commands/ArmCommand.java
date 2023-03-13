@@ -11,11 +11,11 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 
 public class ArmCommand extends CommandBase {
-  /** Creates a new ArmCommand. */
+  // Creates a new ArmCommand
   
   private final ArmSubsystem arm;
-  private ArmSubsystem.Position position = null;
-  private Supplier<ArmSubsystem.Position> positionSupplier = null;
+  private Position position = null;
+  private Supplier<Position> positionSupplier = null;
 
   public ArmCommand(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,14 +23,14 @@ public class ArmCommand extends CommandBase {
     addRequirements(arm);
   }
 
-  public ArmCommand(ArmSubsystem arm, ArmSubsystem.Position position) {
+  public ArmCommand(ArmSubsystem arm, Position position) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
     this.position = position;
     addRequirements(arm);
   }
 
-  public ArmCommand(ArmSubsystem arm, Supplier<ArmSubsystem.Position> positionSupplier) {
+  public ArmCommand(ArmSubsystem arm, Supplier<Position> positionSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
     this.positionSupplier = positionSupplier;
