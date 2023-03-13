@@ -56,8 +56,8 @@ public class Auto {
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
-        return new PlaceCommand(s_Intake).withTimeout(1.0)
-            ; //TODO Needs to run in the background.andThen(new IdleCommand(s_Intake));
+        return new PlaceCommand(s_Intake).withTimeout(0.5)
+            .andThen(new IdleCommand(s_Intake).withTimeout(0.001));
     }
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
@@ -74,7 +74,7 @@ public class Auto {
         eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2.getSelected())); // TODO Fix with Supplier
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
         eventMap.put("Ground intake", new IntakeCommand(s_Intake).alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
-        eventMap.put("Balance", new PrintCommand("TODO Auto-balance"));
+        eventMap.put("Balance", new AutoBalanceCommand(s_Swerve));
 
         autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
