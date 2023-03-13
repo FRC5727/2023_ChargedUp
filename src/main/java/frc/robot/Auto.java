@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
@@ -45,9 +44,8 @@ public class Auto {
     {
         return new IdleCommand(s_Intake)
             .raceWith(
-                Commands.runOnce(() -> s_Arm.setTargetPosition(positionFunc.get()))
-                    .andThen(Commands.runOnce(() -> DriverStation.reportError("Moving arm", false)))
-                    .andThen(new ArmCommand(s_Arm).withTimeout(7.0))
+                Commands.runOnce(() -> DriverStation.reportError("Moving arm", false))
+                    .andThen(new ArmCommand(s_Arm, positionFunc).withTimeout(7.0))
                     .andThen(Commands.runOnce(() -> DriverStation.reportError("Arm done moving", false))))
             .andThen(Commands.runOnce(() -> DriverStation.reportError("Running justPlaceCommand", true)))
             .andThen(justPlaceCommand(s_Intake))
@@ -71,7 +69,7 @@ public class Auto {
         eventMap.put("Place piece", toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected)));
         eventMap.put("Place cube", placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected));
         eventMap.put("Place second cube", justPlaceCommand(s_Intake));
-        eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2.getSelected())); // TODO Fix with Supplier
+        eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2::getSelected));
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
         eventMap.put("Ground intake", new IntakeCommand(s_Intake).alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
         eventMap.put("Balance", new AutoBalanceCommand(s_Swerve));
