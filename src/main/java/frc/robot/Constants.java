@@ -187,8 +187,8 @@ public final class Constants {
     public static final int lowCoder = 5;
 
     // Offsets are the CANcoder absolute position in the calibration position
-    public static final double lowerOffset = 151.2;
-    public static final double highOffset = 15.9;
+    public static final double lowerOffset = 151.1;
+    public static final double highOffset = 16.3;
 
     // Debug arm position by getting position from Chooser
     public static final boolean positionDebugChooser = false;
