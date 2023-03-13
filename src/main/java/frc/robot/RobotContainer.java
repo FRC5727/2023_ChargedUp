@@ -75,6 +75,9 @@ public class RobotContainer {
       }
       SmartDashboard.putData("Position chooser", positionChooser);
     }
+
+    // Easy way to test AutoBalance
+    SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
   }
 
   public Command getAutonomousCommand() {
