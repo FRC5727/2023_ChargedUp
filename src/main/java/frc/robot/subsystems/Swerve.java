@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public static final boolean swerveDebug = false;
+    public static final boolean swerveDebug = true;
     private boolean speedLimit = false;
     
     public SwerveDriveOdometry swerveOdometry;
@@ -145,8 +145,9 @@ public class Swerve extends SubsystemBase {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
-    public double getGyroPitch(){
-        return gyro.getPitch();
+    public double getPitch(){
+        // The gyro is rotated 90 degrees, so the gyro roll is the robot pitch
+        return gyro.getRoll();
     }
 
     // TOOD Remove if unused
@@ -178,6 +179,8 @@ public class Swerve extends SubsystemBase {
                 SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             }
             SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
+            SmartDashboard.putNumber("Robot Pitch", getPitch());
+            // SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
             Pose2d robotPose = swerveOdometry.getPoseMeters();
             SmartDashboard.putNumber("Pose X", robotPose.getX());
             SmartDashboard.putNumber("Pose Y", robotPose.getY());

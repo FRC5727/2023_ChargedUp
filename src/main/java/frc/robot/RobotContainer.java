@@ -19,6 +19,8 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
+import java.util.List;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -63,7 +65,9 @@ public class RobotContainer {
 
     // Auto Routines
     autoChooser.setDefaultOption("No auto (intake faces away)", null);
-    for (String pathName : Auto.getPathnames()) {
+    List<String> pathNames = Auto.getPathnames();
+    pathNames.sort(String::compareTo);
+    for (String pathName : pathNames) {
       autoChooser.addOption(pathName, pathName);
     }
     SmartDashboard.putData("Autonomous routine", autoChooser);
