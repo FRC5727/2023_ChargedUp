@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.PRECHASSIS, new ArmPosition(-32, -45),
       Position.CHASSIS, new ArmPosition(-20, -48),
       Position.SAFE, new ArmPosition(-19, 11),
-      Position.GRID_LOW, new ArmPosition(-12, -46),
+      Position.GRID_LOW, new ArmPosition(-10, -43),
       Position.GRID_MID, new ArmPosition(-5, -4),
       Position.GRID_HIGH, new ArmPosition(28, 22),
       Position.INTAKE_PREGROUND, new ArmPosition(7, -56),

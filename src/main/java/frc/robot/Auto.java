@@ -3,6 +3,7 @@ package frc.robot;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,6 +12,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +22,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
+
+// TODO Expel cube without moving to ANY position
+// TODO Update DriverStation
 
 public class Auto {
     private static final double autoMaxVel = 3.0;
@@ -36,19 +41,23 @@ public class Auto {
         return Commands.runOnce(() -> { if (!pieceChooser.getSelected()) s_Intake.toggleCube(); });
     }
 
-    private Command placePieceCommand(IntakeSubsystem s_Intake, ArmSubsystem s_Arm, Position position)
+    private Command placePieceCommand(IntakeSubsystem s_Intake, ArmSubsystem s_Arm, Supplier<Position> positionFunc)
     {
         return new IdleCommand(s_Intake)
             .raceWith(
-                Commands.runOnce(() -> s_Arm.setTargetPosition(position))
-                    .andThen(new ArmCommand(s_Arm).withTimeout(7.0)))
-            .andThen(justPlaceCommand(s_Intake));
+                Commands.runOnce(() -> s_Arm.setTargetPosition(positionFunc.get()))
+                    .andThen(Commands.runOnce(() -> DriverStation.reportError("Moving arm", false)))
+                    .andThen(new ArmCommand(s_Arm).withTimeout(7.0))
+                    .andThen(Commands.runOnce(() -> DriverStation.reportError("Arm done moving", false))))
+            .andThen(Commands.runOnce(() -> DriverStation.reportError("Running justPlaceCommand", true)))
+            .andThen(justPlaceCommand(s_Intake))
+            .andThen(Commands.runOnce(() -> DriverStation.reportError("placePieceCommand terminating", false)));
     }
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
         return new PlaceCommand(s_Intake).withTimeout(1.0)
-            .andThen(new IdleCommand(s_Intake));
+            ; //TODO Needs to run in the background.andThen(new IdleCommand(s_Intake));
     }
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
@@ -59,10 +68,10 @@ public class Auto {
             .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
             .andThen(new IdleCommand(s_Intake)
                 .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
-        eventMap.put("Place piece", toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser.getSelected())));
-        eventMap.put("Place cube", placePieceCommand(s_Intake, s_Arm, placeChooser.getSelected()));
+        eventMap.put("Place piece", toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected)));
+        eventMap.put("Place cube", placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected));
         eventMap.put("Place second cube", justPlaceCommand(s_Intake));
-        eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2.getSelected()));
+        eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2.getSelected())); // TODO Fix with Supplier
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
         eventMap.put("Ground intake", new IntakeCommand(s_Intake).alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
         eventMap.put("Balance", new PrintCommand("TODO Auto-balance"));
@@ -72,7 +81,7 @@ public class Auto {
             s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
             new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-            new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+            new PIDConstants(2.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
             s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
             eventMap,
             true, // Mirror Blue path to Red automatically
@@ -88,11 +97,11 @@ public class Auto {
         placeChooser.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("First placement location", placeChooser);
 
-        placeChooser2.addOption("High", Position.GRID_HIGH);
+        placeChooser2.addOption("High (2)", Position.GRID_HIGH);
         placeChooser2.addOption("Middle", Position.GRID_MID);
         placeChooser2.addOption("Low", Position.GRID_LOW);
         placeChooser2.setDefaultOption("Chassis", Position.CHASSIS);
-        SmartDashboard.putData("Second placement location", placeChooser);
+        SmartDashboard.putData("Second placement location", placeChooser2);
     }
 
     public Command buildCommand(String pathName) {
@@ -107,7 +116,7 @@ public class Auto {
     public static List<String> getPathnames() {
         return Stream.of(new File(Filesystem.getDeployDirectory(), "pathplanner").listFiles())
                 .filter(file -> !file.isDirectory())
-                .filter(file -> file.getName().matches("\\.path$"))
+                .filter(file -> file.getName().matches(".*\\.path"))
                 .map(File::getName)
                 .map(name -> name.substring(0, name.lastIndexOf(".")))
                 .collect(Collectors.toList());
