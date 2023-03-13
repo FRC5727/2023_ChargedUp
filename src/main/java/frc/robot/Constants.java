@@ -176,6 +176,7 @@ public final class Constants {
   }
 
   public static final class Arm {
+    // CAN bus IDs
     public static final int highMaster = 8;
     public static final int lowerMaster = 9;
     public static final int highSlave = 10;
@@ -185,6 +186,10 @@ public final class Constants {
     public static final int highCoder = 4;
     public static final int lowCoder = 5;
 
+    // Offsets are the CANcoder absolute position in the calibration position
+    public static final double lowerOffset = 151.2;
+    public static final double highOffset = 15.9;
+
     // Debug arm position by getting position from Chooser
     public static final boolean positionDebugChooser = false;
 
@@ -192,6 +197,6 @@ public final class Constants {
     public static final boolean positionDebugDirect = false;
   
     // Voltage to apply when moving arm manually
-    public static final double manualVoltage = 2.0;
+    public static final double manualVoltage = 1.5;
   }
 }
