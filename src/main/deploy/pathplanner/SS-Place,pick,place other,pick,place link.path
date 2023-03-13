@@ -1,0 +1,294 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.8,
+        "y": 4.42
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7848077530122137,
+        "y": 4.593648177666931
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Place cube"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 10.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.0,
+        "y": 4.6
+      },
+      "prevControl": {
+        "x": 2.0,
+        "y": 4.6
+      },
+      "nextControl": {
+        "x": 4.0,
+        "y": 4.6
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.0,
+        "y": 4.6
+      },
+      "prevControl": {
+        "x": 5.884939912567749,
+        "y": 4.6
+      },
+      "nextControl": {
+        "x": 6.115060087432251,
+        "y": 4.6
+      },
+      "holonomicAngle": 0.01,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.0,
+        "y": 4.6
+      },
+      "prevControl": {
+        "x": 6.973375537293476,
+        "y": 4.6
+      },
+      "nextControl": {
+        "x": 6.973375537293476,
+        "y": 4.6
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.75,
+        "y": 4.6
+      },
+      "prevControl": {
+        "x": 3.2710868902427466,
+        "y": 4.691881678043266
+      },
+      "nextControl": {
+        "x": 2.2289131097572534,
+        "y": 4.508118321956733
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.8,
+        "y": 3.85
+      },
+      "prevControl": {
+        "x": 2.2891230444550263,
+        "y": 3.85
+      },
+      "nextControl": {
+        "x": 2.2891230444550263,
+        "y": 3.85
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.75,
+        "y": 4.6
+      },
+      "prevControl": {
+        "x": 2.277492058908355,
+        "y": 4.656845068417919
+      },
+      "nextControl": {
+        "x": 3.352943851633908,
+        "y": 4.527462839208355
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.07,
+        "y": 4.4
+      },
+      "prevControl": {
+        "x": 6.253596885995207,
+        "y": 4.780695024202021
+      },
+      "nextControl": {
+        "x": 7.075957466622367,
+        "y": 4.397221987690788
+      },
+      "holonomicAngle": -90.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.07,
+        "y": 3.5
+      },
+      "prevControl": {
+        "x": 7.07,
+        "y": 3.7526318770436693
+      },
+      "nextControl": {
+        "x": 7.07,
+        "y": 3.7526318770436693
+      },
+      "holonomicAngle": -90.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.8045844863619553,
+        "y": 5.1
+      },
+      "prevControl": {
+        "x": 5.558867324667656,
+        "y": 5.099999999999999
+      },
+      "nextControl": null,
+      "holonomicAngle": -180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Place third cube",
+          "Chassis"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "maxVelocity": 3.0,
+  "maxAcceleration": 2.75,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.2,
+      "names": [
+        "Ground intake"
+      ]
+    },
+    {
+      "position": 3.1,
+      "names": [
+        "Prepare to place second piece"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "Place second cube"
+      ]
+    },
+    {
+      "position": 6.0,
+      "names": [
+        "Ground intake"
+      ]
+    },
+    {
+      "position": 5.1,
+      "names": [
+        "Chassis"
+      ]
+    },
+    {
+      "position": 8.05,
+      "names": [
+        "Prepare to place third piece"
+      ]
+    }
+  ]
+}

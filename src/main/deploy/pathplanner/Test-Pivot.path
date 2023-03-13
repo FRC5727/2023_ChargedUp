@@ -30,17 +30,17 @@
         "y": 1.07
       },
       "prevControl": {
-        "x": 5.5,
-        "y": 1.07
+        "x": 5.500000038180931,
+        "y": 1.0697236635096292
       },
       "nextControl": {
-        "x": 7.5,
-        "y": 1.07
+        "x": 6.5382181641556265,
+        "y": 1.0700105610737545
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
         "names": [],
@@ -56,7 +56,7 @@
       },
       "prevControl": {
         "x": 6.501945109153376,
-        "y": 0.04242633106386462
+        "y": 1.0609422973231921
       },
       "nextControl": {
         "x": 6.501945109153376,
