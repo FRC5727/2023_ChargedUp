@@ -184,6 +184,9 @@ public class ArmSubsystem extends SubsystemBase {
         case INTAKE_GROUND:
           targetPosition.add(Position.INTAKE_PREGROUND);
           break;
+        case CALIBRATION:
+        case NONE:
+          break;
       }
 
       // Now we know we are transitioning from either CHASSIS, SAFE, or INTAKE_PREGROUND
@@ -221,6 +224,9 @@ public class ArmSubsystem extends SubsystemBase {
         case SAFE:
           // Safe directly from any of the previous positions
           break;
+        case CALIBRATION:
+        case NONE:
+          break;  
       }
     }
     if (targetPosition.isEmpty() || targetPosition.getLast() != position) {
