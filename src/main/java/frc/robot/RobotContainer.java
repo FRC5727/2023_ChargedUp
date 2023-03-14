@@ -150,13 +150,13 @@ public class RobotContainer {
 
     // Use D-Pad for manual motor control
     new POVButton(Controls.driver, 0)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(Arm.manualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> armSubsystem.upperArmDirect(Arm.manualVoltage), () -> armSubsystem.upperArmDirect(0), armSubsystem));
     new POVButton(Controls.driver, 180)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.highArmDirect(-Arm.manualVoltage), () -> armSubsystem.highArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> armSubsystem.upperArmDirect(-Arm.manualVoltage), () -> armSubsystem.upperArmDirect(0), armSubsystem));
     new POVButton(Controls.driver, 90)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(Arm.manualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowerArmDirect(Arm.manualVoltage), () -> armSubsystem.lowerArmDirect(0), armSubsystem));
     new POVButton(Controls.driver, 270)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowArmDirect(-Arm.manualVoltage), () -> armSubsystem.lowArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> armSubsystem.lowerArmDirect(-Arm.manualVoltage), () -> armSubsystem.lowerArmDirect(0), armSubsystem));
 
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }

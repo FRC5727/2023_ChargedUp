@@ -177,13 +177,13 @@ public final class Constants {
 
   public static final class Arm {
     // CAN bus IDs
-    public static final int highMaster = 8;
+    public static final int upperMaster = 8;
     public static final int lowerMaster = 9;
-    public static final int highSlave = 10;
+    public static final int upperSlave = 10;
     public static final int lowerSlave = 11;
 
     // TODO Future Jimmy, please document how you did the arm in Phoenix Tuner X
-    public static final int highCoder = 4;
+    public static final int upperCoder = 4;
     public static final int lowCoder = 5;
 
     // Offsets are the CANcoder absolute position in the calibration position
