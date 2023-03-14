@@ -37,6 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Enumeration of all defined arm positions
   public enum Position {
+    NONE,
     CALIBRATION,
     STARTING,
     PRECHASSIS,
@@ -66,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_MID, new ArmPosition(-5, -4),
       Position.GRID_HIGH, new ArmPosition(28, 22),
       Position.INTAKE_PREGROUND, new ArmPosition(7, -56),
-      Position.INTAKE_GROUND, new ArmPosition(11, -67),
+      Position.INTAKE_GROUND, new ArmPosition(11, -69),
       Position.INTAKE_SUBSTATION, new ArmPosition(-19, 11)
     ));
 
@@ -105,8 +106,8 @@ public class ArmSubsystem extends SubsystemBase {
       H_kv = 4.45, // 4.45
       H_ka = 0.02; // 0.02
 
-  private double L_maxVoltage = 3;
-  private double H_maxVoltage = 3;
+  private double L_maxVoltage = 5;
+  private double H_maxVoltage = 4;
 
   private double LowerCANcoderInitTime = 0.0;
   private double HighCANcoderInitTime = 0.0;

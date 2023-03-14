@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.8,
-        "y": 4.42
+        "x": 1.82,
+        "y": 4.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7848077530122137,
-        "y": 4.593648177666931
+        "x": 2.8048077530122137,
+        "y": 4.663648177666931
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -126,16 +126,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.8,
-        "y": 3.85
+        "x": 1.95,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 2.2891230444550263,
-        "y": 3.85
+        "x": 2.439123044455026,
+        "y": 4.0
       },
       "nextControl": {
-        "x": 2.2891230444550263,
-        "y": 3.85
+        "x": 2.439123044455026,
+        "y": 4.0
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -176,15 +176,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.07,
+        "x": 7.12,
         "y": 4.4
       },
       "prevControl": {
-        "x": 6.253596885995207,
+        "x": 6.303596885995207,
         "y": 4.780695024202021
       },
       "nextControl": {
-        "x": 7.075957466622367,
+        "x": 7.125957466622367,
         "y": 4.397221987690788
       },
       "holonomicAngle": -90.0,
@@ -201,15 +201,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.07,
+        "x": 7.12,
         "y": 3.5
       },
       "prevControl": {
-        "x": 7.07,
+        "x": 7.12,
         "y": 3.7526318770436693
       },
       "nextControl": {
-        "x": 7.07,
+        "x": 7.12,
         "y": 3.7526318770436693
       },
       "holonomicAngle": -90.0,
@@ -226,12 +226,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.8045844863619553,
-        "y": 5.1
+        "x": 1.82,
+        "y": 4.9
       },
       "prevControl": {
-        "x": 5.558867324667656,
-        "y": 5.099999999999999
+        "x": 7.6173415504725766,
+        "y": 4.8999999999999995
       },
       "nextControl": null,
       "holonomicAngle": -180.0,
@@ -241,7 +241,6 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place third cube",
           "Chassis"
         ],
         "executionBehavior": "sequential",
@@ -250,12 +249,12 @@
       }
     }
   ],
-  "maxVelocity": 4.0,
-  "maxAcceleration": 3.0,
+  "maxVelocity": 3.0,
+  "maxAcceleration": 2.0,
   "isReversed": null,
   "markers": [
     {
-      "position": 0.2,
+      "position": 0.1,
       "names": [
         "Ground intake"
       ]
@@ -267,7 +266,7 @@
       ]
     },
     {
-      "position": 5.0,
+      "position": 4.9,
       "names": [
         "Place second cube"
       ]
@@ -288,6 +287,12 @@
       "position": 8.05,
       "names": [
         "Prepare to place third piece"
+      ]
+    },
+    {
+      "position": 8.92,
+      "names": [
+        "Place third cube"
       ]
     }
   ]

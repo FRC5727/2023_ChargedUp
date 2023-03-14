@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cube"
+          "Place cone"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -151,21 +151,21 @@
     },
     {
       "anchorPoint": {
-        "x": 5.5,
-        "y": 4.49
+        "x": 2.35,
+        "y": 3.35
       },
       "prevControl": {
-        "x": 5.027492058908355,
-        "y": 4.54684506841792
+        "x": 1.8740849695606308,
+        "y": 3.35
       },
       "nextControl": {
-        "x": 6.102943851633908,
-        "y": 4.417462839208356
+        "x": 2.6155824406399604,
+        "y": 3.35
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -176,21 +176,23 @@
     },
     {
       "anchorPoint": {
-        "x": 7.07,
-        "y": 4.0
+        "x": 3.8,
+        "y": 3.35
       },
       "prevControl": {
-        "x": 6.253596885995206,
-        "y": 4.380695024202024
+        "x": 3.798874903230569,
+        "y": 3.35
       },
       "nextControl": null,
-      "holonomicAngle": -90.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Balance"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0

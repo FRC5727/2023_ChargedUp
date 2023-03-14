@@ -43,27 +43,36 @@ public class ArmCommand extends CommandBase {
     if (positionSupplier != null) {
       position = positionSupplier.get();
     }
-    if (position != null) {
-      arm.setTargetPosition(position);
+    if (position != Position.NONE) {
+      if (position != null) {
+        arm.setTargetPosition(position);
+      }
+      arm.beginMovement();
     }
-    arm.beginMovement();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.updateMovement();
+    if (position != Position.NONE) {
+      arm.updateMovement();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.stopMovement();
+    if (position != Position.NONE) {
+      arm.stopMovement();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (position == Position.NONE) {
+      return true;
+    }
     return arm.doneMovement();
   }
 }

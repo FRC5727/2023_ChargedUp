@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
@@ -27,7 +28,7 @@ import frc.robot.subsystems.ArmSubsystem.Position;
 
 public class Auto {
     private static final double autoMaxVel = 3.0;
-    private static final double autoMaxAccel = 1.0;
+    private static final double autoMaxAccel = 2.0;
 
     private HashMap<String, Command> eventMap = new HashMap<>();
     private SwerveAutoBuilder autoBuilder;
@@ -54,8 +55,7 @@ public class Auto {
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
-        return new PlaceCommand(s_Intake).withTimeout(0.5)
-            .andThen(new IdleCommand(s_Intake).withTimeout(0.001));
+        return new PlaceCommand(s_Intake).withTimeout(0.2);
     }
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
@@ -66,19 +66,28 @@ public class Auto {
             .andThen(new PlaceCommand(s_Intake).withTimeout(2.0))
             .andThen(new IdleCommand(s_Intake)
                 .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
-        eventMap.put("Place piece", toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected)));
+        // eventMap.put("Place piece", 
+//            Commands.runOnce(() -> { if !s_Intake.toggleCube())
+        // toggleCommand(s_Intake).andThen(placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected)));
         eventMap.put("Place cube", placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected));
+        eventMap.put("Place cone", Commands.runOnce(() -> s_Intake.toggleCube())
+            .andThen(placePieceCommand(s_Intake, s_Arm, placeChooser::getSelected)));
         eventMap.put("Place second cube", justPlaceCommand(s_Intake));
+        eventMap.put("Place third cube", justPlaceCommand(s_Intake));
         eventMap.put("Prepare to place second piece", new ArmCommand(s_Arm, placeChooser2::getSelected));
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
-        eventMap.put("Ground intake", new IntakeCommand(s_Intake).alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
+        eventMap.put("Ground intake", new ArmCommand(s_Arm, Position.INTAKE_GROUND)
+            .alongWith(
+                Commands.runOnce(() -> { if (!s_Intake.isCube()) s_Intake.toggleCube(); })
+                .andThen(new WaitCommand(1.0))
+                .andThen(new IntakeCommand(s_Intake))));
         eventMap.put("Balance", new AutoBalanceCommand(s_Swerve));
 
         autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
             s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-            new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+            new PIDConstants(10, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
             new PIDConstants(2.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
             s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
             eventMap,
@@ -92,7 +101,8 @@ public class Auto {
         placeChooser.addOption("High", Position.GRID_HIGH);
         placeChooser.addOption("Middle", Position.GRID_MID);
         placeChooser.addOption("Low", Position.GRID_LOW);
-        placeChooser.setDefaultOption("Chassis", Position.CHASSIS);
+        placeChooser.addOption("Chassis", Position.CHASSIS);
+        placeChooser.setDefaultOption("No movement", Position.NONE);
         SmartDashboard.putData("First placement location", placeChooser);
 
         placeChooser2.addOption("High (2)", Position.GRID_HIGH);
