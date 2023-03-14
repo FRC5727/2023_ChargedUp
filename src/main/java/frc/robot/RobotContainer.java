@@ -19,8 +19,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
 
-import java.util.List;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -38,9 +36,6 @@ public class RobotContainer {
   private final Auto auto = new Auto(armSubsystem, intakeSubsystem, s_Swerve);
 
   private Position driverTargetPosition = Position.CHASSIS;
-
-  // Auto Chooser
-  private final SendableChooser<String> autoChooser = new SendableChooser<>();
 
   private final SendableChooser<ArmSubsystem.Position> positionChooser = new SendableChooser<>();
 
@@ -63,15 +58,6 @@ public class RobotContainer {
     intakeSubsystem.setDefaultCommand(new IdleCommand(intakeSubsystem));
     configureBindings();
 
-    // Auto Routines
-    autoChooser.setDefaultOption("No auto (intake faces away)", null);
-    List<String> pathNames = Auto.getPathnames();
-    pathNames.sort(String::compareTo);
-    for (String pathName : pathNames) {
-      autoChooser.addOption(pathName, pathName);
-    }
-    SmartDashboard.putData("Autonomous routine", autoChooser);
-
     // Arm position chooser
     if (Arm.positionDebugChooser) {
       for (Position pos : Position.values()) {
@@ -85,7 +71,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return auto.buildCommand(autoChooser.getSelected());
+    return auto.buildCommand();
   }
 
   /*
@@ -157,7 +143,6 @@ public class RobotContainer {
     }
 
     // Place currently held game piece
-    // TODO If we can align automatically, add this to arm commands
     driverLeftBumper.whileTrue(new PlaceCommand(intakeSubsystem));
 
     // Toggle between cones and cubes

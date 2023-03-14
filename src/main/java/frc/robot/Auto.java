@@ -22,9 +22,10 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.Position;
 
 public class Auto {
-    private HashMap<String, Command> eventMap = new HashMap<>();
-    private SwerveAutoBuilder autoBuilder;
+    private final HashMap<String, Command> eventMap = new HashMap<>();
+    private final SwerveAutoBuilder autoBuilder;
 
+    private final SendableChooser<String> pathChooser = new SendableChooser<>();
     private final SendableChooser<Boolean> pieceChooser = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser2 = new SendableChooser<>();
@@ -86,6 +87,16 @@ public class Auto {
         placeChooser3.addOption("Low", Position.GRID_LOW);
         placeChooser3.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("Third placement location", placeChooser3);
+
+        pathChooser.setDefaultOption("No auto (face intake away)", null);
+        for (String pathName : getPathnames()) {
+            pathChooser.addOption(pathName, pathName);
+        }
+        SmartDashboard.putData("Autonomous routine", pathChooser);
+    }
+
+    public Command buildCommand() {
+        return buildCommand(pathChooser.getSelected());
     }
 
     public Command buildCommand(String pathName) {
@@ -96,12 +107,13 @@ public class Auto {
         return autoBuilder.fullAuto(pathGroup);
     }
 
-    public static List<String> getPathnames() {
+    private static List<String> getPathnames() {
         return Stream.of(new File(Filesystem.getDeployDirectory(), "pathplanner").listFiles())
                 .filter(file -> !file.isDirectory())
                 .filter(file -> file.getName().matches(".*\\.path"))
                 .map(File::getName)
                 .map(name -> name.substring(0, name.lastIndexOf(".")))
+                .sorted()
                 .collect(Collectors.toList());
     }
 }
