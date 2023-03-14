@@ -14,7 +14,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.pathplanner.lib.auto.PIDConstants;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -80,12 +81,15 @@ public class ArmSubsystem extends SubsystemBase {
   private CANCoder lowerArmCoder;
   private CANCoder upperArmCoder;
 
-  private PIDController lowerPidController;
-  private PIDController upperPidController;
+  private ProfiledPIDController lowerPidController;
+  private ProfiledPIDController upperPidController;
 
   // TODO Tune this
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
   private final PIDConstants upperConstants = new PIDConstants(0.40, 0.00, 0.00);
+  private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(45, 45);
+  private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(45, 45);
+
 
   private double lowerMaxVoltage = 5;
   private double upperMaxVoltage = 4;
@@ -102,8 +106,8 @@ public class ArmSubsystem extends SubsystemBase {
     this.upperArmSlave = new WPI_TalonFX(Constants.Arm.upperSlave, Constants.CANivoreName);
     this.upperArmCoder = new CANCoder(Constants.Arm.upperCoder, Constants.CANivoreName);
 
-    this.lowerPidController = new PIDController(lowerConstants.kP, lowerConstants.kI, lowerConstants.kD);
-    this.upperPidController = new PIDController(upperConstants.kP, upperConstants.kI, upperConstants.kD);
+    this.lowerPidController = new ProfiledPIDController(lowerConstants.kP, lowerConstants.kI, lowerConstants.kD, lowerConstraints);
+    this.upperPidController = new ProfiledPIDController(upperConstants.kP, upperConstants.kI, upperConstants.kD, upperConstraints);
 
     lowerPidController.disableContinuousInput();
     upperPidController.disableContinuousInput();
@@ -237,8 +241,9 @@ public class ArmSubsystem extends SubsystemBase {
   public void beginMovement() {
     ArmPosition nextPosition = armPositions.get(targetPosition.peek());
 
-    lowerPidController.setSetpoint(nextPosition.lowerArmAngle);
-    upperPidController.setSetpoint(nextPosition.upperArmAngle);
+    // TODO Consider passing a State, so that velocity can be non-zero for intermediate points
+    lowerPidController.setGoal(nextPosition.lowerArmAngle);
+    upperPidController.setGoal(nextPosition.upperArmAngle);
     if (targetPosition.size() > 1) {
       if (targetPosition.peek() == Position.SAFE) {
         lowerPidController.setTolerance(25, 50);
@@ -251,18 +256,19 @@ public class ArmSubsystem extends SubsystemBase {
       lowerPidController.setTolerance(2, .5);
       upperPidController.setTolerance(2, .5);
     }
-    lowerPidController.reset();
-    upperPidController.reset();
+    lowerPidController.reset(getLowerAngle());
+    upperPidController.reset(getUpperAngle());
   }
 
   public void updateMovement() {
-    if (lowerPidController.atSetpoint() && upperPidController.atSetpoint()) {
+    if (lowerPidController.atGoal() && upperPidController.atGoal()) {
       lastPosition = targetPosition.remove();
       if (!doneMovement()) {
         beginMovement();
       }
     }
     if (!doneMovement()) {
+      // TODO Consider removing (or considerably raising) max voltage with PID profile in place
       lowerArmMaster.setVoltage(constrainValue(lowerPidController.calculate(getLowerAngle()), lowerMaxVoltage));
       upperArmMaster.setVoltage(constrainValue(upperPidController.calculate(getUpperAngle()), upperMaxVoltage));
     } else {
@@ -301,10 +307,10 @@ public class ArmSubsystem extends SubsystemBase {
     if (armDebug) {
       SmartDashboard.putNumber("Target queue depth", targetPosition.size());
       SmartDashboard.putString("Target Position", targetPosition.isEmpty() ? "<none>" : targetPosition.peek().toString());
-      SmartDashboard.putNumber("Lower Arm Setpoint: ", lowerPidController.getSetpoint());
-      SmartDashboard.putNumber("Upper Arm Setpoint: ", upperPidController.getSetpoint());
-      SmartDashboard.putBoolean("Lower Arm set? ", lowerPidController.atSetpoint());
-      SmartDashboard.putBoolean("Upper Arm set? ", upperPidController.atSetpoint());
+      SmartDashboard.putNumber("Lower Arm goal", lowerPidController.getGoal().position);
+      SmartDashboard.putNumber("Upper Arm goal", upperPidController.getGoal().position);
+      SmartDashboard.putBoolean("Lower Arm set? ", lowerPidController.atGoal());
+      SmartDashboard.putBoolean("Upper Arm set? ", upperPidController.atGoal());
 
       SmartDashboard.putNumber("Lower Angle ABSOLUTE", getLowerAbsoluteAngle());
       SmartDashboard.putNumber("Upper Angle ABSOLUTE", getUpperAbsoluteAngle());
