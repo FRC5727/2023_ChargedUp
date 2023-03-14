@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cube"
+          "Place first piece"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -30,12 +30,12 @@
         "y": 4.6
       },
       "prevControl": {
-        "x": 2.620728223912588,
-        "y": 4.597565160042601
+        "x": 3.164752048912562,
+        "y": 4.599515205655443
       },
       "nextControl": {
         "x": 4.26267266969061,
-        "y": 4.603450686403547
+        "y": 4.603450686403548
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -154,7 +154,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.2,
+      "position": 0.05,
       "names": [
         "Ground intake"
       ]

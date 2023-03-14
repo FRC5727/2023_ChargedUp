@@ -7,8 +7,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8048077530122137,
-        "y": 4.663648177666931
+        "x": 2.2683686825198817,
+        "y": 4.569059496032962
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cube"
+          "Place first piece"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -156,11 +156,11 @@
       },
       "prevControl": {
         "x": 5.027492058908355,
-        "y": 4.54684506841792
+        "y": 4.546845068417925
       },
       "nextControl": {
-        "x": 6.102943851633908,
-        "y": 4.417462839208356
+        "x": 5.722281023664431,
+        "y": 4.463258481182309
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -176,12 +176,12 @@
     },
     {
       "anchorPoint": {
-        "x": 7.07,
-        "y": 4.0
+        "x": 7.12,
+        "y": 4.2
       },
       "prevControl": {
-        "x": 6.253596885995206,
-        "y": 4.380695024202024
+        "x": 6.713771994279005,
+        "y": 4.389427230024732
       },
       "nextControl": null,
       "holonomicAngle": -90.0,
@@ -190,7 +190,9 @@
       "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Ground intake"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -202,21 +204,21 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.1,
+      "position": 0.05,
       "names": [
         "Ground intake"
       ]
     },
     {
-      "position": 3.1,
+      "position": 3.0,
       "names": [
-        "Prepare to place second piece"
+        "Move arm to second"
       ]
     },
     {
       "position": 5.0,
       "names": [
-        "Place second cube"
+        "Eject cube"
       ]
     },
     {

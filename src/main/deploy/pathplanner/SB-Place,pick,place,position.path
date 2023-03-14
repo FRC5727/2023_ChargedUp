@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.8,
+        "x": 1.82,
         "y": 1.07
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7848077530122137,
-        "y": 0.8963518223330688
+        "x": 2.2542830951280455,
+        "y": 1.0012163150357367
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cube"
+          "Place first piece"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -30,17 +30,17 @@
         "y": 0.92
       },
       "prevControl": {
-        "x": 2.0,
+        "x": 2.765783676180802,
         "y": 0.92
       },
       "nextControl": {
-        "x": 4.0,
+        "x": 3.999999999999998,
         "y": 0.92
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -126,15 +126,15 @@
     },
     {
       "anchorPoint": {
-        "x": 1.8,
+        "x": 1.82,
         "y": 1.07
       },
       "prevControl": {
-        "x": 2.2891230444550263,
+        "x": 2.3091230444550264,
         "y": 1.07
       },
       "nextControl": {
-        "x": 2.2891230444550263,
+        "x": 2.3091230444550264,
         "y": 1.07
       },
       "holonomicAngle": 180.0,
@@ -176,12 +176,12 @@
     },
     {
       "anchorPoint": {
-        "x": 7.07,
-        "y": 1.5
+        "x": 7.12,
+        "y": 1.4
       },
       "prevControl": {
-        "x": 6.253596885995206,
-        "y": 1.119304975797976
+        "x": 6.303596885995206,
+        "y": 1.019304975797976
       },
       "nextControl": null,
       "holonomicAngle": 90.0,
@@ -190,33 +190,35 @@
       "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Ground intake"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 4.0,
-  "maxAcceleration": 3.0,
+  "maxVelocity": 3.0,
+  "maxAcceleration": 2.0,
   "isReversed": null,
   "markers": [
     {
-      "position": 0.2,
+      "position": 0.05,
       "names": [
         "Ground intake"
       ]
     },
     {
-      "position": 3.1,
+      "position": 3.0,
       "names": [
-        "Prepare to place second piece"
+        "Move arm to second"
       ]
     },
     {
       "position": 5.0,
       "names": [
-        "Place second cube"
+        "Eject cube"
       ]
     },
     {

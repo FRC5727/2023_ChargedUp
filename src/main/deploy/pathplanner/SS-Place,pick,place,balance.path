@@ -7,8 +7,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8048077530122137,
-        "y": 4.663648177666931
+        "x": 2.314403322117383,
+        "y": 4.577176645041197
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cone"
+          "Place first piece"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -204,21 +204,21 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.1,
+      "position": 0.05,
       "names": [
         "Ground intake"
       ]
     },
     {
-      "position": 3.1,
+      "position": 3.0,
       "names": [
-        "Prepare to place second piece"
+        "Move arm to second"
       ]
     },
     {
       "position": 5.0,
       "names": [
-        "Place second cube"
+        "Eject cube"
       ]
     },
     {

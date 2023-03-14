@@ -2,12 +2,12 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.8,
+        "x": 1.82,
         "y": 1.07
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.273643213953095,
+        "x": 3.2936432139530956,
         "y": 0.9158500773141907
       },
       "holonomicAngle": 180.0,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Place cube"
+          "Place first piece"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -30,12 +30,12 @@
         "y": 0.92
       },
       "prevControl": {
-        "x": 1.831789277613643,
-        "y": 1.033737506071504
+        "x": 3.200113024064121,
+        "y": 0.92
       },
       "nextControl": {
-        "x": 4.297012889437622,
-        "y": 0.8427646564374165
+        "x": 4.299999999999981,
+        "y": 0.92
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -102,15 +102,15 @@
     {
       "anchorPoint": {
         "x": 5.4953678328409294,
-        "y": 2.1
+        "y": 2.3
       },
       "prevControl": {
         "x": 6.383342707303083,
-        "y": 2.1
+        "y": 2.3
       },
       "nextControl": {
         "x": 4.788033092455325,
-        "y": 2.1
+        "y": 2.3
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -126,12 +126,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9,
-        "y": 2.1
+        "x": 4.0,
+        "y": 2.3
       },
       "prevControl": {
-        "x": 4.597629669600073,
-        "y": 2.1
+        "x": 4.697629669600072,
+        "y": 2.3
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -154,7 +154,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.2,
+      "position": 0.05,
       "names": [
         "Ground intake"
       ]
