@@ -65,10 +65,12 @@ public class Auto {
             true, // Mirror Blue path to Red automatically
             s_Swerve);
 
+        pieceChooser.addOption("--- Initial Piece ---", null);
         pieceChooser.setDefaultOption("Cube", Boolean.TRUE);
         pieceChooser.addOption("Cone", Boolean.FALSE);
         SmartDashboard.putData("Starting game piece", pieceChooser);
 
+        placeChooser.addOption("--- First Position ---", null);
         placeChooser.addOption("High", Position.GRID_HIGH);
         placeChooser.addOption("Middle", Position.GRID_MID);
         placeChooser.addOption("Low", Position.GRID_LOW);
@@ -76,18 +78,21 @@ public class Auto {
         placeChooser.setDefaultOption("No movement", Position.NONE);
         SmartDashboard.putData("First placement location", placeChooser);
 
-        placeChooser2.addOption("High (2)", Position.GRID_HIGH);
+        placeChooser2.addOption("--- Second Position ---", null);
+        placeChooser2.addOption("High", Position.GRID_HIGH);
         placeChooser2.addOption("Middle", Position.GRID_MID);
         placeChooser2.addOption("Low", Position.GRID_LOW);
         placeChooser2.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("Second placement location", placeChooser2);
         
-        placeChooser3.addOption("High (3)", Position.GRID_HIGH);
+        placeChooser3.addOption("--- Third Position ---", null);
+        placeChooser3.addOption("High", Position.GRID_HIGH);
         placeChooser3.addOption("Middle", Position.GRID_MID);
         placeChooser3.addOption("Low", Position.GRID_LOW);
         placeChooser3.setDefaultOption("Chassis", Position.CHASSIS);
         SmartDashboard.putData("Third placement location", placeChooser3);
 
+        pathChooser.addOption("--- Auto Routine ---", null);
         pathChooser.setDefaultOption("No auto (face intake away)", null);
         for (String pathName : getPathnames()) {
             pathChooser.addOption(pathName, pathName);
