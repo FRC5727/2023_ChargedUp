@@ -67,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_LOW, new ArmPosition(-10, -43),
       Position.GRID_MID, new ArmPosition(-5, -4),
       Position.GRID_HIGH, new ArmPosition(28, 22),
-      Position.INTAKE_PREGROUND, new ArmPosition(7, -56),
+      Position.INTAKE_PREGROUND, new ArmPosition(6, -50),
       Position.INTAKE_GROUND, new ArmPosition(11, -69),
       Position.INTAKE_SUBSTATION, new ArmPosition(-19, 11)
     ));
@@ -208,7 +208,6 @@ public class ArmSubsystem extends SubsystemBase {
         case INTAKE_GROUND:
         case INTAKE_PREGROUND:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.INTAKE_PREGROUND) {
-            targetPosition.add(Position.GRID_LOW);
             targetPosition.add(Position.INTAKE_PREGROUND);
           }
           break;
@@ -220,10 +219,6 @@ public class ArmSubsystem extends SubsystemBase {
           }
           break;
         case CHASSIS:
-          if (targetPosition.isEmpty() || targetPosition.getLast() == Position.INTAKE_PREGROUND) {
-            targetPosition.add(Position.GRID_LOW);
-          }
-          break;
         case GRID_LOW:
         case SAFE:
           // Safe directly from any of the previous positions
