@@ -42,7 +42,7 @@ public final class Constants {
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
     // Multipliers when speed limit is in effect;
-    public static final double speedLimitXY = 0.2; // TODO Raise this for Mecklenberg
+    public static final double speedLimitXY = 0.30;
     public static final double speedLimitRot = 0.15;
 
     public static final COTSFalconSwerveConstants chosenModule =
