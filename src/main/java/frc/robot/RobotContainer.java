@@ -30,11 +30,11 @@ import static frc.robot.Constants.*;
  */
 public class RobotContainer {
   // Subsystems
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ArmSubsystem s_Arm = new ArmSubsystem();
+  private final IntakeSubsystem s_Intake = new IntakeSubsystem();
   
   private final Swerve s_Swerve = new Swerve();
-  private final Auto auto = new Auto(armSubsystem, intakeSubsystem, s_Swerve);
+  private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve);
 
   private Position driverTargetPosition = Position.CHASSIS;
 
@@ -56,7 +56,7 @@ public class RobotContainer {
             () -> s_Swerve.getSpeedLimitXY(),
             () -> s_Swerve.getSpeedLimitRot()
         ));
-    intakeSubsystem.setDefaultCommand(new IdleCommand(intakeSubsystem));
+    s_Intake.setDefaultCommand(new IdleCommand(s_Intake));
     configureBindings();
 
     // Arm position chooser
@@ -110,54 +110,54 @@ public class RobotContainer {
     Trigger armTrigger = 
       driverRightBumper.whileTrue(
         Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-          .andThen(Commands.runOnce(() -> armSubsystem.setTargetPosition(Arm.positionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
-          .andThen(new ArmCommand(armSubsystem)));
+          .andThen(Commands.runOnce(() -> s_Arm.setTargetPosition(Arm.positionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
+          .andThen(new ArmCommand(s_Arm)));
     if (!Arm.positionDebugDirect) {
       armTrigger
         .onFalse(
           Commands.waitSeconds(0.5)
             .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(new ArmCommand(armSubsystem, Position.CHASSIS)));
+          .alongWith(new ArmCommand(s_Arm, Position.CHASSIS)));
     }
 
     Trigger intakeSubstationTrigger = 
-      driverRightTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
+      driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(
             Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-              .andThen(new ArmCommand(armSubsystem, Position.INTAKE_SUBSTATION))));
+              .andThen(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))));
  
     if (!Arm.positionDebugDirect) {
       intakeSubstationTrigger
         .onFalse(
           Commands.waitSeconds(0.5)
             .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(new ArmCommand(armSubsystem, Position.CHASSIS)));
+          .alongWith(new ArmCommand(s_Arm, Position.CHASSIS)));
     }
         
     Trigger intakeGroundTrigger = 
-      driverLeftTrigger.whileTrue(new IntakeCommand(intakeSubsystem)
-        .alongWith(new ArmCommand(armSubsystem, Position.INTAKE_GROUND)));
+      driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
+        .alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
     
     if (!Arm.positionDebugDirect) {
       intakeGroundTrigger
-        .onFalse(new ArmCommand(armSubsystem, Position.CHASSIS));
+        .onFalse(new ArmCommand(s_Arm, Position.CHASSIS));
     }
 
     // Place currently held game piece
-    driverLeftBumper.whileTrue(new PlaceCommand(intakeSubsystem));
+    driverLeftBumper.whileTrue(new PlaceCommand(s_Intake));
 
     // Toggle between cones and cubes
-    new JoystickButton(Controls.driver, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> intakeSubsystem.toggleCube()));
+    new JoystickButton(Controls.driver, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> s_Intake.toggleCube()));
 
     // Use D-Pad for manual motor control
     new POVButton(Controls.driver, 0)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.upperArmDirect(Arm.manualVoltage), () -> armSubsystem.upperArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> s_Arm.upperArmDirect(Arm.manualVoltage), () -> s_Arm.upperArmDirect(0), s_Arm));
     new POVButton(Controls.driver, 180)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.upperArmDirect(-Arm.manualVoltage), () -> armSubsystem.upperArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> s_Arm.upperArmDirect(-Arm.manualVoltage), () -> s_Arm.upperArmDirect(0), s_Arm));
     new POVButton(Controls.driver, 90)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowerArmDirect(Arm.manualVoltage), () -> armSubsystem.lowerArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> s_Arm.lowerArmDirect(Arm.manualVoltage), () -> s_Arm.lowerArmDirect(0), s_Arm));
     new POVButton(Controls.driver, 270)
-      .whileTrue(Commands.startEnd(() -> armSubsystem.lowerArmDirect(-Arm.manualVoltage), () -> armSubsystem.lowerArmDirect(0), armSubsystem));
+      .whileTrue(Commands.startEnd(() -> s_Arm.lowerArmDirect(-Arm.manualVoltage), () -> s_Arm.lowerArmDirect(0), s_Arm));
 
     SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
   }
