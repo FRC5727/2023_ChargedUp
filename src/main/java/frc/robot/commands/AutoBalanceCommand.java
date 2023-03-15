@@ -14,7 +14,7 @@ import frc.robot.subsystems.Swerve;
 public class AutoBalanceCommand extends CommandBase {
   /** Creates a new AutoBalanceCommand. */
   private final Swerve s_Swerve;
-  private final PIDController m_PID = new PIDController(0.025, 0, 0);
+  private final PIDController m_PID = new PIDController(0.02, 0, 0);
   private final Timer timer = new Timer();
 
   private boolean usingPID = false;
