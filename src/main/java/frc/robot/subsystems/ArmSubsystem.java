@@ -65,10 +65,10 @@ public class ArmSubsystem extends SubsystemBase {
       Position.CHASSIS, new ArmPosition(-20, -48),
       Position.SAFE, new ArmPosition(-19, 11),
       Position.GRID_LOW, new ArmPosition(-10, -43),
-      Position.GRID_MID, new ArmPosition(-5, -4),
+      Position.GRID_MID, new ArmPosition(-5, -8),
       Position.GRID_HIGH, new ArmPosition(28, 22),
       Position.INTAKE_PREGROUND, new ArmPosition(6, -50),
-      Position.INTAKE_GROUND, new ArmPosition(11, -69),
+      Position.INTAKE_GROUND, new ArmPosition(11, -72),
       Position.INTAKE_SUBSTATION, new ArmPosition(-19, 11)
     ));
 
@@ -84,7 +84,6 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController lowerPidController;
   private ProfiledPIDController upperPidController;
 
-  // TODO Tune this
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
   private final PIDConstants upperConstants = new PIDConstants(0.55, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
@@ -212,11 +211,11 @@ public class ArmSubsystem extends SubsystemBase {
           break;
         case GRID_MID:
         case GRID_HIGH:
-        case INTAKE_SUBSTATION:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.SAFE) {
             targetPosition.add(Position.SAFE);
           }
           break;
+        case INTAKE_SUBSTATION:
         case CHASSIS:
         case GRID_LOW:
         case SAFE:
