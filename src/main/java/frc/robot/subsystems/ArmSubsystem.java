@@ -87,8 +87,8 @@ public class ArmSubsystem extends SubsystemBase {
   // TODO Tune this
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
   private final PIDConstants upperConstants = new PIDConstants(0.55, 0.00, 0.00);
-  private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(90, 75);
-  private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(90, 75);
+  private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
+  private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
 
   private double lowerMaxVoltage = 10;
   private double upperMaxVoltage = 10;
