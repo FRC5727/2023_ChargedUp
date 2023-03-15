@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private final CANSparkMax intakeNeo;
+  private final LEDSubsystem m_led = new LEDSubsystem();
 
   private boolean cube = true;
 
@@ -25,6 +26,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem() {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+
+    m_led.setRainbow(); 
+  
   }
   public void setSpeed(double speed) {
     intakeNeo.set(speed);
@@ -55,6 +59,15 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   public void toggleCube(){
     cube = !cube;
+  
+     if(cube){
+      //Set color to purple
+         m_led.setColor(186, 0, 255);
+     }
+     else {
+         m_led.setColor(255,191,0);
+     }
+  
   }
   public boolean isCube(){
     return cube;

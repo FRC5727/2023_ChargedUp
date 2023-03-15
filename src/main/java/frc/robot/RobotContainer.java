@@ -32,6 +32,7 @@ public class RobotContainer {
   // Subsystems
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  
   private final Swerve s_Swerve = new Swerve();
   private final Auto auto = new Auto(armSubsystem, intakeSubsystem, s_Swerve);
 

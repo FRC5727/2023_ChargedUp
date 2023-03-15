@@ -27,6 +27,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
   public static final String CANivoreName = "CANivore";
 
+  public static final int LED_CANDLE = 0; // Port for LED light
   public static final double speedLimit = 0.75;
   public static final double rSpeedLimit = 0.40;
 
