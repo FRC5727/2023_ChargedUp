@@ -15,10 +15,13 @@ public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax intakeNeo;
 
   private boolean cube = true;
+
+  // TODO Move to constants
   private static final double intakeSpeed = 0.50;
   private static final double outtakeSpeed = 0.50;
+  private static final double outtakeConeSpeed = 0.35;
   private static final double idleSpeed = 0.18; 
- 
+  private static final double stallCurrent = 15.0;
 
   public IntakeSubsystem() {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
@@ -33,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
     setSpeed(-1.0 * intakeSpeed);
   }
   public void coneOuttake(){
-    setSpeed(-1.0 * outtakeSpeed);;
+    setSpeed(-1.0 * outtakeConeSpeed);;
   }
   public void cubeOuttake(){
     setSpeed(outtakeSpeed);
@@ -56,11 +59,16 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean isCube(){
     return cube;
   }
+  public boolean isStalled(){
+    return intakeNeo.getOutputCurrent() > stallCurrent;
+  }
   public void intakeIdle(){
     if(isCube()) cubeIdle(); else coneIdle();
   }
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Cube?", cube);
+    SmartDashboard.putNumber("Intake output current", intakeNeo.getOutputCurrent());
+    SmartDashboard.putBoolean("Piece captured?", isStalled());
   }
 }

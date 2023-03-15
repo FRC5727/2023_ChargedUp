@@ -36,7 +36,7 @@ public class IntakeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO Check if piece acquired (motor stalled)
     return false;
+    // return intake.isStalled();
   }
 }
