@@ -86,13 +86,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   // TODO Tune this
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
-  private final PIDConstants upperConstants = new PIDConstants(0.40, 0.00, 0.00);
-  private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(45, 45);
-  private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(45, 45);
+  private final PIDConstants upperConstants = new PIDConstants(0.55, 0.00, 0.00);
+  private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(90, 75);
+  private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(90, 75);
 
-
-  private double lowerMaxVoltage = 5;
-  private double upperMaxVoltage = 4;
+  private double lowerMaxVoltage = 10;
+  private double upperMaxVoltage = 10;
 
   public ArmSubsystem() {
     // Note that Map.of() only supports 10 key-value pairs, so calibration here
@@ -251,6 +250,7 @@ public class ArmSubsystem extends SubsystemBase {
       lowerPidController.setTolerance(2, .5);
       upperPidController.setTolerance(2, .5);
     }
+    // TODO Needed?
     lowerPidController.reset(getLowerAngle());
     upperPidController.reset(getUpperAngle());
   }
