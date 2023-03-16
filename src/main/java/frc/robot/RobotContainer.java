@@ -55,8 +55,8 @@ public class RobotContainer {
             () -> -Controls.driver.getRawAxis(strafeAxis),
             () -> -Controls.driver.getRawAxis(rotationAxis),
             () -> false, // always field relative
-            () -> s_Swerve.getSpeedLimitXY(),
-            () -> s_Swerve.getSpeedLimitRot()
+            s_Swerve::getSpeedLimitXY,
+            s_Swerve::getSpeedLimitRot
         ));
     s_Intake.setDefaultCommand(new IdleCommand(s_Intake));
     configureBindings();
@@ -72,7 +72,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
 
     // Simple test of LED subsystem
-    SmartDashboard.putData("LED Rainbow", Commands.runOnce(() -> ledSubsystem.setRainbow()));
+    SmartDashboard.putData("LED Rainbow", Commands.runOnce(ledSubsystem::setRainbow));
   }
 
   public Command getAutonomousCommand() {
@@ -113,19 +113,19 @@ public class RobotContainer {
     // Move to selected position
     Trigger armTrigger = 
       driverRightBumper.whileTrue(
-        Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
+        Commands.runOnce(s_Swerve::enableSpeedLimit)
           .andThen(Commands.runOnce(() -> s_Arm.setTargetPosition(s_Arm.isDirectMode() ? positionChooser.getSelected() : driverTargetPosition)))
           .andThen(new ArmCommand(s_Arm)));
     armTrigger
       .onFalse(
         Commands.waitSeconds(0.5)
-          .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+          .andThen(Commands.runOnce(s_Swerve::disableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.CHASSIS))
         .unless(s_Arm::isDirectMode));
 
     Trigger intakeSubstationTrigger = 
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
-        .alongWith(Commands.runOnce(() -> s_Swerve.enableSpeedLimit()))
+        .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
         .andThen(new IdleCommand(s_Intake)
           .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
@@ -133,7 +133,7 @@ public class RobotContainer {
     intakeSubstationTrigger
       .onFalse(
         Commands.waitSeconds(0.5)
-          .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+          .andThen(Commands.runOnce(s_Swerve::disableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.CHASSIS))
         .unless(s_Arm::isDirectMode));
         
@@ -162,7 +162,7 @@ public class RobotContainer {
     new POVButton(Controls.driver, 270)
       .whileTrue(Commands.startEnd(() -> s_Arm.lowerArmDirect(-Arm.manualVoltage), () -> s_Arm.lowerArmDirect(0), s_Arm));
 
-    SmartDashboard.putData("Zero Gyro", Commands.runOnce(() -> s_Swerve.zeroGyro()));
+    SmartDashboard.putData("Zero Gyro", Commands.runOnce(s_Swerve::zeroGyro));
   }
 
   // TODO Replace this ugly hack
