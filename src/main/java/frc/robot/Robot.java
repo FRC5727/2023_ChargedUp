@@ -34,11 +34,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     DriverStation.silenceJoystickConnectionWarning(true);
     ctreConfigs = new CTREConfigs();
-    DriverStation.silenceJoystickConnectionWarning(true);
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //driveSubsystem.zeroGyroscope();
 
     if (!DriverStation.isFMSAttached())
       PathPlannerServer.startServer(5811);
@@ -145,7 +144,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.disabled();
+  }
 
   @Override
   public void disabledPeriodic() {}
