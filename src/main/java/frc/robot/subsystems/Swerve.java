@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import java.util.EnumSet;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -17,6 +19,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public static final boolean swerveDebug = true;
+    public static boolean swerveDebug = false;
     private boolean speedLimit = false;
     
     public SwerveDriveOdometry swerveOdometry;
@@ -36,6 +41,14 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.CANivoreName);
         gyro.configFactoryDefault();
         zeroGyro();
+
+        NetworkTableInstance nt = NetworkTableInstance.getDefault();
+        NetworkTable sdTable = nt.getTable("SmartDashboard");
+
+        SmartDashboard.putBoolean("Swerve debug", swerveDebug);
+        sdTable.addListener("Swerve debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
+          swerveDebug = event.valueData.value.getBoolean();
+        });
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.Mod0.constants),
