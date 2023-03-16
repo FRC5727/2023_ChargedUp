@@ -27,7 +27,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private boolean armDebug = false;
+  private boolean armDebug = true;
 
   // Controls whether or not to move arm to manual positions
   private boolean armDirectDebug = false;
@@ -92,12 +92,13 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController upperPidController;
 
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
-  private final PIDConstants upperConstants = new PIDConstants(0.45, 0.00, 0.00);
+  private final PIDConstants upperConstants = new PIDConstants(0.25, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
 
-  private double lowerMaxVoltage = 10;
-  private double upperMaxVoltage = 10;
+  private double lowerMaxVoltage = 12;
+  private double upperMaxVoltage = 12
+  ;
 
   public ArmSubsystem() {
     // Note that Map.of() only supports 10 key-value pairs, so calibration here

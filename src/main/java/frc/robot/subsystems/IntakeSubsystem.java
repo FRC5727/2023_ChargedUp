@@ -30,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private static final double outtakeConeSpeed = 0.35;
   private static final double idleSpeed = 0.18; 
   private static final double stallCurrent = 15.0;
-  private static final int stallMax = 10;
+  private static final int stallMax = 20;
   private static int stallCounter = 0;
 
   public IntakeSubsystem() {
