@@ -4,15 +4,21 @@
 
 package frc.robot.subsystems;
 
+import java.util.EnumSet;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private final CANSparkMax intakeNeo;
+  private boolean intakeDebug = false;
   private final LEDSubsystem m_led = new LEDSubsystem();
 
   private boolean cube = true;
@@ -29,6 +35,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem() {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+
+    
+    NetworkTableInstance nt = NetworkTableInstance.getDefault();
+    NetworkTable sdTable = nt.getTable("SmartDashboard");
+
+    SmartDashboard.putBoolean("Intake debug", intakeDebug);
+    sdTable.addListener("Intake debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
+      intakeDebug = event.valueData.value.getBoolean();
+    });
 
     m_led.setColor(162, 255, 0);
   }
@@ -101,8 +116,10 @@ public class IntakeSubsystem extends SubsystemBase {
       stallCounter = 0;
     }
     SmartDashboard.putBoolean("Cube?", cube);
-    SmartDashboard.putNumber("Intake output current", intakeNeo.getOutputCurrent());
-    SmartDashboard.putNumber("Intake stall counter", stallCounter);
-    SmartDashboard.putBoolean("Piece captured?", isStalled());
+    if (intakeDebug) {
+      SmartDashboard.putNumber("Intake output current", intakeNeo.getOutputCurrent());
+      SmartDashboard.putNumber("Intake stall counter", stallCounter);
+      SmartDashboard.putBoolean("Piece captured?", isStalled());
+    }
   }
 }
