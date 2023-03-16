@@ -275,7 +275,6 @@ public class ArmSubsystem extends SubsystemBase {
       lowerPidController.setTolerance(2, 5);
       upperPidController.setTolerance(2, 5);
     }
-    // TODO Needed?
     lowerPidController.reset(getLowerAngle());
     upperPidController.reset(getUpperAngle());
   }
