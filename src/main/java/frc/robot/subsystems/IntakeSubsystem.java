@@ -16,6 +16,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final LEDSubsystem m_led = new LEDSubsystem();
 
   private boolean cube = true;
+  private boolean colorInit = false;
 
   // TODO Move to constants
   private static final double intakeSpeed = 0.50;
@@ -27,11 +28,13 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
 
-    m_led.setRainbow(); 
-  
+    m_led.setColor(162, 255, 0);
   }
   public void setSpeed(double speed) {
     intakeNeo.set(speed);
+    if (!colorInit) {
+      setColor();
+    }
   }
   public void coneIntake(){
     setSpeed(intakeSpeed);
@@ -59,15 +62,22 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   public void toggleCube(){
     cube = !cube;
-  
-     if(cube){
+    setColor();
+  }
+  private void setColor() {
+    if (cube) {
       //Set color to purple
-         m_led.setColor(186, 0, 255);
-     }
-     else {
-         m_led.setColor(255,191,0);
-     }
-  
+      m_led.setColor(186, 0, 255);
+    } else {
+      m_led.setColor(255,128,0);
+    }
+    colorInit = true;
+  }
+  public void disabled() {
+    if (colorInit) {
+      m_led.setColor(222, 0, 0);
+      colorInit = false;
+    }
   }
   public boolean isCube(){
     return cube;

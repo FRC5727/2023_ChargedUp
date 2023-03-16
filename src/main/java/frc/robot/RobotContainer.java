@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
@@ -32,6 +33,7 @@ public class RobotContainer {
   // Subsystems
   private final ArmSubsystem s_Arm = new ArmSubsystem();
   private final IntakeSubsystem s_Intake = new IntakeSubsystem();
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   
   private final Swerve s_Swerve = new Swerve();
   private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve);
@@ -69,6 +71,7 @@ public class RobotContainer {
 
     // Easy way to test AutoBalance
     SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
+    SmartDashboard.putData("LED", Commands.runOnce(() -> ledSubsystem.setRainbow()));
   }
 
   public Command getAutonomousCommand() {
@@ -166,5 +169,9 @@ public class RobotContainer {
   // For some reason, after auto, the teleop controls are inverted
   public void hack() {
     s_Swerve.hack();
+  }
+
+  public void disabled() {
+    s_Intake.disabled();
   }
 }

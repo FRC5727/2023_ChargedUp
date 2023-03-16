@@ -14,8 +14,11 @@ public class LEDSubsystem extends SubsystemBase {
 
   /** Creates a new LEDSubsystem. */
   private CANdle m_candle = new CANdle(Constants.LED_CANDLE);
+  private final int numLed = 114;
+  private final double brightness = 0.50;
+
   public LEDSubsystem() {
-    m_candle.configBrightnessScalar(0.75);
+    m_candle.configBrightnessScalar(brightness);
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
     // m_candle.configLOSBehavior(true);
@@ -24,14 +27,13 @@ public class LEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-   // This method will be called once per scheduler run
   }
   public void setColor(int r, int g, int b){
     m_candle.clearAnimation(0);
-    m_candle.setLEDs(r, g, b, 255, 0, 20);
+    m_candle.setLEDs(r, g, b, 255, 0, numLed);
   }
   public void setRainbow(){
-    m_candle.animate(new RainbowAnimation(0.5,0.1,20));
+    m_candle.clearAnimation(0);
+    m_candle.animate(new RainbowAnimation(brightness, 0.3, numLed));
   }
 }
