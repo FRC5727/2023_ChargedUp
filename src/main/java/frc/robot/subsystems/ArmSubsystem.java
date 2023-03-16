@@ -201,7 +201,6 @@ public class ArmSubsystem extends SubsystemBase {
         case CHASSIS:
           targetPosition.add(Position.CHASSIS);
           break;
-        case GRID_LOW:
         case GRID_MID:
         case GRID_HIGH:
         case INTAKE_SUBSTATION:
@@ -212,6 +211,7 @@ public class ArmSubsystem extends SubsystemBase {
         case INTAKE_GROUND:
           targetPosition.add(Position.INTAKE_PREGROUND);
           break;
+        case GRID_LOW:
         case CALIBRATION:
         case NONE:
           break;
