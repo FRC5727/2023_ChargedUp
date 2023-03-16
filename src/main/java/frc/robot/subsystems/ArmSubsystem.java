@@ -69,7 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_HIGH, new ArmPosition(28, 22),
       Position.INTAKE_PREGROUND, new ArmPosition(6, -50),
       Position.INTAKE_GROUND, new ArmPosition(11, -72),
-      Position.INTAKE_SUBSTATION, new ArmPosition(-19, 11)
+      Position.INTAKE_SUBSTATION, new ArmPosition(-16, 14)
     ));
 
   private WPI_TalonFX lowerArmMaster;
@@ -85,7 +85,7 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController upperPidController;
 
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
-  private final PIDConstants upperConstants = new PIDConstants(0.55, 0.00, 0.00);
+  private final PIDConstants upperConstants = new PIDConstants(0.45, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
 
@@ -239,15 +239,15 @@ public class ArmSubsystem extends SubsystemBase {
     upperPidController.setGoal(nextPosition.upperArmAngle);
     if (targetPosition.size() > 1) {
       if (targetPosition.peek() == Position.SAFE) {
-        lowerPidController.setTolerance(25, 50);
-        upperPidController.setTolerance(25, 50);
+        lowerPidController.setTolerance(25);
+        upperPidController.setTolerance(25);
       } else {
-        lowerPidController.setTolerance(3, 5);
-        upperPidController.setTolerance(3, 5);
+        lowerPidController.setTolerance(5, 15);
+        upperPidController.setTolerance(5, 15);
       }
     } else {
-      lowerPidController.setTolerance(2, .5);
-      upperPidController.setTolerance(2, .5);
+      lowerPidController.setTolerance(2, 5);
+      upperPidController.setTolerance(2, 5);
     }
     // TODO Needed?
     lowerPidController.reset(getLowerAngle());
