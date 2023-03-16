@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -125,9 +126,10 @@ public class RobotContainer {
 
     Trigger intakeSubstationTrigger = 
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
-        .alongWith(
-            Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-              .andThen(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))));
+        .alongWith(Commands.runOnce(() -> s_Swerve.enableSpeedLimit()))
+        .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
+        .andThen(new IdleCommand(s_Intake)
+          .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
  
     if (!Arm.positionDebugDirect) {
       intakeSubstationTrigger
@@ -139,7 +141,9 @@ public class RobotContainer {
         
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
-        .alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND)));
+        .alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND))
+        .andThen(new IdleCommand(s_Intake)
+          .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
     
     if (!Arm.positionDebugDirect) {
       intakeGroundTrigger

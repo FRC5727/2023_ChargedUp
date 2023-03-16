@@ -165,8 +165,11 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setTargetPosition(Position position) {
+    Position lastTarget = targetPosition.isEmpty() ? null : targetPosition.getFirst();
+    
     targetPosition.clear();
-    if (!Constants.Arm.positionDebugDirect && lastPosition != position) {
+    
+    if (!Constants.Arm.positionDebugDirect && lastPosition != position && lastTarget != position) {
       // Determine first step based on last known position
       switch (lastPosition) {
         case STARTING:
