@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +29,9 @@ import frc.robot.Constants;
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
   private boolean armDebug = false;
+
+  // Controls whether or not to move arm to manual positions
+  private boolean armDirectDebug = false;
 
   // Abstraction of the encode positions for a defined arm position
   private class ArmPosition {
@@ -132,7 +136,16 @@ public class ArmSubsystem extends SubsystemBase {
       }
     });
 
+    SmartDashboard.putBoolean("Arm direct debug", armDirectDebug);
+    sdTable.addListener("Arm direct debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
+      armDirectDebug = event.valueData.value.getBoolean();
+    });
+
     brake();
+  }
+
+  public boolean isDirectMode() {
+    return armDirectDebug;
   }
 
   private void brake() {
@@ -180,7 +193,7 @@ public class ArmSubsystem extends SubsystemBase {
     
     targetPosition.clear();
     
-    if (!Constants.Arm.positionDebugDirect && lastPosition != position && lastTarget != position) {
+    if (!armDirectDebug && lastPosition != position && lastTarget != position) {
       // Determine first step based on last known position
       switch (lastPosition) {
         case STARTING:

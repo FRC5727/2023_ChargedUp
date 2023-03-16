@@ -191,12 +191,6 @@ public final class Constants {
     public static final double lowerOffset = 151.1;
     public static final double highOffset = 16.3;
 
-    // Debug arm position by getting position from Chooser
-    public static final boolean positionDebugChooser = false;
-
-    // Debug arm position by moving directly there
-    public static final boolean positionDebugDirect = false;
-  
     // Voltage to apply when moving arm manually
     public static final double manualVoltage = 1.5;
   }

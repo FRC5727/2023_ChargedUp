@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -63,16 +62,17 @@ public class RobotContainer {
     configureBindings();
 
     // Arm position chooser
-    if (Arm.positionDebugChooser) {
-      for (Position pos : Position.values()) {
-        positionChooser.addOption(pos.toString(), pos);
-      }
-      SmartDashboard.putData("Position chooser", positionChooser);
+    positionChooser.setDefaultOption("--- Arm Direct Debug Positions ---", null);
+    for (Position pos : Position.values()) {
+      positionChooser.addOption(pos.toString(), pos);
     }
+    SmartDashboard.putData("Position chooser", positionChooser);
 
     // Easy way to test AutoBalance
     SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
-    SmartDashboard.putData("LED", Commands.runOnce(() -> ledSubsystem.setRainbow()));
+
+    // Simple test of LED subsystem
+    SmartDashboard.putData("LED Rainbow", Commands.runOnce(() -> ledSubsystem.setRainbow()));
   }
 
   public Command getAutonomousCommand() {
@@ -114,15 +114,14 @@ public class RobotContainer {
     Trigger armTrigger = 
       driverRightBumper.whileTrue(
         Commands.runOnce(() -> s_Swerve.enableSpeedLimit())
-          .andThen(Commands.runOnce(() -> s_Arm.setTargetPosition(Arm.positionDebugChooser ? positionChooser.getSelected() : driverTargetPosition)))
+          .andThen(Commands.runOnce(() -> s_Arm.setTargetPosition(s_Arm.isDirectMode() ? positionChooser.getSelected() : driverTargetPosition)))
           .andThen(new ArmCommand(s_Arm)));
-    if (!Arm.positionDebugDirect) {
-      armTrigger
-        .onFalse(
-          Commands.waitSeconds(0.5)
-            .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(new ArmCommand(s_Arm, Position.CHASSIS)));
-    }
+    armTrigger
+      .onFalse(
+        Commands.waitSeconds(0.5)
+          .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+        .alongWith(new ArmCommand(s_Arm, Position.CHASSIS))
+        .unless(s_Arm::isDirectMode));
 
     Trigger intakeSubstationTrigger = 
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
@@ -131,13 +130,12 @@ public class RobotContainer {
         .andThen(new IdleCommand(s_Intake)
           .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
  
-    if (!Arm.positionDebugDirect) {
-      intakeSubstationTrigger
-        .onFalse(
-          Commands.waitSeconds(0.5)
-            .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
-          .alongWith(new ArmCommand(s_Arm, Position.CHASSIS)));
-    }
+    intakeSubstationTrigger
+      .onFalse(
+        Commands.waitSeconds(0.5)
+          .andThen(Commands.runOnce(() -> s_Swerve.disableSpeedLimit()))
+        .alongWith(new ArmCommand(s_Arm, Position.CHASSIS))
+        .unless(s_Arm::isDirectMode));
         
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
@@ -145,10 +143,8 @@ public class RobotContainer {
         .andThen(new IdleCommand(s_Intake)
           .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
     
-    if (!Arm.positionDebugDirect) {
-      intakeGroundTrigger
-        .onFalse(new ArmCommand(s_Arm, Position.CHASSIS));
-    }
+    intakeGroundTrigger
+      .onFalse(new ArmCommand(s_Arm, Position.CHASSIS).unless(s_Arm::isDirectMode));
 
     // Place currently held game piece
     driverLeftBumper.whileTrue(new PlaceCommand(s_Intake));
