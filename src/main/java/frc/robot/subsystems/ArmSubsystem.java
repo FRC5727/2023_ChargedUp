@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -92,9 +93,11 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController upperPidController;
 
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
-  private final PIDConstants upperConstants = new PIDConstants(0.28, 0.00, 0.00);
+  private final PIDConstants upperConstantsTeleOp = new PIDConstants(0.25, 0.00, 0.00);
+  private final PIDConstants upperConstantsAuto = new PIDConstants(0.34, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
+  private boolean teleOpInit = false;
 
   private double lowerMaxVoltage = 12;
   private double upperMaxVoltage = 12;
@@ -112,7 +115,7 @@ public class ArmSubsystem extends SubsystemBase {
     this.upperArmCoder = new CANCoder(Constants.Arm.upperCoder, Constants.CANivoreName);
 
     this.lowerPidController = new ProfiledPIDController(lowerConstants.kP, lowerConstants.kI, lowerConstants.kD, lowerConstraints);
-    this.upperPidController = new ProfiledPIDController(upperConstants.kP, upperConstants.kI, upperConstants.kD, upperConstraints);
+    this.upperPidController = new ProfiledPIDController(upperConstantsAuto.kP, upperConstantsAuto.kI, upperConstantsAuto.kD, upperConstraints);
 
     lowerPidController.disableContinuousInput();
     upperPidController.disableContinuousInput();
@@ -262,6 +265,10 @@ public class ArmSubsystem extends SubsystemBase {
     // TODO Consider passing a State, so that velocity can be non-zero for intermediate points
     lowerPidController.setGoal(nextPosition.lowerArmAngle);
     upperPidController.setGoal(nextPosition.upperArmAngle);
+    if (!teleOpInit && DriverStation.isTeleop()) {
+      upperPidController.setPID(upperConstantsTeleOp.kP, upperConstantsTeleOp.kI, upperConstantsTeleOp.kD);
+      teleOpInit = true;
+    }
     if (targetPosition.size() > 1) {
       if (targetPosition.peek() == Position.SAFE) {
         lowerPidController.setTolerance(25);
