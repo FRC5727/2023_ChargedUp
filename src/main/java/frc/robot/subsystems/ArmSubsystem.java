@@ -28,7 +28,7 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
-  private boolean armDebug = true;
+  private boolean armDebug = false;
 
   // Controls whether or not to move arm to manual positions
   private boolean armDirectDebug = false;
