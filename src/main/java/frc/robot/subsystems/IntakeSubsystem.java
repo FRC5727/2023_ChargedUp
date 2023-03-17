@@ -30,12 +30,12 @@ public class IntakeSubsystem extends SubsystemBase {
   private static final double outtakeConeSpeed = 0.35;
   private static final double idleSpeed = 0.18; 
   private static final double stallCurrent = 15.0;
-  private static final int stallMax = 20;
+  private static final int stallMaxCube = 10;
+  private static final int stallMaxCone = 20;
   private static int stallCounter = 0;
 
   public IntakeSubsystem() {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
-
     
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
     NetworkTable sdTable = nt.getTable("SmartDashboard");
@@ -103,7 +103,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return cube;
   }
   public boolean isStalled(){
-    return stallCounter >= stallMax;
+    return stallCounter >= (cube ? stallMaxCube : stallMaxCone);
   }
   public void intakeIdle(){
     if(isCube()) cubeIdle(); else coneIdle();
