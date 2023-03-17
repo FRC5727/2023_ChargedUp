@@ -26,6 +26,31 @@
     },
     {
       "anchorPoint": {
+        "x": 3.9,
+        "y": 1.07
+      },
+      "prevControl": {
+        "x": 3.393780348815217,
+        "y": 1.07
+      },
+      "nextControl": {
+        "x": 4.406219651184783,
+        "y": 1.07
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": 0.7,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
         "x": 6.4,
         "y": 1.07
       },
@@ -36,7 +61,7 @@
       "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 1.5,
       "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
@@ -47,8 +72,15 @@
       }
     }
   ],
-  "maxVelocity": 3.0,
+  "maxVelocity": 2.0,
   "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.05,
+      "names": [
+        "Chassis"
+      ]
+    }
+  ]
 }
