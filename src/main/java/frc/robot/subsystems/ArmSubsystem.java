@@ -97,8 +97,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
 
   private double lowerMaxVoltage = 12;
-  private double upperMaxVoltage = 12
-  ;
+  private double upperMaxVoltage = 12;
 
   public ArmSubsystem() {
     // Note that Map.of() only supports 10 key-value pairs, so calibration here
@@ -128,12 +127,11 @@ public class ArmSubsystem extends SubsystemBase {
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
     NetworkTable sdTable = nt.getTable("SmartDashboard");
 
+    SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
+
     SmartDashboard.putBoolean("Arm debug", armDebug);
     sdTable.addListener("Arm debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
       armDebug = event.valueData.value.getBoolean();
-      if (armDebug) {
-        SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
-      }
     });
 
     SmartDashboard.putBoolean("Arm direct debug", armDirectDebug);
