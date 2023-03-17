@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
@@ -31,10 +31,9 @@ import static frc.robot.Constants.*;
  */
 public class RobotContainer {
   // Subsystems
+  private final LED s_LED = new LED();
   private final ArmSubsystem s_Arm = new ArmSubsystem();
-  private final IntakeSubsystem s_Intake = new IntakeSubsystem();
-  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
-  
+  private final IntakeSubsystem s_Intake = new IntakeSubsystem(s_LED);
   private final Swerve s_Swerve = new Swerve();
   private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve);
 
@@ -72,7 +71,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
 
     // Simple test of LED subsystem
-    SmartDashboard.putData("LED Rainbow", Commands.runOnce(ledSubsystem::setRainbow));
+    SmartDashboard.putData("LED Rainbow", Commands.runOnce(s_LED::setRainbow));
   }
 
   public Command getAutonomousCommand() {

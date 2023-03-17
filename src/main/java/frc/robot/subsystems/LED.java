@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,9 +6,7 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 import frc.robot.Constants;
 
-public class LEDSubsystem extends SubsystemBase {
-
-  /** Creates a new LEDSubsystem. */
+public class LED extends SubsystemBase {
   private CANdle m_candle = new CANdle(Constants.LED_CANDLE);
   private final int numLed = 114;
   private final double brightness = 0.50;
@@ -20,19 +14,34 @@ public class LEDSubsystem extends SubsystemBase {
   private boolean flashOff = false;
   private final int flashRate = 8; // in ticks
   private int flashTicks = 0;
-  private int lastR = 0;
-  private int lastG = 0;
-  private int lastB = 0;
-  private int flashR = 0;
-  private int flashG = 0;
-  private int flashB = 0;
+  private Color last = new Color(0, 0, 0);
+  private Color flash = new Color(0, 0, 0);
 
-  public LEDSubsystem() {
+  public static class Color {
+    private final int R, G, B;
+    public Color(int r, int g, int b) {
+      R = r;
+      G = g;
+      B = b;
+    }
+  }
+
+  public static final class Colors {
+    public static final Color off = new LED.Color(0, 0, 0);
+    public static final Color omegabytes = new LED.Color(162, 255, 0);
+    public static final Color cubePurple = new LED.Color(186, 0, 255);
+    public static final Color coneYellow = new LED.Color(255, 128, 0);
+    public static final Color disabledRed = new LED.Color(222, 0, 0);
+  }
+
+  public LED() {
     m_candle.configBrightnessScalar(brightness);
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
     m_candle.configLOSBehavior(true);
+    setColor(Colors.omegabytes);
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -40,37 +49,41 @@ public class LEDSubsystem extends SubsystemBase {
       flashTicks++;
       if (flashTicks == flashRate) {
         if (flashOff) {
-          m_candle.setLEDs(lastR, lastG, lastB, 255, 0, numLed);
+          setColorDirect(last);
           flashOff = false;
           flashCount--;
         } else {
-          m_candle.setLEDs(flashR, flashG, flashB, 255, 0, numLed);
+          setColorDirect(flash);
           flashOff = true;
         }
         flashTicks = 0;
       }
     }
   }
-  public void setColor(int r, int g, int b) {
-    lastR = r;
-    lastG = g;
-    lastB = b;
+
+  private void setColorDirect(Color color) {
+    m_candle.setLEDs(color.R, color.G, color.B, 255, 0, numLed);
+  }
+
+  public void setColor(Color color) {
+    last = color;
     flashCount = 0;
     flashOff = false;
     m_candle.clearAnimation(0);
-    m_candle.setLEDs(r, g, b, 255, 0, numLed);
+    setColorDirect(color);
   }
+
   public void setRainbow(){
     m_candle.clearAnimation(0);
     m_candle.animate(new RainbowAnimation(brightness, 0.3, numLed));
   }
+
   public void flash(int count) {
-    flash(count, 0, 0, 0);
+    flash(count, Colors.off);
   }
-  public void flash(int count, int r, int g, int b) {
+
+  public void flash(int count, Color color) {
     flashCount = count;
-    flashR = r;
-    flashG = g;
-    flashB = b;
+    flash = color;
   }
 }

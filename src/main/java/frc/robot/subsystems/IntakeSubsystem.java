@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private final CANSparkMax intakeNeo;
   private boolean intakeDebug = false;
-  private final LEDSubsystem m_led = new LEDSubsystem();
+  private LED m_led;
 
   private boolean cube = true;
   private boolean colorInit = false;
@@ -32,9 +32,10 @@ public class IntakeSubsystem extends SubsystemBase {
   private static final double stallCurrent = 15.0;
   private static final int stallMaxCube = 10;
   private static final int stallMaxCone = 20;
+
   private static int stallCounter = 0;
 
-  public IntakeSubsystem() {
+  public IntakeSubsystem(LED s_LED) {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
     
     NetworkTableInstance nt = NetworkTableInstance.getDefault();
@@ -45,8 +46,9 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeDebug = event.valueData.value.getBoolean();
     });
 
-    m_led.setColor(162, 255, 0);
+    m_led = s_LED;
   }
+
   public void setSpeed(double speed) {
     intakeNeo.set(speed);
     if (!colorInit) {
@@ -83,21 +85,20 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   private void setColor() {
     if (cube) {
-      //Set color to purple
-      m_led.setColor(186, 0, 255);
+      m_led.setColor(LED.Colors.cubePurple);
     } else {
-      m_led.setColor(255,128,0);
+      m_led.setColor(LED.Colors.coneYellow);
     }
     colorInit = true;
   }
   public void disabled() {
     if (colorInit) {
-      m_led.setColor(222, 0, 0);
+      m_led.setColor(LED.Colors.disabledRed);
       colorInit = false;
     }
   }
   public void flash() {
-    m_led.flash(5, 126, 255, 0);
+    m_led.flash(5, LED.Colors.omegabytes);
   }
   public boolean isCube(){
     return cube;
