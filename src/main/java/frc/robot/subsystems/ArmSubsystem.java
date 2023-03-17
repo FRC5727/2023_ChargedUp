@@ -92,7 +92,7 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController upperPidController;
 
   private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
-  private final PIDConstants upperConstants = new PIDConstants(0.25, 0.00, 0.00);
+  private final PIDConstants upperConstants = new PIDConstants(0.28, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 270);
 
