@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
@@ -9,31 +5,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Dashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
-  /** Creates a new IntakeSubsystem. */
-  private final CANSparkMax intakeNeo;
   private boolean intakeDebug = false;
-  private LED m_led;
+  private final CANSparkMax intakeNeo;
+  private final LED m_led;
 
   private boolean cube = true;
   private boolean colorInit = false;
   private double currentSpeed = 0.0;
-  
-  // TODO Move to constants
-  private static final double intakeSpeed = 0.50;
-  private static final double outtakeSpeed = 0.50;
-  private static final double outtakeConeSpeed = 0.35;
-  private static final double idleSpeed = 0.18; 
-  private static final double stallCurrent = 15.0;
-  private static final int stallMaxCube = 10;
-  private static final int stallMaxCone = 20;
-
-  private static int stallCounter = 0;
+  private int stallCounter = 0;
 
   public IntakeSubsystem(LED s_LED) {
-    intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
+    intakeNeo = new CANSparkMax(Constants.Intake.deviceId, MotorType.kBrushless);
     
     Dashboard.watchBoolean("Intake debug", intakeDebug, (val) -> intakeDebug = val.booleanValue());
 
@@ -49,19 +35,19 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void coneIntake(){
-    setSpeed(intakeSpeed);
+    setSpeed(Constants.Intake.intakeSpeed);
   }
 
   public void cubeIntake(){
-    setSpeed(-1.0 * intakeSpeed);
+    setSpeed(-1.0 * Constants.Intake.intakeSpeed);
   }
 
   public void coneOuttake(){
-    setSpeed(-1.0 * outtakeConeSpeed);;
+    setSpeed(-1.0 * Constants.Intake.outtakeConeSpeed);;
   }
 
   public void cubeOuttake(){
-    setSpeed(outtakeSpeed);
+    setSpeed(Constants.Intake.outtakeSpeed);
   }
 
   public void place(){
@@ -81,11 +67,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   
   public void cubeIdle(){
-    setSpeed(-1.0 * idleSpeed);
+    setSpeed(-1.0 * Constants.Intake.idleSpeed);
   }
   
   public void coneIdle(){
-    setSpeed(idleSpeed);
+    setSpeed(Constants.Intake.idleSpeed);
   }
   
   public void toggleCube(){
@@ -119,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   
   public boolean isStalled(){
-    return stallCounter >= (cube ? stallMaxCube : stallMaxCone);
+    return stallCounter >= (cube ? Constants.Intake.stallMaxCube : Constants.Intake.stallMaxCone);
   }
   
   public void intakeIdle(){
@@ -132,7 +118,7 @@ public class IntakeSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
-    if (intakeNeo.getOutputCurrent() > stallCurrent) {
+    if (intakeNeo.getOutputCurrent() > Constants.Intake.stallCurrent) {
       stallCounter++;
     } else {
       stallCounter = 0;

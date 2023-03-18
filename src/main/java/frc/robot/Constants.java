@@ -193,4 +193,15 @@ public final class Constants {
     // Voltage to apply when moving arm manually
     public static final double manualVoltage = 1.5;
   }
+
+  public static final class Intake {
+    public static final int deviceId = 1;
+    public static final double intakeSpeed = 0.50;
+    public static final double outtakeSpeed = 0.50;
+    public static final double outtakeConeSpeed = 0.35;
+    public static final double idleSpeed = 0.18; 
+    public static final double stallCurrent = 15.0;
+    public static final int stallMaxCube = 10;
+    public static final int stallMaxCone = 20;  
+  }
 }
