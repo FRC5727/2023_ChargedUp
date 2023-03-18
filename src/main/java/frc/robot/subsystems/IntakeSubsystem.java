@@ -4,16 +4,12 @@
 
 package frc.robot.subsystems;
 
-import java.util.EnumSet;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEvent;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Dashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
@@ -39,13 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(LED s_LED) {
     intakeNeo = new CANSparkMax(1, MotorType.kBrushless);
     
-    NetworkTableInstance nt = NetworkTableInstance.getDefault();
-    NetworkTable sdTable = nt.getTable("SmartDashboard");
-
-    SmartDashboard.putBoolean("Intake debug", intakeDebug);
-    sdTable.addListener("Intake debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
-      intakeDebug = event.valueData.value.getBoolean();
-    });
+    Dashboard.watchBoolean("Intake debug", intakeDebug, (val) -> intakeDebug = val.booleanValue());
 
     m_led = s_LED;
   }

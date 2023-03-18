@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -17,14 +16,12 @@ import com.pathplanner.lib.auto.PIDConstants;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEvent;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Dashboard;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
@@ -127,20 +124,10 @@ public class ArmSubsystem extends SubsystemBase {
     upperArmSlave.setInverted(false);
     upperArmMaster.setInverted(true);
 
-    NetworkTableInstance nt = NetworkTableInstance.getDefault();
-    NetworkTable sdTable = nt.getTable("SmartDashboard");
-
     SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
 
-    SmartDashboard.putBoolean("Arm debug", armDebug);
-    sdTable.addListener("Arm debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
-      armDebug = event.valueData.value.getBoolean();
-    });
-
-    SmartDashboard.putBoolean("Arm direct debug", armDirectDebug);
-    sdTable.addListener("Arm direct debug", EnumSet.of(NetworkTableEvent.Kind.kValueRemote), (table, key, event) -> {
-      armDirectDebug = event.valueData.value.getBoolean();
-    });
+    Dashboard.watchBoolean("Arm debug", armDebug, (val) -> armDebug = val.booleanValue());
+    Dashboard.watchBoolean("Arm direct debug", armDirectDebug, (val) -> armDirectDebug = val.booleanValue());
 
     brake();
   }

@@ -35,7 +35,6 @@ public final class Constants {
     public static final double stickDeadband = 0.10; // TODO We have used 0.05 previously
     public static final double triggerAxisThreshold = 0.10; // Threshold to consider a trigger pulled
     public static final XboxController driver = new XboxController(0);
-    // public static final XboxController manip = new XboxController(1);
   }
 
   public static final class Swerve {
