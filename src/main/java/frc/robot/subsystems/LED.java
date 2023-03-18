@@ -29,9 +29,10 @@ public class LED extends SubsystemBase {
   public static final class Colors {
     public static final Color off = new LED.Color(0, 0, 0);
     public static final Color omegabytes = new LED.Color(162, 255, 0);
-    public static final Color cubePurple = new LED.Color(186, 0, 255);
-    public static final Color coneYellow = new LED.Color(255, 128, 0);
+    public static final Color purple = new LED.Color(186, 0, 255);
+    public static final Color yellow = new LED.Color(255, 128, 0);
     public static final Color disabledRed = new LED.Color(222, 0, 0);
+    public static final Color blue = new LED.Color(0, 0, 222);
   }
 
   public LED() {

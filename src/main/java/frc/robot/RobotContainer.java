@@ -35,7 +35,7 @@ public class RobotContainer {
   private final ArmSubsystem s_Arm = new ArmSubsystem();
   private final IntakeSubsystem s_Intake = new IntakeSubsystem(s_LED);
   private final Swerve s_Swerve = new Swerve();
-  private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve);
+  private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve, s_LED);
 
   private Position driverTargetPosition = Position.CHASSIS;
 
@@ -68,7 +68,7 @@ public class RobotContainer {
     SmartDashboard.putData("Position chooser", positionChooser);
 
     // Easy way to test AutoBalance
-    SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve));
+    SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve, s_LED));
 
     // Simple test of LED subsystem
     SmartDashboard.putData("LED Rainbow", Commands.runOnce(s_LED::setRainbow));

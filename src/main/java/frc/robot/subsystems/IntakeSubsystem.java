@@ -85,9 +85,9 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   private void setColor() {
     if (cube) {
-      m_led.setColor(LED.Colors.cubePurple);
+      m_led.setColor(LED.Colors.purple);
     } else {
-      m_led.setColor(LED.Colors.coneYellow);
+      m_led.setColor(LED.Colors.yellow);
     }
     colorInit = true;
   }

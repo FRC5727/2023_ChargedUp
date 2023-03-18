@@ -9,11 +9,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Swerve;
 
 public class AutoBalanceCommand extends CommandBase {
   /** Creates a new AutoBalanceCommand. */
   private final Swerve s_Swerve;
+  private final LED s_LED;
   private final PIDController m_PID = new PIDController(0.02, 0, 0);
   private final Timer timer = new Timer();
 
@@ -22,8 +24,9 @@ public class AutoBalanceCommand extends CommandBase {
   private boolean paused = false;
   private double pauseDelay = 0.25;
 
-  public AutoBalanceCommand(Swerve s_Swerve) {
+  public AutoBalanceCommand(Swerve s_Swerve, LED s_LED) {
     this.s_Swerve = s_Swerve;
+    this.s_LED = s_LED;
     addRequirements(s_Swerve);
 
     m_PID.setTolerance(2.5);
@@ -60,6 +63,13 @@ public class AutoBalanceCommand extends CommandBase {
     SmartDashboard.putNumber("Autobalance speed", speed);
     SmartDashboard.putBoolean("Autobalance PID", usingPID);
     SmartDashboard.putBoolean("Autobalanced paused", paused);
+    if (balanced) {
+      s_LED.setColor(LED.Colors.omegabytes);
+    } else if (usingPID) {
+      s_LED.setColor(LED.Colors.yellow);
+    } else {
+      s_LED.setColor(LED.Colors.blue);
+    }
     s_Swerve.drive(driving, 0, false, false);
   }
 

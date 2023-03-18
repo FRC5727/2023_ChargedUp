@@ -36,7 +36,7 @@ public class Auto {
         return new PlaceCommand(s_Intake).withTimeout(0.2);
     }
   
-    public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve) {
+    public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
         eventMap.put("Place first piece", 
             Commands.runOnce(() -> { if (!pieceChooser.getSelected().booleanValue()) s_Intake.toggleCube(); })
                 .andThen(new ArmCommand(s_Arm, placeChooser::getSelected)
@@ -52,7 +52,7 @@ public class Auto {
                     Commands.runOnce(() -> { if (!s_Intake.isCube()) s_Intake.toggleCube(); })
                     .andThen(new WaitCommand(1.0))
                     .andThen(new IntakeCommand(s_Intake))));
-        eventMap.put("Balance", new AutoBalanceCommand(s_Swerve));
+        eventMap.put("Balance", new AutoBalanceCommand(s_Swerve, s_LED));
 
         autoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose, // Pose2d supplier
