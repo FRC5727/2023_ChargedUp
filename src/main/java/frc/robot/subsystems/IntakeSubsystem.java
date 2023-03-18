@@ -23,7 +23,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private boolean cube = true;
   private boolean colorInit = false;
-
+  private double currentSpeed = 0.0;
+  
   // TODO Move to constants
   private static final double intakeSpeed = 0.50;
   private static final double outtakeSpeed = 0.50;
@@ -50,39 +51,59 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setSpeed(double speed) {
+    currentSpeed = speed;
     intakeNeo.set(speed);
     if (!colorInit) {
       setColor();
     }
   }
+
   public void coneIntake(){
     setSpeed(intakeSpeed);
   }
+
   public void cubeIntake(){
     setSpeed(-1.0 * intakeSpeed);
   }
+
   public void coneOuttake(){
     setSpeed(-1.0 * outtakeConeSpeed);;
   }
+
   public void cubeOuttake(){
     setSpeed(outtakeSpeed);
   }
+
   public void place(){
-    if(isCube()) cubeOuttake(); else coneOuttake();
+    if(isCube()) {
+      cubeOuttake();
+    } else {
+      coneOuttake();
+    }
   }
+
   public void intake(){
-    if(isCube()) cubeIntake(); else coneIntake();
+    if(isCube()) {
+      cubeIntake();
+    } else {
+      coneIntake();
+    }
   }
+  
   public void cubeIdle(){
     setSpeed(-1.0 * idleSpeed);
   }
+  
   public void coneIdle(){
     setSpeed(idleSpeed);
   }
+  
   public void toggleCube(){
     cube = !cube;
+    setSpeed(-1.0 * currentSpeed);
     setColor();
   }
+  
   private void setColor() {
     if (cube) {
       m_led.setColor(LED.Colors.purple);
@@ -91,24 +112,34 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     colorInit = true;
   }
+  
   public void disabled() {
     if (colorInit) {
       m_led.setColor(LED.Colors.disabledRed);
       colorInit = false;
     }
   }
+
   public void flash() {
     m_led.flash(5, LED.Colors.omegabytes);
   }
+  
   public boolean isCube(){
     return cube;
   }
+  
   public boolean isStalled(){
     return stallCounter >= (cube ? stallMaxCube : stallMaxCone);
   }
+  
   public void intakeIdle(){
-    if(isCube()) cubeIdle(); else coneIdle();
+    if(isCube()) {
+      cubeIdle();
+    } else {
+      coneIdle();
+    }
   }
+  
   @Override
   public void periodic() {
     if (intakeNeo.getOutputCurrent() > stallCurrent) {
