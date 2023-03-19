@@ -70,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
       // Zero angles are with lower arm vertical and upper arm horizontal
       Position.STARTING, new ArmPosition(-20, -58),
       Position.PRECHASSIS, new ArmPosition(-32, -45),
-      Position.CHASSIS, new ArmPosition(-20, -48),
+      Position.CHASSIS, new ArmPosition(-20, -44),
       Position.SAFE, new ArmPosition(-19, 11),
       Position.GRID_LOW, new ArmPosition(-10, -43),
       Position.GRID_MID, new ArmPosition(-5, -8),
