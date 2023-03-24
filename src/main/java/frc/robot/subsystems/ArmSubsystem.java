@@ -106,13 +106,13 @@ public class ArmSubsystem extends SubsystemBase {
     // Note that Map.of() only supports 10 key-value pairs, so calibration here
     armPositions.put(Position.CALIBRATION, new ArmPosition(-20, 0));
 
-    this.lowerArmMaster = new WPI_TalonFX(Constants.Arm.lowerMaster, Constants.CANivoreName);
-    this.lowerArmSlave = new WPI_TalonFX(Constants.Arm.lowerSlave, Constants.CANivoreName);
-    this.lowerArmCoder = new CANCoder(Constants.Arm.lowCoder, Constants.CANivoreName);
+    this.lowerArmMaster = new WPI_TalonFX(Constants.Arm.lowerMaster, "rio");
+    this.lowerArmSlave = new WPI_TalonFX(Constants.Arm.lowerSlave, "rio");
+    this.lowerArmCoder = new CANCoder(Constants.Arm.lowCoder, "rio");
 
-    this.upperArmMaster = new WPI_TalonFX(Constants.Arm.upperMaster, Constants.CANivoreName);
-    this.upperArmSlave = new WPI_TalonFX(Constants.Arm.upperSlave, Constants.CANivoreName);
-    this.upperArmCoder = new CANCoder(Constants.Arm.upperCoder, Constants.CANivoreName);
+    this.upperArmMaster = new WPI_TalonFX(Constants.Arm.upperMaster, "rio");
+    this.upperArmSlave = new WPI_TalonFX(Constants.Arm.upperSlave, "rio");
+    this.upperArmCoder = new CANCoder(Constants.Arm.upperCoder, "rio");
 
     this.lowerPidController = new ProfiledPIDController(lowerConstants.kP, lowerConstants.kI, lowerConstants.kD, lowerConstraints);
     this.upperPidController = new ProfiledPIDController(upperConstantsAuto.kP, upperConstantsAuto.kI, upperConstantsAuto.kD, upperConstraints);

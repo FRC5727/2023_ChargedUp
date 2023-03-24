@@ -62,7 +62,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
   public void setRainbow(){
     m_candle.clearAnimation(0);
-    m_candle.animate(new RainbowAnimation(brightness, 0.3, numLed));
+    m_candle.animate(new RainbowAnimation(brightness, 4, numLed));
   }
   public void flash(int count) {
     flash(count, 0, 0, 0);
