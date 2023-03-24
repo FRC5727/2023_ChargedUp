@@ -63,15 +63,23 @@ public class LED extends SubsystemBase {
   }
 
   private void setColorDirect(Color color) {
-    m_candle.setLEDs(color.R, color.G, color.B, 255, 0, numLed);
+    setColorDirect(color, 0.0, 100.0);
+  }
+
+  private void setColorDirect(Color color, double start, double end) {
+    m_candle.setLEDs(color.R, color.G, color.B, 255, (int)Math.round(start * numLed), (int)Math.round(end * numLed));
   }
 
   public void setColor(Color color) {
+    setColor(color, 0.0, 100.0);
+  }
+
+  public void setColor(Color color, double start, double end) {
     last = color;
     flashCount = 0;
     flashOff = false;
     m_candle.clearAnimation(0);
-    setColorDirect(color);
+    setColorDirect(color, start, end);
   }
 
   public void setRainbow(){
