@@ -57,7 +57,7 @@ public class RobotContainer {
             s_Swerve::getSpeedLimitXY,
             s_Swerve::getSpeedLimitRot
         ));
-    s_Intake.setDefaultCommand(new IdleCommand(s_Intake));
+    s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::intakeIdle, null, s_Intake));
     configureBindings();
 
     // Arm position chooser
@@ -126,8 +126,8 @@ public class RobotContainer {
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
-        .andThen(new IdleCommand(s_Intake)
-          .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
+        .andThen(Commands.runOnce(s_Intake::intakeIdle, s_Intake))
+        .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
  
     intakeSubstationTrigger
       .onFalse(
@@ -139,14 +139,14 @@ public class RobotContainer {
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND))
-        .andThen(new IdleCommand(s_Intake)
-          .raceWith(new ArmCommand(s_Arm, Position.CHASSIS))));
+        .andThen(Commands.runOnce(s_Intake::intakeIdle, s_Intake))
+        .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
     
     intakeGroundTrigger
       .onFalse(new ArmCommand(s_Arm, Position.CHASSIS).unless(s_Arm::isDirectMode));
 
     // Place currently held game piece
-    driverLeftBumper.whileTrue(new PlaceCommand(s_Intake));
+    driverLeftBumper.whileTrue(Commands.startEnd(s_Intake::place, null, s_Intake));
 
     // Toggle between cones and cubes
     new JoystickButton(Controls.driver, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> s_Intake.toggleCube()));

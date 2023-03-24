@@ -14,8 +14,9 @@ public class IntakeSubsystem extends SubsystemBase {
   private final LED m_led;
 
   private boolean cube = true;
+  private boolean idle = true;
+  private boolean intake = false;
   private boolean colorInit = false;
-  private double currentSpeed = 0.0;
   private int stallCounter = 0;
 
   public IntakeSubsystem(LED s_LED) {
@@ -26,61 +27,45 @@ public class IntakeSubsystem extends SubsystemBase {
     m_led = s_LED;
   }
 
+  public void setSpeed() {
+    if (idle) {
+      setSpeed(Constants.Intake.idleSpeed * (cube ? -1.0 : 1.0));
+    } else if (intake) {
+      setSpeed(Constants.Intake.intakeSpeed * (cube ? -1.0 : 1.0));
+    } else if (cube) {
+      setSpeed(Constants.Intake.outtakeSpeed);
+    } else {
+      setSpeed(Constants.Intake.outtakeConeSpeed * -1.0);
+    }
+  }
+
   public void setSpeed(double speed) {
-    currentSpeed = speed;
     intakeNeo.set(speed);
     if (!colorInit) {
       setColor();
     }
   }
 
-  public void coneIntake(){
-    setSpeed(Constants.Intake.intakeSpeed);
+  public void place() {
+    idle = false;
+    intake = false;
+    setSpeed();
   }
 
-  public void cubeIntake(){
-    setSpeed(-1.0 * Constants.Intake.intakeSpeed);
-  }
-
-  public void coneOuttake(){
-    setSpeed(-1.0 * Constants.Intake.outtakeConeSpeed);;
-  }
-
-  public void cubeOuttake(){
-    setSpeed(Constants.Intake.outtakeSpeed);
-  }
-
-  public void place(){
-    if(isCube()) {
-      cubeOuttake();
-    } else {
-      coneOuttake();
-    }
-  }
-
-  public void intake(){
-    if(isCube()) {
-      cubeIntake();
-    } else {
-      coneIntake();
-    }
+  public void intake() {
+    idle = false;
+    intake = true;
+    setSpeed();
   }
   
-  public void cubeIdle(){
-    setSpeed(-1.0 * Constants.Intake.idleSpeed);
-  }
-  
-  public void coneIdle(){
-    setSpeed(Constants.Intake.idleSpeed);
-  }
-  
-  public void toggleCube(){
+  public void toggleCube() {
     cube = !cube;
-    setSpeed(-1.0 * currentSpeed);
+    setSpeed();
     setColor();
   }
   
   private void setColor() {
+    // TODO Animate while intaking / placing
     if (cube) {
       m_led.setColor(LED.Colors.purple);
     } else {
@@ -100,20 +85,18 @@ public class IntakeSubsystem extends SubsystemBase {
     m_led.flash(5, LED.Colors.omegabytes);
   }
   
-  public boolean isCube(){
+  public boolean isCube() {
     return cube;
   }
   
-  public boolean isStalled(){
+  public boolean isStalled() {
     return stallCounter >= (cube ? Constants.Intake.stallMaxCube : Constants.Intake.stallMaxCone);
   }
   
-  public void intakeIdle(){
-    if(isCube()) {
-      cubeIdle();
-    } else {
-      coneIdle();
-    }
+  public void intakeIdle() {
+    idle = true;
+    intake = true;
+    setSpeed();
   }
   
   @Override
