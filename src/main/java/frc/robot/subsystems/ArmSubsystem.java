@@ -77,6 +77,9 @@ public class ArmSubsystem extends SubsystemBase {
       Position.INTAKE_SUBSTATION, new ArmPosition(-16, 14)
     ));
 
+  private LED s_Led;
+  private IntakeSubsystem s_Intake;
+
   private WPI_TalonFX lowerArmMaster;
   private WPI_TalonFX lowerArmSlave;
 
@@ -99,7 +102,10 @@ public class ArmSubsystem extends SubsystemBase {
   private double lowerMaxVoltage = 12;
   private double upperMaxVoltage = 12;
 
-  public ArmSubsystem() {
+  public ArmSubsystem(LED s_Led, IntakeSubsystem s_Intake) {
+    this.s_Led = s_Led;
+    this.s_Intake = s_Intake;
+
     // Note that Map.of() only supports 10 key-value pairs, so calibration here
     armPositions.put(Position.CALIBRATION, new ArmPosition(-20, 0));
 
@@ -243,6 +249,19 @@ public class ArmSubsystem extends SubsystemBase {
     }
     if (targetPosition.isEmpty() || targetPosition.getLast() != position) {
       targetPosition.add(position);
+    }
+
+    // Show what position the arm is moving to
+    switch (position) {
+      case GRID_LOW:
+        s_Led.setColor(LED.Colors.blue, 0.0, 20.0);
+      case GRID_MID:
+        s_Led.setColor(LED.Colors.blue, 0.0, 50.0);
+      case GRID_HIGH:
+        s_Led.setColor(LED.Colors.blue, 0.0, 80.0);
+      default:
+        s_Intake.setColor();
+        break;
     }
   }
 

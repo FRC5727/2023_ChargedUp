@@ -32,8 +32,8 @@ import static frc.robot.Constants.*;
 public class RobotContainer {
   // Subsystems
   private final LED s_LED = new LED();
-  private final ArmSubsystem s_Arm = new ArmSubsystem();
   private final IntakeSubsystem s_Intake = new IntakeSubsystem(s_LED);
+  private final ArmSubsystem s_Arm = new ArmSubsystem(s_LED, s_Intake);
   private final Swerve s_Swerve = new Swerve();
   private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve, s_LED);
 

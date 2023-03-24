@@ -64,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
     setColor();
   }
   
-  private void setColor() {
+  public void setColor() {
     // TODO Animate while intaking / placing
     if (cube) {
       m_led.setColor(LED.Colors.purple);
