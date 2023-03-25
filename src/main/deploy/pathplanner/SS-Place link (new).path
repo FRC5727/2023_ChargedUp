@@ -13,7 +13,7 @@
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": false,
+      "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
@@ -40,7 +40,7 @@
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": false,
+      "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -155,17 +155,17 @@
         "y": 4.6
       },
       "prevControl": {
-        "x": 2.277492058908355,
-        "y": 4.656845068417919
+        "x": 2.301757616251024,
+        "y": 4.440081640800255
       },
       "nextControl": {
-        "x": 3.352943851633908,
-        "y": 4.527462839208355
+        "x": 3.5819641814722227,
+        "y": 4.896817863811166
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -176,15 +176,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.12,
+        "x": 7.25,
         "y": 4.5
       },
       "prevControl": {
-        "x": 6.303596885995207,
+        "x": 6.433596885995207,
         "y": 4.880695024202021
       },
       "nextControl": {
-        "x": 7.125957466622367,
+        "x": 7.255957466622367,
         "y": 4.4972219876907875
       },
       "holonomicAngle": -90.0,
@@ -201,15 +201,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.12,
+        "x": 7.25,
         "y": 3.5
       },
       "prevControl": {
-        "x": 7.12,
+        "x": 7.25,
         "y": 3.7526318770436693
       },
       "nextControl": {
-        "x": 7.12,
+        "x": 7.25,
         "y": 3.7526318770436693
       },
       "holonomicAngle": -90.0,
@@ -227,11 +227,11 @@
     {
       "anchorPoint": {
         "x": 1.82,
-        "y": 4.9
+        "y": 4.98
       },
       "prevControl": {
         "x": 7.6173415504725766,
-        "y": 4.8999999999999995
+        "y": 4.9799999999999995
       },
       "nextControl": null,
       "holonomicAngle": -180.0,
@@ -290,7 +290,7 @@
       ]
     },
     {
-      "position": 8.92,
+      "position": 8.93,
       "names": [
         "Eject cube"
       ]
