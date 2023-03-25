@@ -57,7 +57,7 @@ public class RobotContainer {
             s_Swerve::getSpeedLimitXY,
             s_Swerve::getSpeedLimitRot
         ));
-    s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::intakeIdle, () -> {}, s_Intake));
+    s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::idle, () -> {}, s_Intake));
     configureBindings();
 
     // Arm position chooser
@@ -126,7 +126,7 @@ public class RobotContainer {
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
-        .andThen(Commands.runOnce(s_Intake::intakeIdle, s_Intake))
+        .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
         .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
  
     intakeSubstationTrigger
@@ -139,7 +139,7 @@ public class RobotContainer {
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_GROUND))
-        .andThen(Commands.runOnce(s_Intake::intakeIdle, s_Intake))
+        .andThen(Commands.runOnce(s_Intake::idle, s_Intake)) // TODO Needed?  Default command should cover?
         .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
     
     intakeGroundTrigger

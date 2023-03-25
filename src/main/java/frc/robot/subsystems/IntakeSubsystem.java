@@ -93,7 +93,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return stallCounter >= (cube ? Constants.Intake.stallMaxCube : Constants.Intake.stallMaxCone);
   }
   
-  public void intakeIdle() {
+  public void idle() {
     idle = true;
     intake = true;
     setSpeed();

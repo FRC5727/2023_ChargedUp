@@ -39,7 +39,7 @@ public class Auto {
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
         eventMap.put("Place first piece", 
             Commands.runOnce(() -> { if (!pieceChooser.getSelected().booleanValue()) s_Intake.toggleCube(); })
-                .andThen(Commands.runOnce(s_Intake::intakeIdle, s_Intake))
+                .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
                 .andThen(new ArmCommand(s_Arm, placeChooser::getSelected))
                 .andThen(justPlaceCommand(s_Intake)));
         eventMap.put("Move arm to second", new ArmCommand(s_Arm, placeChooser2::getSelected));
