@@ -109,6 +109,7 @@ public class IntakeSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Cube?", cube);
     if (intakeDebug) {
       SmartDashboard.putNumber("Intake output current", intakeNeo.getOutputCurrent());
+      SmartDashboard.putNumber("Intake current speed", intakeNeo.get());
       SmartDashboard.putNumber("Intake stall counter", stallCounter);
       SmartDashboard.putBoolean("Piece captured?", isStalled());
     }
