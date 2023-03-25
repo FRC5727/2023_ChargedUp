@@ -196,16 +196,16 @@ public class ArmSubsystem extends SubsystemBase {
         case CHASSIS:
           targetPosition.add(Position.CHASSIS);
           break;
-        case GRID_MID:
         case GRID_HIGH:
-        case INTAKE_SUBSTATION:
-        case SAFE:
           targetPosition.add(Position.SAFE);
           break;
         case INTAKE_PREGROUND:
         case INTAKE_GROUND:
           targetPosition.add(Position.INTAKE_PREGROUND);
           break;
+        case GRID_MID:
+        case SAFE:
+        case INTAKE_SUBSTATION:
         case GRID_LOW:
         case CALIBRATION:
         case NONE:
@@ -230,7 +230,6 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.INTAKE_PREGROUND);
           }
           break;
-        case GRID_MID:
         case GRID_HIGH:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.SAFE) {
             targetPosition.add(Position.SAFE);
@@ -238,6 +237,7 @@ public class ArmSubsystem extends SubsystemBase {
           break;
         case INTAKE_SUBSTATION:
         case CHASSIS:
+        case GRID_MID:
         case GRID_LOW:
         case SAFE:
           // Safe directly from any of the previous positions
