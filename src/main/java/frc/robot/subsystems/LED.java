@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle;
@@ -10,6 +11,7 @@ public class LED extends SubsystemBase {
   private CANdle m_candle = new CANdle(Constants.LED_CANDLE);
   private final int numLed = 114; // Includes numBaseLed
   private final int numBaseLed = 8;
+  private final double middle = 52.5; // Not including numBaseLed
   private final double brightness = 0.50;
   private int flashCount = 0;
   private boolean flashOff = false;
@@ -34,6 +36,7 @@ public class LED extends SubsystemBase {
     public static final Color yellow = new LED.Color(255, 128, 0);
     public static final Color disabledRed = new LED.Color(222, 0, 0);
     public static final Color blue = new LED.Color(0, 0, 222);
+    public static final Color white = new LED.Color(255, 255, 255);
   }
 
   public LED() {
@@ -68,16 +71,19 @@ public class LED extends SubsystemBase {
   }
 
   private void setColorDirect(Color color, double startPct, double endPct) {
-    double mid = (numLed - numBaseLed) / 2.0;
-    int start = (int)Math.round(startPct * mid) + (startPct == 0.0 ? 0 : numBaseLed);
-    int end = (int)Math.round(endPct * mid) + (startPct == 0.0 ? numBaseLed : 0);
+    double cnt = middle;
+    int start = (int)Math.round(startPct / 100.0 * cnt) + (startPct == 0.0 ? 0 : numBaseLed);
+    int end = (int)Math.round(endPct / 100.0 * cnt) + (startPct == 0.0 ? numBaseLed : 0);
 
-    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end);
+    DriverStation.reportWarning("Setting front color between " + start + " and " + end, false);
+    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
 
-    start = (int)Math.round(mid + startPct * mid) + numBaseLed;
-    end = (int)Math.round(mid + end * mid) + numBaseLed;
+    cnt = numLed - numBaseLed - middle + 1;
+    end = numLed - (int)Math.round(startPct / 100.0 * cnt);
+    start = numLed - (int)Math.round(endPct / 100.0 * cnt);
 
-    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end);
+    DriverStation.reportWarning("Setting back color between " + start + " and " + end, false);
+    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
   }
 
   public void setColor(Color color) {

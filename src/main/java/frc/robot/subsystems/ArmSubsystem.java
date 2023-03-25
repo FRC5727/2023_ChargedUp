@@ -254,11 +254,14 @@ public class ArmSubsystem extends SubsystemBase {
     // Show what position the arm is moving to
     switch (position) {
       case GRID_LOW:
-        s_Led.setColor(LED.Colors.blue, 0.0, 20.0);
+        s_Led.setColor(LED.Colors.white, 0.0, 20.0);
+        break;
       case GRID_MID:
-        s_Led.setColor(LED.Colors.blue, 0.0, 50.0);
+        s_Led.setColor(LED.Colors.white, 0.0, 50.0);
+        break;
       case GRID_HIGH:
-        s_Led.setColor(LED.Colors.blue, 0.0, 80.0);
+        s_Led.setColor(LED.Colors.white, 0.0, 80.0);
+        break;
       default:
         s_Intake.setColor();
         break;
