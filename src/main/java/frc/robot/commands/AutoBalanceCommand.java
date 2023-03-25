@@ -18,6 +18,8 @@ public class AutoBalanceCommand extends CommandBase {
   private final LED s_LED;
   private final PIDController m_PID = new PIDController(0.02, 0, 0);
   private final Timer timer = new Timer();
+  private final double angleTarget = 2.5;
+  private final double angleMax = 15.0;
 
   private boolean usingPID = false;
   private double switchPoint = 8;
@@ -29,7 +31,7 @@ public class AutoBalanceCommand extends CommandBase {
     this.s_LED = s_LED;
     addRequirements(s_Swerve);
 
-    m_PID.setTolerance(2.5);
+    m_PID.setTolerance(angleTarget);
   }
 
   // Called when the command is initially scheduled.
@@ -65,10 +67,15 @@ public class AutoBalanceCommand extends CommandBase {
     SmartDashboard.putBoolean("Autobalanced paused", paused);
     if (balanced) {
       s_LED.setColor(LED.Colors.omegabytes);
-    } else if (usingPID) {
-      s_LED.setColor(LED.Colors.yellow);
     } else {
-      s_LED.setColor(LED.Colors.blue);
+      double colorPercent = Math.max(Math.min((angleMax - Math.abs(pitch)) / (angleMax - angleTarget) * 100, 100), 0) * 0.9 + 10;
+
+      s_LED.setColor(LED.Colors.off, colorPercent, 100);
+      if (usingPID) {
+        s_LED.setColor(LED.Colors.yellow, 0, colorPercent);
+      } else {
+        s_LED.setColor(LED.Colors.blue, 0, colorPercent);
+      }
     }
     s_Swerve.drive(driving, 0, false, false);
   }
