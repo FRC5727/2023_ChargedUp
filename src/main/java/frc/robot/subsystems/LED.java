@@ -8,7 +8,8 @@ import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
   private CANdle m_candle = new CANdle(Constants.LED_CANDLE);
-  private final int numLed = 114;
+  private final int numLed = 114; // Includes numBaseLed
+  private final int numBaseLed = 8;
   private final double brightness = 0.50;
   private int flashCount = 0;
   private boolean flashOff = false;
@@ -66,8 +67,17 @@ public class LED extends SubsystemBase {
     setColorDirect(color, 0.0, 100.0);
   }
 
-  private void setColorDirect(Color color, double start, double end) {
-    m_candle.setLEDs(color.R, color.G, color.B, 255, (int)Math.round(start * numLed), (int)Math.round(end * numLed));
+  private void setColorDirect(Color color, double startPct, double endPct) {
+    double mid = (numLed - numBaseLed) / 2.0;
+    int start = (int)Math.round(startPct * mid) + (startPct == 0.0 ? 0 : numBaseLed);
+    int end = (int)Math.round(endPct * mid) + (startPct == 0.0 ? numBaseLed : 0);
+
+    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end);
+
+    start = (int)Math.round(mid + startPct * mid) + numBaseLed;
+    end = (int)Math.round(mid + end * mid) + numBaseLed;
+
+    m_candle.setLEDs(color.R, color.G, color.B, 255, start, end);
   }
 
   public void setColor(Color color) {
