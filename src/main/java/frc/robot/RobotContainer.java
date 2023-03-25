@@ -57,7 +57,7 @@ public class RobotContainer {
             s_Swerve::getSpeedLimitXY,
             s_Swerve::getSpeedLimitRot
         ));
-    s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::intakeIdle, null, s_Intake));
+    s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::intakeIdle, () -> {}, s_Intake));
     configureBindings();
 
     // Arm position chooser
@@ -146,7 +146,7 @@ public class RobotContainer {
       .onFalse(new ArmCommand(s_Arm, Position.CHASSIS).unless(s_Arm::isDirectMode));
 
     // Place currently held game piece
-    driverLeftBumper.whileTrue(Commands.startEnd(s_Intake::place, null, s_Intake));
+    driverLeftBumper.whileTrue(Commands.startEnd(s_Intake::place, () -> {}, s_Intake));
 
     // Toggle between cones and cubes
     new JoystickButton(Controls.driver, XboxController.Button.kX.value).onTrue(Commands.runOnce(() -> s_Intake.toggleCube()));

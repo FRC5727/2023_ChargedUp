@@ -33,7 +33,7 @@ public class Auto {
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
-        return Commands.startEnd(s_Intake::place, null, s_Intake).withTimeout(0.2);
+        return Commands.startEnd(s_Intake::place, () -> {}, s_Intake).withTimeout(0.2);
     }
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
