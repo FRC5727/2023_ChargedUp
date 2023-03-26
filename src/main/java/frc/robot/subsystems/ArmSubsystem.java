@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
       Position.GRID_LOW, new ArmPosition(-10, -43),
       Position.GRID_MID, new ArmPosition(-5, -8),
       Position.GRID_HIGH, new ArmPosition(28, 22),
-      Position.INTAKE_PREGROUND, new ArmPosition(6, -50),
+      Position.INTAKE_PREGROUND, new ArmPosition(6, -44),
       Position.INTAKE_GROUND, new ArmPosition(11, -72),
       Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16)
     ));
@@ -92,7 +92,7 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController lowerPidController;
   private ProfiledPIDController upperPidController;
 
-  private final PIDConstants lowerConstants = new PIDConstants(0.70, 0.00, 0.00);
+  private final PIDConstants lowerConstants = new PIDConstants(0.50, 0.00, 0.00);
   private final PIDConstants upperConstantsTeleOp = new PIDConstants(0.50, 0.00, 0.00);
   private final PIDConstants upperConstantsAuto = new PIDConstants(0.50, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
