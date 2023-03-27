@@ -287,6 +287,7 @@ public class ArmSubsystem extends SubsystemBase {
       lowerPidController.setTolerance(2, 5);
       upperPidController.setTolerance(2, 5);
     }
+    // TODO Can this be made smoother if we can acknowledge a non-zero starting velocity?
     lowerPidController.reset(getLowerAngle());
     upperPidController.reset(getUpperAngle());
   }
