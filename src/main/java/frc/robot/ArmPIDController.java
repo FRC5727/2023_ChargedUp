@@ -3,171 +3,13 @@ package frc.robot;
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
-
-/**
- * Implements a PID control loop whose setpoint is updated to follow a path for
- * a double-jointed arm with an intermediate position. Users should call reset()
- * when they first start running the controller to avoid unwanted
- * behavior.
- */
-public class ArmPIDController implements Sendable {
-  private static int instances;
-
-  private PIDController m_controller;
-  private double m_minimumInput;
-  private double m_maximumInput;
-  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
-  private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
-  private TrapezoidProfile.Constraints m_constraints;
-
-  /**
-   * Allocates a ProfiledPIDController with the given constants for Kp, Ki, and Kd.
-   *
-   * @param Kp The proportional coefficient.
-   * @param Ki The integral coefficient.
-   * @param Kd The derivative coefficient.
-   * @param constraints Velocity and acceleration constraints for goal.
-   */
-  public ProfiledPIDController(
-      double Kp, double Ki, double Kd, TrapezoidProfile.Constraints constraints) {
-    this(Kp, Ki, Kd, constraints, 0.02);
-  }
-
-  /**
-   * Allocates a ProfiledPIDController with the given constants for Kp, Ki, and Kd.
-   *
-   * @param Kp The proportional coefficient.
-   * @param Ki The integral coefficient.
-   * @param Kd The derivative coefficient.
-   * @param constraints Velocity and acceleration constraints for goal.
-   * @param period The period between controller updates in seconds. The default is 0.02 seconds.
-   */
-  public ProfiledPIDController(
-      double Kp, double Ki, double Kd, TrapezoidProfile.Constraints constraints, double period) {
-    m_controller = new PIDController(Kp, Ki, Kd, period);
-    m_constraints = constraints;
-    instances++;
-
-    SendableRegistry.add(this, "ProfiledPIDController", instances);
-    MathSharedStore.reportUsage(MathUsageId.kController_ProfiledPIDController, instances);
-  }
-
-  /**
-   * Sets the goal for the ProfiledPIDController.
-   *
-   * @param goal The desired goal state.
-   */
-  public void setGoal(TrapezoidProfile.State goal) {
-    m_goal = goal;
-  }
-
-  /**
-   * Sets the goal for the ProfiledPIDController.
-   *
-   * @param goal The desired goal position.
-   */
-  public void setGoal(double goal) {
-    m_goal = new TrapezoidProfile.State(goal, 0);
-  }
-
-  /**
-   * Gets the goal for the ProfiledPIDController.
-   *
-   * @return The goal.
-   */
-  public TrapezoidProfile.State getGoal() {
-    return m_goal;
-  }
-
-  /**
-   * Returns true if the error is within the tolerance of the error.
-   *
-   * <p>This will return false until at least one input value has been computed.
-   *
-   * @return True if the error is within the tolerance of the error.
-   */
-  public boolean atGoal() {
-    return atSetpoint() && m_goal.equals(m_setpoint);
-  }
-
-  /**
-   * Set velocity and acceleration constraints for goal.
-   *
-   * @param constraints Velocity and acceleration constraints for goal.
-   */
-  public void setConstraints(TrapezoidProfile.Constraints constraints) {
-    m_constraints = constraints;
-  }
-
-  /**
-   * Returns true if the error is within the tolerance of the error.
-   *
-   * <p>This will return false until at least one input value has been computed.
-   *
-   * @return True if the error is within the tolerance of the error.
-   */
-  public boolean atSetpoint() {
-    return m_controller.atSetpoint();
-  }
-
-    // m_controller.disableContinuousInput();
-    // m_controller.setIntegratorRange(minimumIntegral, maximumIntegral);
-    // setTolerance(positionTolerance, Double.POSITIVE_INFINITY);
-
-  /**
-   * Sets the error which is considered tolerable for use with atSetpoint().
-   *
-   * @param positionTolerance Position error which is tolerable.
-   * @param velocityTolerance Velocity error which is tolerable.
-   */
-  public void setTolerance(double positionTolerance, double velocityTolerance) {
-    m_controller.setTolerance(positionTolerance, velocityTolerance);
-  }
-
-    // return m_controller.getPositionError();
-    // return m_controller.getVelocityError();
-
-  /**
-   * Returns the next output of the PID controller.
-   *
-   * @param measurement The current measurement of the process variable.
-   * @return The controller's next output.
-   */
-  public double calculate(double measurement) {
-    var profile = new TrapezoidProfile(m_constraints, m_goal, m_setpoint);
-    m_setpoint = profile.calculate(getPeriod());
-    return m_controller.calculate(measurement, m_setpoint.position);
-  }
-
-  /**
-   * Reset the previous error and the integral term.
-   *
-   * @param measurement The current measured State of the system.
-   */
-  public void reset(TrapezoidProfile.State measurement) {
-    m_controller.reset();
-    m_setpoint = measurement;
-  }
-
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("ProfiledPIDController");
-    builder.addDoubleProperty("p", this::getP, this::setP);
-    builder.addDoubleProperty("i", this::getI, this::setI);
-    builder.addDoubleProperty("d", this::getD, this::setD);
-    builder.addDoubleProperty("goal", () -> getGoal().position, this::setGoal);
-  }
-
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package edu.wpi.first.math.trajectory;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUsageId;
 import java.util.Objects;
@@ -261,16 +103,25 @@ public class TrapezoidProfile {
   }
 
   /**
-   * Construct a TrapezoidProfile.
+   * Construct a ArmPathProfile.
    *
    * @param constraints The constraints on the profile, like maximum velocity.
    * @param goal The desired state when the profile is complete.
    * @param initial The initial state (usually the current state).
+   * @param intermediate The desired position to hit between the initial and goal states.
    */
-  public TrapezoidProfile(Constraints constraints, State goal, State initial) {
-    m_direction = shouldFlipAcceleration(initial, goal) ? -1 : 1;
+  public ArmPathProfile(Constraints constraints, State goal, State initial, double intermediate) {
+    ProfiledPIDController wayptPIDUpper = new ProfiledPIDController(intermediate, intermediate, intermediate, null)
+    m_direction1 = shouldFlipAcceleration(initial, intermediate) ? -1 : 1;
+    m_direction2 = shouldFlipAcceleration(intermediate, goal) ? -1 : 1;
+    if (m_direction1 != m_direction2) {
+      throw new Throwable("TODO Handle ArmPathProfile that flips direction");
+    }
+    // TODO Should intermediate be a position ONLY?
+
     m_constraints = constraints;
     m_initial = direct(initial);
+    m_intermediate = direct(intermediate);
     m_goal = direct(goal);
 
     if (m_initial.velocity > m_constraints.maxVelocity) {
@@ -302,9 +153,59 @@ public class TrapezoidProfile {
       fullSpeedDist = 0;
     }
 
+    if (cutoffDistBegin > (m_intermediate.position - m_initial.position)) {
+      // TODO Handle intermediate position reached during acceleration period
+      DriverStation.reportWarning("Intermediate position will be reached before full acceleration", false);
+    } else if((cutoffDistBegin + cutoffDistEnd) > (m_intermediate.position - m_initial.position)) {
+      // TODO Handle intermediate positon reached during deceleration period
+      DriverStation.reportWarning("Intermediate position will be reached without full acceleration and deceleration", false);
+    } else {
+      // We will fully accelerate 
+      intermediate.velocity = m_constraints.maxVelocity;
+
+      upperDist = wayptUpper - initialUpper.position;
+      lowerDist = wayptLower - initialLower.position;
+
+      // Change in velocity over acceleration gives time to make that change
+      upperAccelTime = (m_constraints.maxVelocity - initialUpper.velocity) / constraints.maxAcceleration;
+      lowerAccelTime = (m_constraints.maxVelocity - initialLower.velocity) / constraints.maxAcceleration;
+
+      // Distance = Acceleration * Time^2 / 2
+      upperAccelDist = constraints.maxAcceleration * upperAccelTime * upperAccelTime / 2.0;
+      lowerAccelDist = constraints.maxAcceleration * lowerAccelTime * lowerAccelTime / 2.0;
+
+      wayptTimeUpper = (upperDist - upperAccelDist) / constraints.maxVelocity + upperAccelTime;
+      wayptTimeLower = (lowerDist - lowerAccelDist) / constraints.maxVelocity + lowerAccelTime;
+      constraintsLower = constraintsUpper = constraints;
+      
+      if (initialUpper.velocity != 0 || initialLower.velocity != 0) {
+        throw new Throwable("TODO Support calculations with a non-zero starting velocity");
+      }
+
+      if (wayptTimeLower > wayptTimeUpper) {
+        wayptTime = wayptTimeLower;
+        constraintsUpper.maxVelocity = intermediateUpper.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, upperDist, wayptTime);
+      } else {
+        wayptTime = wayptTimeUpper;
+        constraintsLower.maxVelocity = intermediateLower.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, lowerDist, wayptTime);
+      }
+
+      wayptPIDUpper.setConstraints(constraintsUpper);
+      wayptPIDLower.setConstraints(constraintsLower);
+    }
+
     m_endAccel = accelerationTime - cutoffBegin;
     m_endFullSpeed = m_endAccel + fullSpeedDist / m_constraints.maxVelocity;
     m_endDeccel = m_endFullSpeed + accelerationTime - cutoffEnd;
+  }
+
+  // Returns velocity to covert a distance in set amount of time, given need
+  // to accelerate first given the specified acceleration
+  // NOTE: Presumes no starting velocity
+  private requiredVelocityAfterRamp(double accel, double distance, double time) {
+    // Derived that v^2 / (2*a) + (t - v/a)*v = d
+    // This is the (useful) quadratic solution: a*t - sqrt(a^2*t^2 - 2*a*d)
+    return accel * time - sqrt(accel * accel * time * time - 2.0 * accel * distance);
   }
 
   /**
