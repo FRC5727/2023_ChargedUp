@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -101,6 +102,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private double lowerMaxVoltage = 12;
   private double upperMaxVoltage = 12;
+
+  private boolean followingWaypoint = false;
 
   public ArmSubsystem(LED s_Led, IntakeSubsystem s_Intake) {
     this.s_Led = s_Led;
@@ -196,9 +199,7 @@ public class ArmSubsystem extends SubsystemBase {
         case CHASSIS:
           targetPosition.add(Position.CHASSIS);
           break;
-        case GRID_MID:
         case GRID_HIGH:
-        case INTAKE_SUBSTATION:
         case SAFE:
           targetPosition.add(Position.SAFE);
           break;
@@ -207,12 +208,14 @@ public class ArmSubsystem extends SubsystemBase {
           targetPosition.add(Position.INTAKE_PREGROUND);
           break;
         case GRID_LOW:
+        case GRID_MID:
+        case INTAKE_SUBSTATION:
         case CALIBRATION:
         case NONE:
           break;
       }
 
-      // Now we know we are transitioning from either CHASSIS, SAFE, or INTAKE_PREGROUND
+      // Now we know we are transitioning from a more limited set of positions
       // Determine any prequisites for final position
       switch (position) {
         case PRECHASSIS:
@@ -265,6 +268,106 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+  private boolean setupWaypoint(State initialUpper, double goalUpper, double wayptUpper,
+                                State initialLower, double goalLower, double wayptLower) {
+    directWayptUpper = initialUpper.position > wayptUpper ? -1 : 1;
+    directGoalUpper = ini, goal) ? -1 : 1;
+    if (m_direction1 != m_direction2) {
+      // Don't handle a flip of a direction as a waypoint; use as a separate ProfilePID altogether
+      return false;
+    }
+    // TODO Should intermediate be a position ONLY?
+
+    m_constraints = constraints;
+    m_initial = direct(initial);
+    m_intermediate = direct(intermediate);
+    m_goal = direct(goal);
+
+    if (m_initial.velocity > m_constraints.maxVelocity) {
+      m_initial.velocity = m_constraints.maxVelocity;
+    }
+
+    // Deal with a possibly truncated motion profile (with nonzero initial or
+    // final velocity) by calculating the parameters as if the profile began and
+    // ended at zero velocity
+    double cutoffBegin = m_initial.velocity / m_constraints.maxAcceleration;
+    double cutoffDistBegin = cutoffBegin * cutoffBegin * m_constraints.maxAcceleration / 2.0;
+
+    double cutoffEnd = m_goal.velocity / m_constraints.maxAcceleration;
+    double cutoffDistEnd = cutoffEnd * cutoffEnd * m_constraints.maxAcceleration / 2.0;
+
+    // Now we can calculate the parameters as if it was a full trapezoid instead
+    // of a truncated one
+
+    double fullTrapezoidDist =
+        cutoffDistBegin + (m_goal.position - m_initial.position) + cutoffDistEnd;
+    double accelerationTime = m_constraints.maxVelocity / m_constraints.maxAcceleration;
+
+    double fullSpeedDist =
+        fullTrapezoidDist - accelerationTime * accelerationTime * m_constraints.maxAcceleration;
+
+    // Handle the case where the profile never reaches full speed
+    if (fullSpeedDist < 0) {
+      accelerationTime = Math.sqrt(fullTrapezoidDist / m_constraints.maxAcceleration);
+      fullSpeedDist = 0;
+    }
+
+    if (cutoffDistBegin > (m_intermediate.position - m_initial.position)) {
+      // TODO Handle intermediate position reached during acceleration period
+      DriverStation.reportWarning("Intermediate position will be reached before full acceleration", false);
+    } else if((cutoffDistBegin + cutoffDistEnd) > (m_intermediate.position - m_initial.position)) {
+      // TODO Handle intermediate positon reached during deceleration period
+      DriverStation.reportWarning("Intermediate position will be reached without full acceleration and deceleration", false);
+    } else {
+      // We have time to fully accelerate
+      upperDist = wayptUpper - initialUpper.position;
+      lowerDist = wayptLower - initialLower.position;
+
+      // Change in velocity over acceleration gives time to make that change
+      upperAccelTime = (m_constraints.maxVelocity - initialUpper.velocity) / constraints.maxAcceleration;
+      lowerAccelTime = (m_constraints.maxVelocity - initialLower.velocity) / constraints.maxAcceleration;
+
+      // Distance = Acceleration * Time^2 / 2
+      upperAccelDist = constraints.maxAcceleration * upperAccelTime * upperAccelTime / 2.0;
+      lowerAccelDist = constraints.maxAcceleration * lowerAccelTime * lowerAccelTime / 2.0;
+
+      wayptTimeUpper = (upperDist - upperAccelDist) / constraints.maxVelocity + upperAccelTime;
+      wayptTimeLower = (lowerDist - lowerAccelDist) / constraints.maxVelocity + lowerAccelTime;
+      constraintsLower = constraintsUpper = constraints;
+      
+      if (initialUpper.velocity != 0 || initialLower.velocity != 0) {
+        throw new Throwable("TODO Support calculations with a non-zero starting velocity");
+      }
+
+      if (wayptTimeLower > wayptTimeUpper) {
+        wayptTime = wayptTimeLower;
+        constraintsUpper.maxVelocity = intermediateUpper.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, upperDist, wayptTime);
+      } else {
+        wayptTime = wayptTimeUpper;
+        constraintsLower.maxVelocity = intermediateLower.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, lowerDist, wayptTime);
+      }
+
+      wayptPIDUpper.setConstraints(constraintsUpper);
+      wayptPIDLower.setConstraints(constraintsLower);
+
+      wayptPIDUpper.reset(upperInitial);
+      wapptPIDLower.reset(lowerInitial);
+    }
+
+    m_endAccel = accelerationTime - cutoffBegin;
+    m_endFullSpeed = m_endAccel + fullSpeedDist / m_constraints.maxVelocity;
+    m_endDeccel = m_endFullSpeed + accelerationTime - cutoffEnd;
+  }
+
+  // Returns velocity to covert a distance in set amount of time, given need
+  // to accelerate first given the specified acceleration
+  // NOTE: Presumes no starting velocity
+  private requiredVelocityAfterRamp(double accel, double distance, double time) {
+    // Derived that v^2 / (2*a) + (t - v/a)*v = d
+    // This is the (useful) quadratic solution: a*t - sqrt(a^2*t^2 - 2*a*d)
+    return accel * time - sqrt(accel * accel * time * time - 2.0 * accel * distance);
+  }
+
   public void beginMovement() {
     ArmPosition nextPosition = armPositions.get(targetPosition.peek());
 
@@ -276,7 +379,7 @@ public class ArmSubsystem extends SubsystemBase {
       teleOpInit = true;
     }
     if (targetPosition.size() > 1) {
-      if (targetPosition.peek() == Position.SAFE) {
+      if (!followingWaypoint && targetPosition.peek() == Position.SAFE) {
         lowerPidController.setTolerance(25);
         upperPidController.setTolerance(25);
       } else {
@@ -287,9 +390,24 @@ public class ArmSubsystem extends SubsystemBase {
       lowerPidController.setTolerance(2, 5);
       upperPidController.setTolerance(2, 5);
     }
-    // TODO Can this be made smoother if we can acknowledge a non-zero starting velocity?
-    lowerPidController.reset(getLowerAngle());
-    upperPidController.reset(getUpperAngle());
+    if (targetPosition.size() == 2) {
+      // TODO Insert waypoint logic
+      Position goalPosition = targetPosition.peekLast();
+      followingWaypoint = setupWaypoint(getUpperAngle(), goalPosition.upperArmAngle, nextPosition.upperArmAngle,
+                                        getLowerAngle(), goalPosition.lowerArmAngle, nextPosition.lowerArmAngle);
+    } else {
+      if (followingWaypoint) { // TODO When are we continuing, vs when are we a fresh target?
+        // TODO Logic to progress past waypoint
+        assert(targetPosition.size() == 1);
+        lowerPidController.reset(getLowerAngle(), lowerPidController.getGoal().maxVelocity); // TODO Might not have been at max?
+        upperPidController.reset(getUpperAngle(), upperPidController.getGoal().maxVelocity);
+      } else {
+        // TODO Can this be made smoother if we can acknowledge a non-zero starting velocity?
+        lowerPidController.reset(getLowerAngle());
+        upperPidController.reset(getUpperAngle());
+      }
+      followingWaypoint = false;
+    }
   }
 
   public void updateMovement() {

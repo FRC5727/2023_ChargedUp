@@ -160,9 +160,7 @@ public class TrapezoidProfile {
       // TODO Handle intermediate positon reached during deceleration period
       DriverStation.reportWarning("Intermediate position will be reached without full acceleration and deceleration", false);
     } else {
-      // We will fully accelerate 
-      intermediate.velocity = m_constraints.maxVelocity;
-
+      // We have time to fully accelerate
       upperDist = wayptUpper - initialUpper.position;
       lowerDist = wayptLower - initialLower.position;
 
@@ -192,6 +190,9 @@ public class TrapezoidProfile {
 
       wayptPIDUpper.setConstraints(constraintsUpper);
       wayptPIDLower.setConstraints(constraintsLower);
+
+      wayptPIDUpper.reset(upperInitial);
+      wapptPIDLower.reset(lowerInitial);
     }
 
     m_endAccel = accelerationTime - cutoffBegin;
