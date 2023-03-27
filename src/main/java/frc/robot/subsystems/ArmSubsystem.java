@@ -62,19 +62,20 @@ public class ArmSubsystem extends SubsystemBase {
   private Position lastPosition = Position.STARTING;
 
   // Lookup "table" for each defined arm position
-  private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.of(
+  private final EnumMap<Position, ArmPosition> armPositions = new EnumMap<>(Map.ofEntries(
       // All positions are lower arm first, upper arm second
       // Zero angles are with lower arm vertical and upper arm horizontal
-      Position.STARTING, new ArmPosition(-20, -58),
-      Position.PRECHASSIS, new ArmPosition(-32, -45),
-      Position.CHASSIS, new ArmPosition(-20, -44),
-      Position.SAFE, new ArmPosition(-16, 16),
-      Position.GRID_LOW, new ArmPosition(-10, -43),
-      Position.GRID_MID, new ArmPosition(-5, -8),
-      Position.GRID_HIGH, new ArmPosition(28, 22),
-      Position.INTAKE_PREGROUND, new ArmPosition(6, -44),
-      Position.INTAKE_GROUND, new ArmPosition(11, -72),
-      Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16)
+      Map.entry(Position.CALIBRATION, new ArmPosition(-20, 0)),
+      Map.entry(Position.STARTING, new ArmPosition(-20, -58)),
+      Map.entry(Position.PRECHASSIS, new ArmPosition(-32, -45)),
+      Map.entry(Position.CHASSIS, new ArmPosition(-20, -44)),
+      Map.entry(Position.SAFE, new ArmPosition(-16, 16)),
+      Map.entry(Position.GRID_LOW, new ArmPosition(-10, -43)),
+      Map.entry(Position.GRID_MID, new ArmPosition(-5, -8)),
+      Map.entry(Position.GRID_HIGH, new ArmPosition(28, 22)),
+      Map.entry(Position.INTAKE_PREGROUND, new ArmPosition(6, -44)),
+      Map.entry(Position.INTAKE_GROUND, new ArmPosition(11, -72)),
+      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16))
     ));
 
   private LED s_Led;
@@ -105,9 +106,6 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem(LED s_Led, IntakeSubsystem s_Intake) {
     this.s_Led = s_Led;
     this.s_Intake = s_Intake;
-
-    // Note that Map.of() only supports 10 key-value pairs, so calibration here
-    armPositions.put(Position.CALIBRATION, new ArmPosition(-20, 0));
 
     this.lowerArmMaster = new WPI_TalonFX(Constants.Arm.lowerMaster, "rio");
     this.lowerArmSlave = new WPI_TalonFX(Constants.Arm.lowerSlave, "rio");
