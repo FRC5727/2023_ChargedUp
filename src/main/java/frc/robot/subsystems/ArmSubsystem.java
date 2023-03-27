@@ -190,6 +190,7 @@ public class ArmSubsystem extends SubsystemBase {
       switch (lastPosition) {
         case STARTING:
           targetPosition.add(Position.PRECHASSIS);
+          // fall through
         case PRECHASSIS:
         case CHASSIS:
           targetPosition.add(Position.CHASSIS);
@@ -197,20 +198,28 @@ public class ArmSubsystem extends SubsystemBase {
         case GRID_HIGH:
           targetPosition.add(Position.SAFE);
           break;
-        case INTAKE_PREGROUND:
+        case SAFE:
+          if (lastTarget == Position.GRID_HIGH) {
+            targetPosition.add(Position.SAFE);
+          }
+          break;
         case INTAKE_GROUND:
           targetPosition.add(Position.INTAKE_PREGROUND);
           break;
+        case INTAKE_PREGROUND:
+          if (lastTarget == Position.INTAKE_GROUND) {
+            targetPosition.add(Position.INTAKE_PREGROUND);
+          }
+          break;
         case GRID_MID:
-        case SAFE:
-        case INTAKE_SUBSTATION:
         case GRID_LOW:
+        case INTAKE_SUBSTATION:
         case CALIBRATION:
         case NONE:
           break;
       }
 
-      // Now we know we are transitioning from either CHASSIS, SAFE, or INTAKE_PREGROUND
+      // Now we know we are transitioning from either CHASSIS, SAFE, INTAKE_PREGROUND or a safe intermediate state
       // Determine any prequisites for final position
       switch (position) {
         case PRECHASSIS:
@@ -223,7 +232,6 @@ public class ArmSubsystem extends SubsystemBase {
           }
           break;
         case INTAKE_GROUND:
-        case INTAKE_PREGROUND:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.INTAKE_PREGROUND) {
             targetPosition.add(Position.INTAKE_PREGROUND);
           }
@@ -233,6 +241,7 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.SAFE);
           }
           break;
+        case INTAKE_PREGROUND:
         case INTAKE_SUBSTATION:
         case CHASSIS:
         case GRID_MID:
