@@ -56,6 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
     INTAKE_PREGROUND,
     INTAKE_GROUND,
     INTAKE_SUBSTATION,
+    YOSHI,
   };
 
   // Next positions for the Arm to target
@@ -76,7 +77,8 @@ public class ArmSubsystem extends SubsystemBase {
       Map.entry(Position.GRID_HIGH, new ArmPosition(28, 22)),
       Map.entry(Position.INTAKE_PREGROUND, new ArmPosition(6, -44)),
       Map.entry(Position.INTAKE_GROUND, new ArmPosition(11, -72)),
-      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16))
+      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16)),
+      Map.entry(Position.YOSHI, new ArmPosition(50, -36))
     ));
 
   private LED s_Led;
@@ -219,6 +221,7 @@ public class ArmSubsystem extends SubsystemBase {
         case GRID_LOW:
         case INTAKE_SUBSTATION:
         case CALIBRATION:
+        case YOSHI:
         case NONE:
           break;
       }
@@ -253,6 +256,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SAFE:
           // Safe directly from any of the previous positions
           break;
+        case YOSHI:
         case CALIBRATION:
         case NONE:
           break;  
