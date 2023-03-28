@@ -3,6 +3,9 @@ package frc.robot;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,6 +33,31 @@ public class Auto {
     private final SendableChooser<ArmSubsystem.Position> placeChooser = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser2 = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser3 = new SendableChooser<>();
+    private final SendableChooser<AutoConfig> quickChooser = new SendableChooser<>();
+
+    private AutoConfig activeConfig;
+
+    public static class AutoConfig {
+        private final String path;
+        private final boolean piece;
+        private final ArmSubsystem.Position place1;
+        private final ArmSubsystem.Position place2;
+        private final ArmSubsystem.Position place3;
+
+        public AutoConfig(String path, boolean piece, ArmSubsystem.Position place1,
+                          ArmSubsystem.Position place2, ArmSubsystem.Position place3) {
+            this.path = path;
+            this.piece = piece;
+            this.place1 = place1;
+            this.place2 = place2;
+            this.place3 = place3;
+        }
+    }
+
+    private final SortedMap<String, AutoConfig> quickpicks = new TreeMap<>(Map.ofEntries(
+        Map.entry("Three cube [start inside]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
+        Map.entry("2.5 w/2 high, with Yoshi [start inside]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.CHASSIS))
+    ));
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
@@ -38,12 +66,12 @@ public class Auto {
   
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
         eventMap.put("Place first piece", 
-            Commands.runOnce(() -> { if (!pieceChooser.getSelected().booleanValue()) s_Intake.toggleCube(); })
+            Commands.runOnce(() -> { if (!activeConfig.piece) s_Intake.toggleCube(); })
                 .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
-                .andThen(new ArmCommand(s_Arm, placeChooser::getSelected))
+                .andThen(new ArmCommand(s_Arm, () -> activeConfig.place1))
                 .andThen(justPlaceCommand(s_Intake)));
-        eventMap.put("Move arm to second", new ArmCommand(s_Arm, placeChooser2::getSelected));
-        eventMap.put("Move arm to third", new ArmCommand(s_Arm, placeChooser3::getSelected));
+        eventMap.put("Move arm to second", new ArmCommand(s_Arm, () -> activeConfig.place2));
+        eventMap.put("Move arm to third", new ArmCommand(s_Arm, () -> activeConfig.place3));
         eventMap.put("Eject cube", justPlaceCommand(s_Intake));
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
         eventMap.put("Ground intake",
@@ -104,17 +132,31 @@ public class Auto {
             pathChooser.addOption(pathName, pathName);
         }
         SmartDashboard.putData("Autonomous routine", pathChooser);
+
+        quickChooser.addOption("--- Auto Quick Pick ---", null);
+        quickChooser.setDefaultOption("Manual selection", null);
+        for (String name : quickpicks.keySet()) {
+          quickChooser.addOption(name, quickpicks.get(name));
+        }
+        SmartDashboard.putData("Quick Picks", quickChooser);
     }
 
     public Command buildCommand() {
-        return buildCommand(pathChooser.getSelected());
+        AutoConfig config = quickChooser.getSelected();
+
+        if (config == null) {
+            config = new AutoConfig(pathChooser.getSelected(), pieceChooser.getSelected().booleanValue(),
+                                    placeChooser.getSelected(), placeChooser2.getSelected(), placeChooser3.getSelected());
+        }
+        return buildCommand(config);
     }
 
-    public Command buildCommand(String pathName) {
-        if (pathName == null)
+    public Command buildCommand(AutoConfig config) {
+        if (config == null || config.path == null)
             return null;
 
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, PathPlanner.getConstraintsFromPath(pathName));
+        activeConfig = config;
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(config.path, PathPlanner.getConstraintsFromPath(config.path));
         return autoBuilder.fullAuto(pathGroup);
     }
 
