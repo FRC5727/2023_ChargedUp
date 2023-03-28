@@ -17,6 +17,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -270,23 +271,45 @@ public class ArmSubsystem extends SubsystemBase {
 
   private boolean setupWaypoint(State initialUpper, double goalUpper, double wayptUpper,
                                 State initialLower, double goalLower, double wayptLower) {
-    directWayptUpper = initialUpper.position > wayptUpper ? -1 : 1;
-    directGoalUpper = ini, goal) ? -1 : 1;
-    if (m_direction1 != m_direction2) {
+    int directWayptUpper = initialUpper.position > wayptUpper ? -1 : 1;
+    int directGoalUpper = wayptUpper > goalUpper.position ? -1 : 1;
+    if (directWayptUpper != directGoalUpper) {
       // Don't handle a flip of a direction as a waypoint; use as a separate ProfilePID altogether
+      DriverStation.reportWarning("Cannot use waypoint, because upper arm reverses", false);
       return false;
     }
-    // TODO Should intermediate be a position ONLY?
 
-    m_constraints = constraints;
-    m_initial = direct(initial);
-    m_intermediate = direct(intermediate);
-    m_goal = direct(goal);
-
-    if (m_initial.velocity > m_constraints.maxVelocity) {
-      m_initial.velocity = m_constraints.maxVelocity;
+    int directWayptLower = initialLower.position > wayptLower ? -1 : 1;
+    int directGoalLower = wayptLower > goalLower.position ? -1 : 1;
+    if (directWayptLower != directGoalLower) {
+      // Don't handle a flip of a direction as a waypoint; use as a separate ProfilePID altogether
+      DriverStation.reportWarning("Cannot use waypoint, because lower arm reverses", false);
+      return false;
     }
 
+    if (directWayptUpper < 0) {
+      initialUpper.position *= -1;
+      initialUpper.velocity *= -1;
+      wayptUpper *= -1;
+      goalUpper *= -1;
+    }
+
+    if (directWayptLower < 0) {
+      initialUpper.position *= -1;
+      initialUpper.velocity *= -1;
+      wayptUpper *= -1;
+      goalUpper *= -1;
+    }
+
+    if (Math.abs(initialUpper.velocity) > upperConstraints.maxVelocity) {
+      initialUpper.velocity = upperConstraints.maxVelocity * Math.signum(initialUpper.velocity);
+    }
+
+    if (Math.abs(initialLower.velocity) > lowerConstraints.maxVelocity) {
+      initialLower.velocity = lowerConstraints.maxVelocity * Math.signum(initialLower.velocity);
+    }
+
+/*
     // Deal with a possibly truncated motion profile (with nonzero initial or
     // final velocity) by calculating the parameters as if the profile began and
     // ended at zero velocity
@@ -311,40 +334,59 @@ public class ArmSubsystem extends SubsystemBase {
       accelerationTime = Math.sqrt(fullTrapezoidDist / m_constraints.maxAcceleration);
       fullSpeedDist = 0;
     }
+*/
 
-    if (cutoffDistBegin > (m_intermediate.position - m_initial.position)) {
-      // TODO Handle intermediate position reached during acceleration period
-      DriverStation.reportWarning("Intermediate position will be reached before full acceleration", false);
+    // Calculate distance to cover to waypoint
+    double upperDist = wayptUpper - initialUpper.position;
+    double lowerDist = wayptLower - initialLower.position;
+
+    // Change in velocity over acceleration gives time to make that change
+    double upperAccelTime = (upperConstraints.maxVelocity - initialUpper.velocity) / upperConstraints.maxAcceleration;
+    double lowerAccelTime = (lowerConstraints.maxVelocity - initialLower.velocity) / lowerConstraints.maxAcceleration;
+
+    // Distance covered while accelerating
+    // TODO Presume initial velocity is 0
+    // Distance = Acceleration * Time^2 / 2
+    double upperAccelDist = upperConstraints.maxAcceleration * upperAccelTime * upperAccelTime / 2.0;
+    double lowerAccelDist = lowerConstraints.maxAcceleration * lowerAccelTime * lowerAccelTime / 2.0;
+
+    State wayptUpperState = new State(wayptUpper, 0.0);
+    State wayptLowerState = new State(wayptLower, 0.0);
+
+    double upperWayptCVTime = 0.0;
+    double lowerWayptCVTime = 0.0;
+
+    // Not all calcuations currently handle a non-zero starting velocity
+    if (initialUpper.velocity != 0 || initialLower.velocity != 0) {
+      throw new Throwable("TODO Support calculations with a non-zero starting velocity");
+    }
+
+    if (upperAccelDist > upperDist) {
+      DriverStation.reportWarning("Waypoint will be reached before full acceleration", false);
+      // TODO Technically, if the back half is even shorter, maybe we shouldn't even fully accelerate -- but ignore for now
+      upperAccelTime = Math.sqrt(upperDist / upperConstraints.maxAcceleration * 2.0); // TODO Presumes initialUpper.velocity == 0
+      wayptUpperState.velocity = initialUpper.velocity + upperAccelTime * upperConstraints.maxAcceleration;
+    } else {
+      // We will fully accelerate to max velocity
+    }
     } else if((cutoffDistBegin + cutoffDistEnd) > (m_intermediate.position - m_initial.position)) {
       // TODO Handle intermediate positon reached during deceleration period
       DriverStation.reportWarning("Intermediate position will be reached without full acceleration and deceleration", false);
     } else {
       // We have time to fully accelerate
-      upperDist = wayptUpper - initialUpper.position;
-      lowerDist = wayptLower - initialLower.position;
+      upperWayptCVTime = (upperDist - upperAccelDist) / upperConstraints.maxVelocity;
+    }
 
-      // Change in velocity over acceleration gives time to make that change
-      upperAccelTime = (m_constraints.maxVelocity - initialUpper.velocity) / constraints.maxAcceleration;
-      lowerAccelTime = (m_constraints.maxVelocity - initialLower.velocity) / constraints.maxAcceleration;
+    double wayptTimeUpper = upperAccelTime + upperWayptCVTime;
 
-      // Distance = Acceleration * Time^2 / 2
-      upperAccelDist = constraints.maxAcceleration * upperAccelTime * upperAccelTime / 2.0;
-      lowerAccelDist = constraints.maxAcceleration * lowerAccelTime * lowerAccelTime / 2.0;
-
-      wayptTimeUpper = (upperDist - upperAccelDist) / constraints.maxVelocity + upperAccelTime;
-      wayptTimeLower = (lowerDist - lowerAccelDist) / constraints.maxVelocity + lowerAccelTime;
-      constraintsLower = constraintsUpper = constraints;
-      
-      if (initialUpper.velocity != 0 || initialLower.velocity != 0) {
-        throw new Throwable("TODO Support calculations with a non-zero starting velocity");
-      }
+    TrapezoidProfile.Constraints upperWayptConstraints = new TrapezoidProfile.Constraints(upperConstraints.maxVelocity, upperConstraints.maxAcceleration);
 
       if (wayptTimeLower > wayptTimeUpper) {
         wayptTime = wayptTimeLower;
-        constraintsUpper.maxVelocity = intermediateUpper.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, upperDist, wayptTime);
+        constraintsUpper.maxVelocity = intermediateUpper.velocity = requiredVelocityAfterRamp(upperConstraints.maxAcceleration, upperDist, wayptTime);
       } else {
         wayptTime = wayptTimeUpper;
-        constraintsLower.maxVelocity = intermediateLower.velocity = requiredVelocityAfterRamp(constraints.maxAcceleration, lowerDist, wayptTime);
+        constraintsLower.maxVelocity = intermediateLower.velocity = requiredVelocityAfterRamp(upperConstraints.maxAcceleration, lowerDist, wayptTime);
       }
 
       wayptPIDUpper.setConstraints(constraintsUpper);
