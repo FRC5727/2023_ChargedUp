@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Dashboard;
+import frc.robot.subsystems.LED.Colors;
 
 public class ArmSubsystem extends SubsystemBase {
   // Controls whether or not to update SmartDashboard
@@ -128,7 +129,10 @@ public class ArmSubsystem extends SubsystemBase {
     upperArmSlave.setInverted(false);
     upperArmMaster.setInverted(true);
 
-    SmartDashboard.putData("Coast arm motors", Commands.startEnd(this::coast, this::brake, this));
+    SmartDashboard.putData("Coast arm motors",
+      Commands.startEnd(() -> { s_Led.setRainbow(); coast(); },
+                        () -> { brake(); s_Led.setColor(Colors.omegabytes); },
+                        this));
 
     Dashboard.watchBoolean("Arm debug", armDebug, (val) -> armDebug = val.booleanValue());
     Dashboard.watchBoolean("Arm direct debug", armDirectDebug, (val) -> armDirectDebug = val.booleanValue());

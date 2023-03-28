@@ -37,6 +37,8 @@ public class LED extends SubsystemBase {
     public static final Color disabledRed = new LED.Color(222, 0, 0);
     public static final Color blue = new LED.Color(0, 0, 222);
     public static final Color white = new LED.Color(255, 255, 255);
+    public static final Color green = new LED.Color(0, 255, 0);
+    public static final Color teal = new LED.Color(0, 255, 255);
   }
 
   public LED() {
@@ -100,7 +102,7 @@ public class LED extends SubsystemBase {
 
   public void setRainbow(){
     m_candle.clearAnimation(0);
-    m_candle.animate(new RainbowAnimation(brightness, 4, numLed));
+    m_candle.animate(new RainbowAnimation(brightness, 0.5, numLed));
   }
 
   public void flash(int count) {
