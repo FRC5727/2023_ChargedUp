@@ -26,18 +26,18 @@
     },
     {
       "anchorPoint": {
-        "x": 3.3,
+        "x": 3.7,
         "y": 4.99
       },
       "prevControl": {
-        "x": 1.9122344639538578,
-        "y": 4.99
+        "x": 2.3122583442208233,
+        "y": 4.998141243928757
       },
       "nextControl": {
-        "x": 4.188118598660524,
-        "y": 4.99
+        "x": 4.126060006505979,
+        "y": 4.987500501316792
       },
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 179.9,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -51,16 +51,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.2,
+        "x": 5.1,
         "y": 4.45
       },
       "prevControl": {
-        "x": 5.47956924912928,
-        "y": 4.45
+        "x": 4.534131875281295,
+        "y": 4.461541203784162
       },
       "nextControl": {
-        "x": 6.547294963184696,
-        "y": 4.45
+        "x": 5.447222751948632,
+        "y": 4.442918193544249
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -76,15 +76,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.0,
+        "x": 5.8,
         "y": 4.45
       },
       "prevControl": {
-        "x": 6.591220371584699,
+        "x": 5.391220371584699,
         "y": 4.45
       },
       "nextControl": {
-        "x": 6.591220371584699,
+        "x": 5.391220371584699,
         "y": 4.45
       },
       "holonomicAngle": 0.0,
@@ -154,9 +154,9 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.01,
+      "position": 1.01,
       "names": [
-        "Ground intake"
+        "Yoshi intake"
       ]
     },
     {
