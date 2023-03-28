@@ -39,6 +39,7 @@ public class IntakeCommand extends CommandBase {
     boolean isStalled = intake.isStalled();
 
     if (isStalled) {
+      // TODO Why isn't this flashing?
       intake.flash();
     }
     return isStalled;

@@ -202,7 +202,7 @@ public class ArmSubsystem extends SubsystemBase {
           targetPosition.add(Position.CHASSIS);
           break;
         case GRID_HIGH:
-          if (position != Position.YOSHI) { // TODO What about auto?
+          if (position != Position.YOSHI) { // TODO What about auto? DriverStation.isAutonomous()
             targetPosition.add(Position.SAFE);
           }
           break;

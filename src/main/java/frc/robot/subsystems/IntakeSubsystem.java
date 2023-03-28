@@ -50,12 +50,14 @@ public class IntakeSubsystem extends SubsystemBase {
     idle = false;
     intake = false;
     setSpeed();
+    m_led.setLarson(cube ? LED.Colors.purple : LED.Colors.yellow);
   }
 
   public void intake() {
     idle = false;
     intake = true;
     setSpeed();
+    m_led.setLarson(cube ? LED.Colors.purple : LED.Colors.yellow);
   }
   
   public void toggleCube() {
@@ -97,6 +99,7 @@ public class IntakeSubsystem extends SubsystemBase {
     idle = true;
     intake = true;
     setSpeed();
+    setColor();
   }
   
   @Override
