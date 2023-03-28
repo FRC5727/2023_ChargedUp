@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -127,6 +128,7 @@ public class RobotContainer {
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
         .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
+        .andThen(new WaitCommand(0.5))
         .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
  
     intakeSubstationTrigger
