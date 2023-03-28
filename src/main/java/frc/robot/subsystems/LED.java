@@ -74,16 +74,19 @@ public class LED extends SubsystemBase {
   }
 
   private void setColorDirect(Color color, double startPct, double endPct) {
-    double cnt = middle;
-    int start = (int)Math.round(startPct / 100.0 * cnt) + (startPct == 0.0 ? 0 : numBaseLed);
-    int end = (int)Math.round(endPct / 100.0 * cnt) + (startPct == 0.0 ? numBaseLed : 0);
+    // Turn off the base LEDs to prevent overheating
+    m_candle.setLEDs(0, 0, 0, 0, 0, numBaseLed);
+
+    double cnt = middle - 0.000001;
+    int start = (int)Math.round(startPct / 100.0 * cnt) + numBaseLed;
+    int end = (int)Math.round(endPct / 100.0 * cnt) + numBaseLed - 1;
 
     DriverStation.reportWarning("Setting front color between " + start + " and " + end, false);
     m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
 
-    cnt = numLed - numBaseLed - middle + 1;
-    end = numLed - (int)Math.round(startPct / 100.0 * cnt);
+    cnt = numLed - numBaseLed - middle + 0.000001;
     start = numLed - (int)Math.round(endPct / 100.0 * cnt);
+    end = numLed - 1 - (int)Math.round(startPct / 100.0 * cnt);
 
     DriverStation.reportWarning("Setting back color between " + start + " and " + end, false);
     m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
