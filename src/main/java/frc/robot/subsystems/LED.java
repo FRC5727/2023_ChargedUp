@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import frc.robot.Constants;
 
@@ -103,6 +104,11 @@ public class LED extends SubsystemBase {
   public void setRainbow(){
     m_candle.clearAnimation(0);
     m_candle.animate(new RainbowAnimation(brightness, 0.5, numLed));
+  }
+
+  public void setLarson(Color color) {
+    m_candle.clearAnimation(0);
+    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.5, numLed, LarsonAnimation.BounceMode.Center, 3));
   }
 
   public void flash(int count) {
