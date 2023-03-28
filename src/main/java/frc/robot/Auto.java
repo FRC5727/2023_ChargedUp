@@ -52,6 +52,12 @@ public class Auto {
                     Commands.runOnce(() -> { if (!s_Intake.isCube()) s_Intake.toggleCube(); })
                     .andThen(new WaitCommand(1.0))
                     .andThen(new IntakeCommand(s_Intake))));
+        eventMap.put("Yoshi intake",
+            new ArmCommand(s_Arm, Position.YOSHI)
+                .alongWith(
+                    Commands.runOnce(() -> { if (!s_Intake.isCube()) s_Intake.toggleCube(); })
+                    .andThen(new WaitCommand(1.0))
+                    .andThen(new IntakeCommand(s_Intake))));
         eventMap.put("Balance", new AutoBalanceCommand(s_Swerve, s_LED));
 
         autoBuilder = new SwerveAutoBuilder(
