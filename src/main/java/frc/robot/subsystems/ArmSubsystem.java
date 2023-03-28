@@ -202,10 +202,12 @@ public class ArmSubsystem extends SubsystemBase {
           targetPosition.add(Position.CHASSIS);
           break;
         case GRID_HIGH:
-          targetPosition.add(Position.SAFE);
+          if (position != Position.YOSHI) { // TODO What about auto?
+            targetPosition.add(Position.SAFE);
+          }
           break;
         case SAFE:
-          if (lastTarget == Position.GRID_HIGH) {
+          if (lastTarget == Position.GRID_HIGH && position != Position.YOSHI) {
             targetPosition.add(Position.SAFE);
           }
           break;
@@ -245,7 +247,9 @@ public class ArmSubsystem extends SubsystemBase {
           break;
         case GRID_HIGH:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.SAFE) {
-            targetPosition.add(Position.SAFE);
+            if (lastPosition != Position.YOSHI) {
+              targetPosition.add(Position.SAFE);
+            }
           }
           break;
         case INTAKE_PREGROUND:
