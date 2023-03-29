@@ -121,7 +121,7 @@ public final class Constants {
     public static final double maxAngularVelocity = 10.0; // TODO: This must be tuned to specific robot
 
     /* Neutral Modes */
-    public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
+    public static final NeutralMode angleNeutralMode = NeutralMode.Brake;
     public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
 
     /* Module Specific Constants */
