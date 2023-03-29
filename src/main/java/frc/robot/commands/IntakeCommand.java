@@ -31,16 +31,14 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Don't bother stopping intake, because it'll just move to idle anyway
+    if (!interrupted) {
+      intake.flash();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isStalled = intake.isStalled();
-
-    if (isStalled) {
-      intake.flash();
-    }
-    return isStalled;
+    return intake.isStalled();
   }
 }

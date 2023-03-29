@@ -67,13 +67,14 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   
   public void setColor() {
-    // TODO Animate while intaking / placing
-    if (cube) {
-      m_led.setColor(LED.Colors.purple);
-    } else {
-      m_led.setColor(LED.Colors.yellow);
+    if (!isStalled()) {
+      if (cube) {
+        m_led.setColor(LED.Colors.purple);
+      } else {
+        m_led.setColor(LED.Colors.yellow);
+      }
+      colorInit = true;
     }
-    colorInit = true;
   }
   
   public void disabled() {
@@ -84,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void flash() {
-    m_led.flash(30, LED.Colors.omegabytes);
+    m_led.flash(50, LED.Colors.teal);
   }
   
   public boolean isCube() {
