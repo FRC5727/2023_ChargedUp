@@ -124,9 +124,9 @@ public class RobotContainer {
       driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
-        .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
-        .andThen(new WaitCommand(0.75))
-        .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
+        .andThen(Commands.runOnce(s_Intake::idle, s_Intake)));
+        // .andThen(new WaitCommand(0.75))
+        // .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
  
     intakeSubstationTrigger
       .onFalse(
