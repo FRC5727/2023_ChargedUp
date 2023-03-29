@@ -17,12 +17,8 @@ public class LED extends SubsystemBase {
   private final int numBaseLed = 8;
   private final double middle = 52.5; // Not including numBaseLed
   private final double brightness = 0.50;
-  private int flashCount = 0;
-  private boolean flashOff = false;
-  private final int flashRate = 8; // in ticks
-  private int flashTicks = 0;
-  private Color last = new Color(0, 0, 0);
-  private Color flash = new Color(0, 0, 0);
+  private int strobeTicks = 0;
+  private Color last = Colors.off;
   private int m_animations = 0;
   private int animExclude = 3;
 
@@ -58,23 +54,16 @@ public class LED extends SubsystemBase {
     SmartDashboard.putData("LED Rainbow", Commands.startEnd(() -> setRainbow(), () -> setColor(Colors.omegabytes)));
     SmartDashboard.putData("LED Larson", Commands.startEnd(() -> setLarson(Colors.teal), () -> setColor(Colors.omegabytes)));
     SmartDashboard.putData("LED Strobe", Commands.startEnd(() -> setStrobe(Colors.teal), () -> setColor(Colors.omegabytes)));
+    SmartDashboard.putData("LED Flash", Commands.startEnd(() -> flash(50, Colors.teal), () -> setColor(Colors.omegabytes)));
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (flashCount > 0) {
-      flashTicks++;
-      if (flashTicks == flashRate) {
-        if (flashOff) {
-          setColorDirect(last);
-          flashOff = false;
-          flashCount--;
-        } else {
-          setColorDirect(flash);
-          flashOff = true;
-        }
-        flashTicks = 0;
+    if (strobeTicks-- > 0) {
+      if (strobeTicks == 0) {
+        clearAnimations();
+        setColorDirect(last);
       }
     }
   }
@@ -113,8 +102,7 @@ public class LED extends SubsystemBase {
 
   public void setColor(Color color, double start, double end) {
     last = color;
-    flashCount = 0;
-    flashOff = false;
+    strobeTicks = 0;
     clearAnimations();
     setColorDirect(color, start, end);
   }
@@ -139,12 +127,16 @@ public class LED extends SubsystemBase {
     m_animations = 2;
   }
 
+  public void setStrobe(Color color, int ticks) {
+    this.strobeTicks = ticks;
+    setStrobe(color);
+  }
+
   public void flash(int count) {
     flash(count, Colors.off);
   }
 
   public void flash(int count, Color color) {
-    flashCount = count;
-    flash = color;
+    setStrobe(color, count);
   }
 }

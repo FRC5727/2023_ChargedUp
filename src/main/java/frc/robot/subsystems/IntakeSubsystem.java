@@ -84,7 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void flash() {
-    m_led.flash(5, LED.Colors.omegabytes);
+    m_led.flash(30, LED.Colors.omegabytes);
   }
   
   public boolean isCube() {
