@@ -55,13 +55,13 @@ public class Auto {
     }
 
     private final SortedMap<String, AutoConfig> quickpicks = new TreeMap<>(Map.ofEntries(
-        Map.entry("3 cube [substation, inside]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
-        Map.entry("2 high + balance [substation, outside]", new AutoConfig("SS-PlaceCone,pick,place,balance", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        Map.entry("2.5 w/2 high [substation, outside]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inside]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
+        Map.entry("3 cube [substation, inner]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
+        Map.entry("2 high + balance [substation, outer]", new AutoConfig("SS-PlaceCone,pick,place,balance", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        Map.entry("2.5 w/2 high [substation, outer]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inner]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
         Map.entry("1 high, over, back and balance [middle cone]", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("1.5 high + balance [speed bump, cube]", new AutoConfig("SB-Place,pick,balance", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        // TODO Need a cone high plus cube high option
+        Map.entry("2.5 high [speed bump, outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
         Map.entry("2 low + high [speed bump, cube]", new AutoConfig("SB-Place,pick,place,position", true, Position.CHASSIS, Position.GRID_HIGH, Position.NONE))
     ));
 
@@ -78,6 +78,7 @@ public class Auto {
                 .andThen(justPlaceCommand(s_Intake)));
         eventMap.put("Move arm to second", new ArmCommand(s_Arm, () -> activeConfig.place2));
         eventMap.put("Move arm to third", new ArmCommand(s_Arm, () -> activeConfig.place3));
+        eventMap.put("Move arm to safe", new ArmCommand(s_Arm, Position.SAFE));
         eventMap.put("Eject cube", justPlaceCommand(s_Intake));
         eventMap.put("Chassis", new ArmCommand(s_Arm, Position.CHASSIS));
         eventMap.put("Ground intake",
