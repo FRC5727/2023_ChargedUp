@@ -55,15 +55,17 @@ public class Auto {
     }
 
     private final SortedMap<String, AutoConfig> quickpicks = new TreeMap<>(Map.ofEntries(
-        Map.entry("Three cube [start inside]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
-        Map.entry("2.5 w/2 high, with Yoshi [start inside]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.CHASSIS))
+        Map.entry("3 cube [substation, inside]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
+        Map.entry("2 high + balance [substation, outside]", new AutoConfig("SS-PlaceCone,pick,place,balance", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        Map.entry("2.5 w/2 high [substation, outside]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
+        // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inside]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
     ));
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
     {
         return Commands.startEnd(s_Intake::place, () -> {}, s_Intake).withTimeout(0.2);
     }
-  
+
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
         eventMap.put("Place first piece", 
             Commands.runOnce(() -> { if (!activeConfig.piece) s_Intake.toggleCube(); })

@@ -66,7 +66,8 @@ public class AutoBalanceCommand extends CommandBase {
     SmartDashboard.putBoolean("Autobalance PID", usingPID);
     SmartDashboard.putBoolean("Autobalanced paused", paused);
     if (balanced) {
-      s_LED.setColor(LED.Colors.omegabytes);
+      s_LED.setColor(LED.Colors.green);
+      s_LED.setStrobe(LED.Colors.green, 100);
     } else {
       double colorPercent = Math.max(Math.min((angleMax - Math.abs(pitch)) / (angleMax - angleTarget) * 100, 100), 0) * 0.9 + 10;
 
