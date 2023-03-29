@@ -196,10 +196,6 @@ public class ArmSubsystem extends SubsystemBase {
       switch (lastPosition) {
         case STARTING:
           targetPosition.add(Position.PRECHASSIS);
-          // fall through
-        // case PRECHASSIS:
-        // case CHASSIS:
-        //   targetPosition.add(Position.CHASSIS);
           break;
         case GRID_HIGH:
           if (position != Position.YOSHI) { // TODO What about auto? DriverStation.isAutonomous()
@@ -219,6 +215,8 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.INTAKE_PREGROUND);
           }
           break;
+        case CHASSIS:
+        case PRECHASSIS:
         case GRID_MID:
         case GRID_LOW:
         case INTAKE_SUBSTATION:
