@@ -128,7 +128,7 @@ public class RobotContainer {
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
         .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
-        .andThen(new WaitCommand(0.5))
+        .andThen(new WaitCommand(0.75))
         .andThen(new ArmCommand(s_Arm, Position.CHASSIS)));
  
     intakeSubstationTrigger
