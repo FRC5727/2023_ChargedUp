@@ -70,9 +70,6 @@ public class RobotContainer {
 
     // Easy way to test AutoBalance
     SmartDashboard.putData("Auto-Balance", new AutoBalanceCommand(s_Swerve, s_LED));
-
-    // Simple test of LED subsystem
-    SmartDashboard.putData("LED Rainbow", Commands.runOnce(s_LED::setRainbow));
   }
 
   public Command getAutonomousCommand() {

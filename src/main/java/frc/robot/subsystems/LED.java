@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
+
 import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
@@ -20,6 +24,7 @@ public class LED extends SubsystemBase {
   private int flashTicks = 0;
   private Color last = new Color(0, 0, 0);
   private Color flash = new Color(0, 0, 0);
+  private int m_animations = 0;
 
   public static class Color {
     private final int R, G, B;
@@ -48,6 +53,10 @@ public class LED extends SubsystemBase {
     m_candle.configV5Enabled(true);
     m_candle.configLOSBehavior(true);
     setColor(Colors.omegabytes);
+
+    // SmartDashboard.putData("LED Rainbow", Commands.runOnce(s_LED::setRainbow));
+    SmartDashboard.putData("LED Larson", Commands.startEnd(() -> setLarson(Colors.teal), () -> setColor(Colors.omegabytes)));
+    SmartDashboard.putData("LED Strobe", Commands.startEnd(() -> setStrobe(Colors.teal), () -> setColor(Colors.omegabytes)));
   }
 
   @Override
@@ -96,22 +105,39 @@ public class LED extends SubsystemBase {
     setColor(color, 0.0, 100.0);
   }
 
+  public void clearAnimations() {
+    for (int idx = 0; idx <= m_animations; idx++) {
+      m_candle.clearAnimation(idx);
+    }
+    m_animations = 0;
+  }
+
   public void setColor(Color color, double start, double end) {
     last = color;
     flashCount = 0;
     flashOff = false;
-    m_candle.clearAnimation(0);
+    clearAnimations();
     setColorDirect(color, start, end);
   }
 
-  public void setRainbow(){
-    m_candle.clearAnimation(0);
+  public void setRainbow() {
+    clearAnimations();
     m_candle.animate(new RainbowAnimation(brightness, 0.5, numLed));
+    m_animations = 1;
   }
 
   public void setLarson(Color color) {
-    m_candle.clearAnimation(0);
-    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.5, numLed, LarsonAnimation.BounceMode.Center, 3));
+    clearAnimations();
+    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, LarsonAnimation.BounceMode.Front, 7, 0), 0);
+    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, LarsonAnimation.BounceMode.Front, 7, numLed / 2 + 2), 1);
+    m_animations = 2;
+  }
+
+  public void setStrobe(Color color) {
+    clearAnimations();
+    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, 0), 0);
+    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, numLed / 2 + 2), 1);
+    m_animations = 2;
   }
 
   public void flash(int count) {
