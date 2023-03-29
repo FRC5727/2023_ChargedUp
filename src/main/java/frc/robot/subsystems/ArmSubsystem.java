@@ -71,13 +71,13 @@ public class ArmSubsystem extends SubsystemBase {
       Map.entry(Position.STARTING, new ArmPosition(-20, -58)),
       Map.entry(Position.PRECHASSIS, new ArmPosition(-32, -45)),
       Map.entry(Position.CHASSIS, new ArmPosition(-20, -44)),
-      Map.entry(Position.SAFE, new ArmPosition(-16, 16)),
+      Map.entry(Position.SAFE, new ArmPosition(-16, 14)),
       Map.entry(Position.GRID_LOW, new ArmPosition(-10, -43)),
       Map.entry(Position.GRID_MID, new ArmPosition(-5, -8)),
       Map.entry(Position.GRID_HIGH, new ArmPosition(28, 22)),
       Map.entry(Position.INTAKE_PREGROUND, new ArmPosition(6, -44)),
       Map.entry(Position.INTAKE_GROUND, new ArmPosition(11, -72)),
-      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-16, 16)),
+      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-16, 14)),
       Map.entry(Position.YOSHI, new ArmPosition(50, -36))
     ));
 
