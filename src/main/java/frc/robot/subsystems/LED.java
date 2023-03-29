@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,6 +24,7 @@ public class LED extends SubsystemBase {
   private Color last = new Color(0, 0, 0);
   private Color flash = new Color(0, 0, 0);
   private int m_animations = 0;
+  private int animExclude = 3;
 
   public static class Color {
     private final int R, G, B;
@@ -54,7 +54,8 @@ public class LED extends SubsystemBase {
     m_candle.configLOSBehavior(true);
     setColor(Colors.omegabytes);
 
-    // SmartDashboard.putData("LED Rainbow", Commands.runOnce(s_LED::setRainbow));
+    // LED tests
+    SmartDashboard.putData("LED Rainbow", Commands.startEnd(() -> setRainbow(), () -> setColor(Colors.omegabytes)));
     SmartDashboard.putData("LED Larson", Commands.startEnd(() -> setLarson(Colors.teal), () -> setColor(Colors.omegabytes)));
     SmartDashboard.putData("LED Strobe", Commands.startEnd(() -> setStrobe(Colors.teal), () -> setColor(Colors.omegabytes)));
   }
@@ -90,14 +91,12 @@ public class LED extends SubsystemBase {
     int start = (int)Math.round(startPct / 100.0 * cnt) + numBaseLed;
     int end = (int)Math.round(endPct / 100.0 * cnt) + numBaseLed - 1;
 
-    DriverStation.reportWarning("Setting front color between " + start + " and " + end, false);
     m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
 
     cnt = numLed - numBaseLed - middle + 0.000001;
     start = numLed - (int)Math.round(endPct / 100.0 * cnt);
     end = numLed - 1 - (int)Math.round(startPct / 100.0 * cnt);
 
-    DriverStation.reportWarning("Setting back color between " + start + " and " + end, false);
     m_candle.setLEDs(color.R, color.G, color.B, 255, start, end - start + 1);
   }
 
@@ -122,21 +121,21 @@ public class LED extends SubsystemBase {
 
   public void setRainbow() {
     clearAnimations();
-    m_candle.animate(new RainbowAnimation(brightness, 0.5, numLed));
+    m_candle.animate(new RainbowAnimation(brightness, 0.5, numLed, false, numBaseLed));
     m_animations = 1;
   }
 
   public void setLarson(Color color) {
     clearAnimations();
-    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, LarsonAnimation.BounceMode.Front, 7, 0), 0);
-    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, LarsonAnimation.BounceMode.Front, 7, numLed / 2 + 2), 1);
+    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, (int)Math.round(middle - animExclude - 0.000001), LarsonAnimation.BounceMode.Front, 7, numBaseLed), 0);
+    m_candle.animate(new LarsonAnimation(color.R, color.G, color.B, 255, 0.8, (int)Math.round(numLed - numBaseLed - middle - animExclude + 0.000001), LarsonAnimation.BounceMode.Front, 7, (int)Math.round(middle + numBaseLed + animExclude)), 1);
     m_animations = 2;
   }
 
   public void setStrobe(Color color) {
     clearAnimations();
-    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, 0), 0);
-    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.8, numLed / 2 - 2, numLed / 2 + 2), 1);
+    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.1, (numLed - numBaseLed) / 2 - animExclude, numBaseLed), 0);
+    m_candle.animate(new StrobeAnimation(color.R, color.G, color.B, 255, 0.1, (numLed - numBaseLed) / 2 - animExclude, (numLed - numBaseLed) / 2 + animExclude + numBaseLed), 1);
     m_animations = 2;
   }
 
