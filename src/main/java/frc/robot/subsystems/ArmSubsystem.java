@@ -71,7 +71,7 @@ public class ArmSubsystem extends SubsystemBase {
       Map.entry(Position.STARTING, new ArmPosition(-20, -58)),
       Map.entry(Position.PRECHASSIS, new ArmPosition(-32, -45)),
       Map.entry(Position.CHASSIS, new ArmPosition(-20, -44)),
-      Map.entry(Position.SAFE, new ArmPosition(-16, 14)),
+      Map.entry(Position.SAFE, new ArmPosition(-20, 22)),
       Map.entry(Position.GRID_LOW, new ArmPosition(-10, -43)),
       Map.entry(Position.GRID_MID, new ArmPosition(-5, -8)),
       Map.entry(Position.GRID_HIGH, new ArmPosition(28, 22)),
@@ -97,10 +97,10 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController upperPidController;
 
   private final PIDConstants lowerConstants = new PIDConstants(0.50, 0.00, 0.00);
-  private final PIDConstants lowerConstantsLaden = new PIDConstants(0.40, 0.00, 0.00);
+  private final PIDConstants lowerConstantsLaden = new PIDConstants(0.50, 0.00, 0.00);
   private final PIDConstants upperConstantsTeleOp = new PIDConstants(0.50, 0.00, 0.00);
   private final PIDConstants upperConstantsAuto = new PIDConstants(0.50, 0.00, 0.00);
-  private final PIDConstants upperConstantsLaden = new PIDConstants(0.40, 0.00, 0.00);
+  private final PIDConstants upperConstantsLaden = new PIDConstants(0.50, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 400);
 
@@ -303,19 +303,19 @@ public class ArmSubsystem extends SubsystemBase {
     }
     if (targetPosition.size() > 1) {
       if (targetPosition.peek() == Position.SAFE) {
-        lowerPidController.setTolerance(25);
-        upperPidController.setTolerance(25);
+        lowerPidController.setTolerance(10);
+        upperPidController.setTolerance(10);
       } else {
         lowerPidController.setTolerance(5, 15);
         upperPidController.setTolerance(5, 15);
       }
     } else {
       if (targetPosition.peek() == Position.INTAKE_SUBSTATION) {
-        lowerPidController.setTolerance(2, 5);
-        upperPidController.setTolerance(2, 5);
-      } else {
         lowerPidController.setTolerance(1, 3);
         upperPidController.setTolerance(1, 3);
+      } else {
+        lowerPidController.setTolerance(2, 5);
+        upperPidController.setTolerance(2, 5);
       }
     }
     lowerPidController.reset(getLowerAngle());
