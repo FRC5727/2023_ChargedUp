@@ -29,7 +29,7 @@ public final class Constants {
 
   public static final int LED_CANDLE = 0; // Port for LED light
   public static final double speedLimit = 0.75;
-  public static final double rSpeedLimit = 0.40;
+  public static final double rSpeedLimit = 0.50;
 
   public static final class Controls {
     public static final double stickDeadband = 0.10; // TODO We have used 0.05 previously
@@ -187,8 +187,8 @@ public final class Constants {
     public static final int lowCoder = 5;
 
     // Offsets are the CANcoder absolute position in the calibration position
-    public static final double lowerOffset = 146.2;
-    public static final double highOffset = 18.8;
+    public static final double lowerOffset = 147.74;
+    public static final double highOffset = 16.69;
 
     // Voltage to apply when moving arm manually
     public static final double manualVoltage = 1.5;
