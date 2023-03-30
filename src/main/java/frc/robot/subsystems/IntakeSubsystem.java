@@ -50,14 +50,14 @@ public class IntakeSubsystem extends SubsystemBase {
     idle = false;
     intake = false;
     setSpeed();
-    m_led.setLarson(cube ? LED.Colors.purple : LED.Colors.yellow);
+    m_led.setLarson(cube ? LED.Colors.cube : LED.Colors.cone);
   }
 
   public void intake() {
     idle = false;
     intake = true;
     setSpeed();
-    m_led.setLarson(cube ? LED.Colors.purple : LED.Colors.yellow);
+    m_led.setLarson(cube ? LED.Colors.cube : LED.Colors.cone);
   }
   
   public void toggleCube() {
@@ -69,9 +69,9 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setColor() {
     if (!isStalled()) {
       if (cube) {
-        m_led.setColor(LED.Colors.purple);
+        m_led.setColor(LED.Colors.cube);
       } else {
-        m_led.setColor(LED.Colors.yellow);
+        m_led.setColor(LED.Colors.cone);
       }
       colorInit = true;
     }
@@ -79,13 +79,13 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public void disabled() {
     if (colorInit) {
-      m_led.setColor(LED.Colors.disabledRed);
+      m_led.setColor(LED.Colors.disabled);
       colorInit = false;
     }
   }
 
   public void flash() {
-    m_led.flash(50, LED.Colors.teal);
+    m_led.flash(50, LED.Colors.cyan);
   }
   
   public boolean isCube() {

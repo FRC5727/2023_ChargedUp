@@ -33,14 +33,17 @@ public class LED extends SubsystemBase {
 
   public static final class Colors {
     public static final Color off = new LED.Color(0, 0, 0);
-    public static final Color omegabytes = new LED.Color(162, 255, 0);
-    public static final Color purple = new LED.Color(186, 0, 255);
-    public static final Color yellow = new LED.Color(255, 128, 0);
-    public static final Color disabledRed = new LED.Color(222, 0, 0);
-    public static final Color blue = new LED.Color(0, 0, 222);
-    public static final Color white = new LED.Color(255, 255, 255);
+    public static final Color red = new LED.Color(255, 0, 0);
     public static final Color green = new LED.Color(0, 255, 0);
-    public static final Color teal = new LED.Color(0, 255, 255);
+    public static final Color blue = new LED.Color(0, 0, 255);
+    public static final Color cyan = new LED.Color(0, 255, 255);
+    public static final Color magenta = new LED.Color(255, 0, 255);
+    public static final Color yellow = new LED.Color(255, 255, 0);
+    public static final Color white = new LED.Color(255, 255, 255);
+    public static final Color omegabytes = new LED.Color(162, 255, 0);
+    public static final Color disabled = new LED.Color(200, 0, 0);
+    public static final Color cube = new LED.Color(186, 0, 255);
+    public static final Color cone = new LED.Color(255, 128, 0);
   }
 
   public LED() {
@@ -52,9 +55,9 @@ public class LED extends SubsystemBase {
 
     // LED tests
     SmartDashboard.putData("LED Rainbow", Commands.startEnd(() -> setRainbow(), () -> setColor(Colors.omegabytes)));
-    SmartDashboard.putData("LED Larson", Commands.startEnd(() -> setLarson(Colors.teal), () -> setColor(Colors.omegabytes)));
-    SmartDashboard.putData("LED Strobe", Commands.startEnd(() -> setStrobe(Colors.teal), () -> setColor(Colors.omegabytes)));
-    SmartDashboard.putData("LED Flash", Commands.startEnd(() -> flash(50, Colors.teal), () -> setColor(Colors.omegabytes)));
+    SmartDashboard.putData("LED Larson", Commands.startEnd(() -> setLarson(Colors.cyan), () -> setColor(Colors.omegabytes)));
+    SmartDashboard.putData("LED Strobe", Commands.startEnd(() -> setStrobe(Colors.cyan), () -> setColor(Colors.omegabytes)));
+    SmartDashboard.putData("LED Flash", Commands.startEnd(() -> flash(50, Colors.cyan), () -> setColor(Colors.omegabytes)));
   }
 
   @Override

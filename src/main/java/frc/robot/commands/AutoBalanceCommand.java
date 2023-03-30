@@ -73,7 +73,7 @@ public class AutoBalanceCommand extends CommandBase {
 
       s_LED.setColor(LED.Colors.off, colorPercent, 100);
       if (usingPID) {
-        s_LED.setColor(LED.Colors.yellow, 0, colorPercent);
+        s_LED.setColor(LED.Colors.cone, 0, colorPercent);
       } else {
         s_LED.setColor(LED.Colors.blue, 0, colorPercent);
       }
