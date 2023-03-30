@@ -96,12 +96,13 @@ public class ArmSubsystem extends SubsystemBase {
   private ProfiledPIDController lowerPidController;
   private ProfiledPIDController upperPidController;
 
-  private final PIDConstants lowerConstants = new PIDConstants(0.60, 0.00, 0.00);
-  private final PIDConstants upperConstantsTeleOp = new PIDConstants(0.60, 0.00, 0.00); //will experiment this afternoon
+  private final PIDConstants lowerConstants = new PIDConstants(0.50, 0.00, 0.00);
+  private final PIDConstants lowerConstantsLaden = new PIDConstants(0.40, 0.00, 0.00);
+  private final PIDConstants upperConstantsTeleOp = new PIDConstants(0.50, 0.00, 0.00);
   private final PIDConstants upperConstantsAuto = new PIDConstants(0.50, 0.00, 0.00);
+  private final PIDConstants upperConstantsLaden = new PIDConstants(0.40, 0.00, 0.00);
   private final TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(180, 270);
   private final TrapezoidProfile.Constraints upperConstraints = new TrapezoidProfile.Constraints(180, 400);
-  private boolean teleOpInit = false;
 
   private double lowerMaxVoltage = 12;
   private double upperMaxVoltage = 12;
@@ -293,9 +294,14 @@ public class ArmSubsystem extends SubsystemBase {
     // TODO Consider passing a State, so that velocity can be non-zero for intermediate points
     lowerPidController.setGoal(nextPosition.lowerArmAngle);
     upperPidController.setGoal(nextPosition.upperArmAngle);
-    if (!teleOpInit && DriverStation.isTeleop()) {
-      upperPidController.setPID(upperConstantsTeleOp.kP, upperConstantsTeleOp.kI, upperConstantsTeleOp.kD);
-      teleOpInit = true;
+    if (DriverStation.isTeleop()) {
+      if (!s_Intake.isCube() && s_Intake.isStalled()) {
+        upperPidController.setPID(upperConstantsLaden.kP, upperConstantsLaden.kI, upperConstantsLaden.kD);
+        lowerPidController.setPID(lowerConstantsLaden.kP, lowerConstantsLaden.kI, lowerConstantsLaden.kD);
+      } else {
+        upperPidController.setPID(upperConstantsTeleOp.kP, upperConstantsTeleOp.kI, upperConstantsTeleOp.kD);
+        lowerPidController.setPID(lowerConstants.kP, lowerConstants.kI, lowerConstants.kD);
+      }
     }
     if (targetPosition.size() > 1) {
       if (targetPosition.peek() == Position.SAFE) {
@@ -380,6 +386,9 @@ public class ArmSubsystem extends SubsystemBase {
 
       SmartDashboard.putNumber("Upper Arm Master Voltage:", upperArmMaster.getMotorOutputVoltage());
       SmartDashboard.putNumber("Upper Arm Slave Voltage:", upperArmSlave.getMotorOutputVoltage());
+
+      SmartDashboard.putNumber("Upper Arm P-Value: ", upperPidController.getP());
+      SmartDashboard.putNumber("Lower Arm P-Value: ", lowerPidController.getP());
     }
   }
 }
