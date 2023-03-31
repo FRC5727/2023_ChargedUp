@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
@@ -64,6 +65,9 @@ public class ArmCommand extends CommandBase {
   public void end(boolean interrupted) {
     if (position != Position.NONE) {
       arm.stopMovement();
+      if (interrupted) {
+        DriverStation.reportWarning("Arm movement to position " + position.toString() + " was interrupted", false);
+      }
     }
   }
 
