@@ -65,7 +65,7 @@ public class ArmCommand extends CommandBase {
   public void end(boolean interrupted) {
     if (position != Position.NONE) {
       arm.stopMovement();
-      if (interrupted) {
+      if (interrupted && position != null) {
         DriverStation.reportWarning("Arm movement to position " + position.toString() + " was interrupted", false);
       }
     }
