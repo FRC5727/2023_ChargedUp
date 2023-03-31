@@ -35,6 +35,7 @@ public class Auto {
     private final SendableChooser<ArmSubsystem.Position> placeChooser3 = new SendableChooser<>();
     private final SendableChooser<AutoConfig> quickChooser = new SendableChooser<>();
 
+    private final double firstArmTimeout = 3.25;
     private AutoConfig activeConfig;
 
     public static class AutoConfig {
@@ -74,7 +75,8 @@ public class Auto {
         eventMap.put("Place first piece", 
             Commands.runOnce(() -> { if (!activeConfig.piece) s_Intake.toggleCube(); })
                 .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
-                .andThen(new ArmCommand(s_Arm, () -> activeConfig.place1))
+                .andThen((new ArmCommand(s_Arm, () -> activeConfig.place1))
+                    .withTimeout(firstArmTimeout))
                 .andThen(justPlaceCommand(s_Intake)));
         eventMap.put("Move arm to second", new ArmCommand(s_Arm, () -> activeConfig.place2));
         eventMap.put("Move arm to third", new ArmCommand(s_Arm, () -> activeConfig.place3));
