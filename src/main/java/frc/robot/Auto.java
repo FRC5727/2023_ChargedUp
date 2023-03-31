@@ -74,7 +74,7 @@ public class Auto {
 
     public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
         eventMap.put("Place first piece", 
-            Commands.runOnce(() -> { if (!activeConfig.piece) s_Intake.toggleCube(); })
+            Commands.runOnce(() -> { if (activeConfig.piece != s_Intake.isCube()) s_Intake.toggleCube(); })
                 .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
                 .andThen((new ArmCommand(s_Arm, () -> activeConfig.place1))
                     .withTimeout(firstArmTimeout))
