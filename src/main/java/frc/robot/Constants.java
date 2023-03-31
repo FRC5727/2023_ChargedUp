@@ -187,8 +187,8 @@ public final class Constants {
     public static final int lowCoder = 5;
 
     // Offsets are the CANcoder absolute position in the calibration position
-    public static final double lowerOffset = 147.74;
-    public static final double highOffset = 16.69;
+    public static final double lowerOffset = 151.9;
+    public static final double highOffset = 17.4;
 
     // Voltage to apply when moving arm manually
     public static final double manualVoltage = 1.5;
