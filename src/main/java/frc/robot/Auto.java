@@ -14,6 +14,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -165,6 +166,7 @@ public class Auto {
             return null;
 
         activeConfig = config;
+        DriverStation.reportWarning("Using path \"" + config.path + "\" for autonomous routine", false);
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(config.path, PathPlanner.getConstraintsFromPath(config.path));
         return autoBuilder.fullAuto(pathGroup);
     }
