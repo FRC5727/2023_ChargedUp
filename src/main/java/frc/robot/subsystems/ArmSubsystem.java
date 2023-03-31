@@ -281,6 +281,9 @@ public class ArmSubsystem extends SubsystemBase {
       case GRID_MID:
         s_Led.setColor(color, 0.0, 50.0);
         break;
+      case INTAKE_SUBSTATION:
+        s_Led.setColor(color, 0.0, 65.0);
+        break;
       case GRID_HIGH:
         s_Led.setColor(color, 0.0, 80.0);
         break;
