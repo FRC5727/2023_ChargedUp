@@ -14,6 +14,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -167,9 +168,11 @@ public class Auto {
         if (config == null || config.path == null)
             return null;
 
-        activeConfig = config;
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(config.path, PathPlanner.getConstraintsFromPath(config.path));
-        return autoBuilder.fullAuto(pathGroup);
+        return Commands.runOnce(() -> {
+            DriverStation.reportWarning("Running auto command built from path: " + config.path, false);
+            activeConfig = config;
+        }).andThen(autoBuilder.fullAuto(pathGroup));
     }
 
     private static List<String> getPathnames() {

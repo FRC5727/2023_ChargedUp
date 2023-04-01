@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -155,17 +154,16 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    DriverStation.reportWarning("Autonomous Init start: " + DriverStation.getMatchTime(), false);
+    // DriverStation.reportWarning("Autonomous Init start: " + DriverStation.getMatchTime(), false);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       //m_robotContainer.hack();
-      m_autonomousCommand = Commands.runOnce(() -> DriverStation.reportWarning("Before starting: " + DriverStation.getMatchTime(), false))
-        .andThen(m_autonomousCommand);
+      // m_autonomousCommand = Commands.runOnce(() -> DriverStation.reportWarning("Before starting: " + DriverStation.getMatchTime(), false)).andThen(m_autonomousCommand);
       m_autonomousCommand.schedule();
     }
-    DriverStation.reportWarning("Autonomous Init end: " + DriverStation.getMatchTime(), false);
+    // DriverStation.reportWarning("Autonomous Init end: " + DriverStation.getMatchTime(), false);
   }
 
   /** This function is called periodically during autonomous. */
