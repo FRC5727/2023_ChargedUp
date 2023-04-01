@@ -161,7 +161,8 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       //m_robotContainer.hack();
-      m_autonomousCommand.beforeStarting(Commands.runOnce(() -> DriverStation.reportWarning("Before starting: " + DriverStation.getMatchTime(), false)));
+      m_autonomousCommand = Commands.runOnce(() -> DriverStation.reportWarning("Before starting: " + DriverStation.getMatchTime(), false))
+        .andThen(m_autonomousCommand);
       m_autonomousCommand.schedule();
     }
     DriverStation.reportWarning("Autonomous Init end: " + DriverStation.getMatchTime(), false);
