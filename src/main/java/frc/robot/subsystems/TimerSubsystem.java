@@ -11,11 +11,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TimerSubsystem extends SubsystemBase {
   /** Creates a new TimerSubsystem. */
   public double gameTime;
-  public TimerSubsystem() { }
+  public double gameTimeConversion;
+  public Timer timer;
+  public TimerSubsystem() { 
+    timer = new Timer();
+  }
 
   @Override
   public void periodic() {
     gameTime = Timer.getMatchTime();
-    SmartDashboard.putNumber("Match TImer", gameTime);
+    double gameTimeConversion = gameTime / 60;
+    SmartDashboard.putNumber("Match Timer", gameTimeConversion);
   }
 }
