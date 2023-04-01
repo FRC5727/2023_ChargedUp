@@ -63,6 +63,7 @@ public class Auto {
         // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inner]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
         Map.entry("[Middle cone] 1 high, over, back and balance", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Middle cube] 1 high", new AutoConfig("Mid-Place only", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle cube] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         // Map.entry("[Speed bump] 1.5 high + balance [cube]", new AutoConfig("SB-Place,pick,balance", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Speed bump] 1.5 high + balance", new AutoConfig("SB-PlaceCone,pick,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Speed bump] 2 high [outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
