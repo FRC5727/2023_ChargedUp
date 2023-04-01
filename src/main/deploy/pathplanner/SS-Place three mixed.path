@@ -350,7 +350,7 @@
     }
   ],
   "maxVelocity": 3.0,
-  "maxAcceleration": 2.4,
+  "maxAcceleration": 2.3,
   "isReversed": null,
   "markers": [
     {
@@ -372,7 +372,7 @@
       ]
     },
     {
-      "position": 5.1,
+      "position": 5.01,
       "names": [
         "Ground intake"
       ]
