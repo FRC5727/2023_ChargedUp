@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.TimerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.ArmSubsystem;
@@ -36,6 +37,7 @@ public class RobotContainer {
   private final ArmSubsystem s_Arm = new ArmSubsystem(s_LED, s_Intake);
   private final Swerve s_Swerve = new Swerve();
   private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve, s_LED);
+  private final TimerSubsystem timerSubsystem = new TimerSubsystem();
 
   private Position driverTargetPosition = Position.CHASSIS;
 
