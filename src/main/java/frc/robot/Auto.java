@@ -14,7 +14,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,7 +33,7 @@ public class Auto {
     private final SendableChooser<ArmSubsystem.Position> placeChooser = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser2 = new SendableChooser<>();
     private final SendableChooser<ArmSubsystem.Position> placeChooser3 = new SendableChooser<>();
-    private final SendableChooser<AutoConfig> quickChooser = new SendableChooser<>();
+    private final SendableChooser<Command> quickChooser = new SendableChooser<>();
 
     private final double firstArmTimeout = 3.25;
     private AutoConfig activeConfig;
@@ -148,19 +147,20 @@ public class Auto {
         quickChooser.addOption("--- Auto Quick Pick ---", null);
         quickChooser.setDefaultOption("Manual selection", null);
         for (String name : quickpicks.keySet()) {
-          quickChooser.addOption(name, quickpicks.get(name));
+          quickChooser.addOption(name, buildCommand(quickpicks.get(name)));
         }
         SmartDashboard.putData("Quick Picks", quickChooser);
     }
 
-    public Command buildCommand() {
-        AutoConfig config = quickChooser.getSelected();
+    public Command getAutoCommand() {
+        Command autoCommand = quickChooser.getSelected();
 
-        if (config == null) {
-            config = new AutoConfig(pathChooser.getSelected(), pieceChooser.getSelected().booleanValue(),
-                                    placeChooser.getSelected(), placeChooser2.getSelected(), placeChooser3.getSelected());
+        if (autoCommand == null) {
+            AutoConfig config = new AutoConfig(pathChooser.getSelected(), pieceChooser.getSelected().booleanValue(),
+                                               placeChooser.getSelected(), placeChooser2.getSelected(), placeChooser3.getSelected());
+            autoCommand = buildCommand(config);
         }
-        return buildCommand(config);
+        return autoCommand;
     }
 
     public Command buildCommand(AutoConfig config) {
@@ -168,7 +168,6 @@ public class Auto {
             return null;
 
         activeConfig = config;
-        DriverStation.reportWarning("Using path \"" + config.path + "\" for autonomous routine", false);
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(config.path, PathPlanner.getConstraintsFromPath(config.path));
         return autoBuilder.fullAuto(pathGroup);
     }
