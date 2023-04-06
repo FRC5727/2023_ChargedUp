@@ -122,17 +122,18 @@ public class RobotContainer {
         .unless(s_Arm::isDirectMode));
 
     Trigger intakeSubstationTrigger = 
-      driverRightTrigger.whileTrue(new IntakeCommand(s_Intake)
+      driverRightTrigger.whileTrue(new IntakeForeverCommand(s_Intake)
         .alongWith(Commands.runOnce(s_Swerve::enableSpeedLimit))
         .alongWith(new ArmCommand(s_Arm, Position.INTAKE_SUBSTATION))
         .andThen(Commands.runOnce(s_Intake::idle, s_Intake)));
  
     intakeSubstationTrigger
       .onFalse(
-        Commands.waitSeconds(0.5)
+        Commands.waitSeconds(0.3)
           .andThen(Commands.runOnce(s_Swerve::disableSpeedLimit))
-        .alongWith(new ArmCommand(s_Arm, Position.CHASSIS))
-        .unless(s_Arm::isDirectMode));
+        .alongWith(Commands.runOnce(s_Intake::idle, s_Intake))
+        .alongWith(new ArmCommand(s_Arm, Position.CHASSIS)
+          .unless(s_Arm::isDirectMode)));
         
     Trigger intakeGroundTrigger = 
       driverLeftTrigger.whileTrue(new IntakeCommand(s_Intake)
