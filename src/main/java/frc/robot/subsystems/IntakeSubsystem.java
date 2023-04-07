@@ -29,7 +29,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void setSpeed() {
     if (idle) {
-      setSpeed(Constants.Intake.idleSpeed * (cube ? -1.0 : 1.0));
+      if (cube) {
+        setSpeed(Constants.Intake.idleCubeSpeed * -1.0);
+      } else {
+        setSpeed(Constants.Intake.idleConeSpeed);
+      }
     } else if (intake) {
       if (cube) {
         setSpeed(Constants.Intake.intakeCubeSpeed * -1.0);

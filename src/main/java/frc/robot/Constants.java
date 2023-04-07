@@ -200,7 +200,8 @@ public final class Constants {
     public static final double intakeConeSpeed = 0.90;
     public static final double outtakeCubeSpeed = 0.50;
     public static final double outtakeConeSpeed = 0.35;
-    public static final double idleSpeed = 0.18; 
+    public static final double idleCubeSpeed = 0.18;
+    public static final double idleConeSpeed = 0.18;
     public static final double stallCurrent = 15.0;
     public static final int stallMaxCube = 10;
     public static final int stallMaxCone = 20;  
