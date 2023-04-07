@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
         setSpeed(Constants.Intake.intakeConeSpeed);
       }
     } else if (cube) {
-      setSpeed(Constants.Intake.outtakeSpeed);
+      setSpeed(Constants.Intake.outtakeCubeSpeed);
     } else {
       setSpeed(Constants.Intake.outtakeConeSpeed * -1.0);
     }

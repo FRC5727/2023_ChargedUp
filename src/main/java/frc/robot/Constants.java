@@ -198,7 +198,7 @@ public final class Constants {
     public static final int deviceId = 1;
     public static final double intakeCubeSpeed = 0.50;
     public static final double intakeConeSpeed = 0.90;
-    public static final double outtakeSpeed = 0.50;
+    public static final double outtakeCubeSpeed = 0.50;
     public static final double outtakeConeSpeed = 0.35;
     public static final double idleSpeed = 0.18; 
     public static final double stallCurrent = 15.0;
