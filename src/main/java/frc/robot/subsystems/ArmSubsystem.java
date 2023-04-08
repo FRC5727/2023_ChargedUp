@@ -47,7 +47,6 @@ public class ArmSubsystem extends SubsystemBase {
     NONE,
     CALIBRATION,
     STARTING,
-    PRECHASSIS,
     CHASSIS,
     SAFE,
     GRID_LOW,
@@ -68,8 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
       // All positions are lower arm first, upper arm second
       // Zero angles are with lower arm vertical and upper arm horizontal
       Map.entry(Position.CALIBRATION, new ArmPosition(-20, 0)),
-      Map.entry(Position.STARTING, new ArmPosition(-20, -58)),
-      Map.entry(Position.PRECHASSIS, new ArmPosition(-32, -45)),
+      Map.entry(Position.STARTING, new ArmPosition(-21, -60)),
       Map.entry(Position.CHASSIS, new ArmPosition(-20, -44)),
       Map.entry(Position.SAFE, new ArmPosition(-20, 22)),
       Map.entry(Position.GRID_LOW, new ArmPosition(-10, -43)),
@@ -195,9 +193,6 @@ public class ArmSubsystem extends SubsystemBase {
     if (!armDirectDebug && lastPosition != position && lastTarget != position) {
       // Determine first step based on last known position
       switch (lastPosition) {
-        case STARTING:
-          targetPosition.add(Position.PRECHASSIS);
-          break;
         case GRID_HIGH:
           if (position != Position.YOSHI) { // TODO What about auto? DriverStation.isAutonomous()
             targetPosition.add(Position.SAFE);
@@ -216,8 +211,8 @@ public class ArmSubsystem extends SubsystemBase {
             targetPosition.add(Position.INTAKE_PREGROUND);
           }
           break;
+        case STARTING:
         case CHASSIS:
-        case PRECHASSIS:
         case GRID_MID:
         case GRID_LOW:
         case INTAKE_SUBSTATION:
@@ -227,18 +222,9 @@ public class ArmSubsystem extends SubsystemBase {
           break;
       }
 
-      // Now we know we are transitioning from either CHASSIS, SAFE, INTAKE_PREGROUND or a safe intermediate state
+      // Now we know we are transitioning from a safe state
       // Determine any prequisites for final position
       switch (position) {
-        case PRECHASSIS:
-        case STARTING:
-          if (targetPosition.isEmpty() || targetPosition.getLast() != Position.CHASSIS) {
-            targetPosition.add(Position.CHASSIS);
-            if (position == Position.STARTING) {
-              targetPosition.add(Position.PRECHASSIS);
-            }
-          }
-          break;
         case INTAKE_GROUND:
           if (targetPosition.isEmpty() || targetPosition.getLast() != Position.INTAKE_PREGROUND) {
             targetPosition.add(Position.INTAKE_PREGROUND);
@@ -251,6 +237,7 @@ public class ArmSubsystem extends SubsystemBase {
             }
           }
           break;
+        case STARTING:
         case INTAKE_PREGROUND:
         case INTAKE_SUBSTATION:
         case CHASSIS:
