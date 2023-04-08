@@ -68,14 +68,14 @@ public class ArmSubsystem extends SubsystemBase {
       // Zero angles are with lower arm vertical and upper arm horizontal
       Map.entry(Position.CALIBRATION, new ArmPosition(-20, 0)),
       Map.entry(Position.STARTING, new ArmPosition(-21, -60)),
-      Map.entry(Position.CHASSIS, new ArmPosition(-20, -44)),
-      Map.entry(Position.SAFE, new ArmPosition(-20, 22)),
-      Map.entry(Position.GRID_LOW, new ArmPosition(-10, -43)),
+      Map.entry(Position.CHASSIS, new ArmPosition(-27, -44)),
+      Map.entry(Position.SAFE, new ArmPosition(-27, 22)),
+      Map.entry(Position.GRID_LOW, new ArmPosition(-23, -33)),
       Map.entry(Position.GRID_MID, new ArmPosition(-5, -7)),
       Map.entry(Position.GRID_HIGH, new ArmPosition(28, 22)),
       Map.entry(Position.INTAKE_PREGROUND, new ArmPosition(6, -44)),
       Map.entry(Position.INTAKE_GROUND, new ArmPosition(12, -70)),
-      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-20, 13)),
+      Map.entry(Position.INTAKE_SUBSTATION, new ArmPosition(-27, 17)),
       Map.entry(Position.YOSHI, new ArmPosition(50, -36))
     ));
 
