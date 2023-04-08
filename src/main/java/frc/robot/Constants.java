@@ -28,8 +28,6 @@ public final class Constants {
   public static final String CANivoreName = "CANivore";
 
   public static final int LED_CANDLE = 0; // Port for LED light
-  public static final double speedLimit = 0.75;
-  public static final double rSpeedLimit = 0.50;
 
   public static final class Controls {
     public static final double stickDeadband = 0.10; // TODO We have used 0.05 previously
@@ -42,7 +40,7 @@ public final class Constants {
     public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
     // Multipliers when speed limit is in effect;
-    public static final double speedLimitXY = 0.30;
+    public static final double speedLimitXY = 0.45;
     public static final double speedLimitRot = 0.15;
 
     public static final COTSFalconSwerveConstants chosenModule =
