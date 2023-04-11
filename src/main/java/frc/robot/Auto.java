@@ -64,11 +64,12 @@ public class Auto {
         Map.entry("[No bump-RED] 3 cube mixed [align inside edge RED]", new AutoConfig("SSRed-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
         Map.entry("[No bump] 3 piece ideal [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick,place", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.GRID_MID)),
         Map.entry("[Middle cone] 1 high, over, back and balance", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Middle cube] 1 high", new AutoConfig("Mid-Place only", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Middle cube] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle cube] 1 high", new AutoConfig("Mid-Place only", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle cube] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle cube] 1 high, delayed mobility (bumpside)", new AutoConfig("Mid-Place, delayed mobility (bumpside)", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Speed bump] 1.5 high + balance", new AutoConfig("SB-PlaceCone,pick,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Speed bump] 2 high [outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        Map.entry("[Speed bump] 3 piece w/push [outer]", new AutoConfig("SB-PlaceCone,pick,eject,pick,place", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE))
+        Map.entry("[Speed bump] 2 high [outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.CHASSIS, Position.GRID_HIGH)),
+        Map.entry("[Speed bump] 3 piece w/push [outer]", new AutoConfig("SB-PlaceCone,pick,eject,pick,place", false, Position.GRID_HIGH, Position.CHASSIS, Position.GRID_HIGH))
         // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inner]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
         // Map.entry("[Speed bump] 1.5 high + balance [cube]", new AutoConfig("SB-Place,pick,balance", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         // Map.entry("2 low + high [speed bump, cube]", new AutoConfig("SB-Place,pick,place,position", true, Position.CHASSIS, Position.GRID_HIGH, Position.NONE))

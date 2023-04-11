@@ -18,6 +18,7 @@
       "stopEvent": {
         "names": [
           "Place first piece",
+          "Move arm to safe",
           "Chassis"
         ],
         "executionBehavior": "sequential",
