@@ -77,7 +77,6 @@ public class RobotPosition extends SubsystemBase {
                 }
                 swervePose.setVisionMeasurementStdDevs(VecBuilder.fill(stddev[0], stddev[1], Units.degreesToRadians(stddev[2])));
                 swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
-                swervePose.addVisionMeasurement(robotPose, targetDistance);
             // }
         }
 
