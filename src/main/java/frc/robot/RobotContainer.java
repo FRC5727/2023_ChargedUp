@@ -17,6 +17,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.TimerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LED;
+import frc.robot.subsystems.RobotPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Position;
 import static frc.robot.Constants.*;
@@ -36,7 +37,8 @@ public class RobotContainer {
   private final IntakeSubsystem s_Intake = new IntakeSubsystem(s_LED);
   private final ArmSubsystem s_Arm = new ArmSubsystem(s_LED, s_Intake);
   private final Swerve s_Swerve = new Swerve();
-  private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve, s_LED);
+  private final RobotPosition s_RobotPosition = new RobotPosition(s_Swerve);
+  private final Auto auto = new Auto(s_Arm, s_Intake, s_Swerve, s_RobotPosition, s_LED);
   private final @SuppressWarnings("unused") TimerSubsystem timerSubsystem = new TimerSubsystem();
 
   private Position driverTargetPosition = Position.CHASSIS;

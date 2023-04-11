@@ -80,7 +80,7 @@ public class Auto {
         return Commands.startEnd(s_Intake::place, () -> {}, s_Intake).withTimeout(0.2);
     }
 
-    public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, LED s_LED) {
+    public Auto(ArmSubsystem s_Arm, IntakeSubsystem s_Intake, Swerve s_Swerve, RobotPosition s_RobotPosition, LED s_LED) {
         eventMap.put("Place first piece",
             Commands.runOnce(() -> { if (activeConfig.piece != s_Intake.isCube()) s_Intake.toggleCube(); })
                 .andThen(Commands.runOnce(s_Intake::idle, s_Intake))
@@ -107,8 +107,8 @@ public class Auto {
         eventMap.put("Balance", new AutoBalanceCommand(s_Swerve, s_LED));
 
         autoBuilder = new SwerveAutoBuilder(
-            s_Swerve::getPose, // Pose2d supplier
-            s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+            s_RobotPosition::getPose, // Pose2d supplier
+            s_RobotPosition::resetPosition, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
             new PIDConstants(12, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
             new PIDConstants(4.25, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)

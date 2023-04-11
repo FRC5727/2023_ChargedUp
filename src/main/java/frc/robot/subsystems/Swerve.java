@@ -8,27 +8,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
     public static boolean swerveDebug = false;
     private boolean speedLimit = false;
     
-    public SwerveDrivePoseEstimator swervePose;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
@@ -53,9 +44,6 @@ public class Swerve extends SubsystemBase {
          */
         Timer.delay(1.0);
         resetModulesToAbsolute();
-
-        // The initial pose will be overridden later by the autonomous routine
-        swervePose = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -86,14 +74,6 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
-    }
-
-    public Pose2d getPose() {
-        return swervePose.getEstimatedPosition();
-    }
-
-    public void resetOdometry(Pose2d pose) {
-        swervePose.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -153,28 +133,8 @@ public class Swerve extends SubsystemBase {
         return gyro.getRoll();
     }
 
-    // TOOD Remove if unused
-    public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory traj) {
-        SmartDashboard.putString("First pose", traj.getInitialHolonomicPose().toString());
-        PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance());
-        SmartDashboard.putString("First pose transformed", transformed.getInitialHolonomicPose().toString());
-        return Commands.runOnce(() -> resetOdometry(transformed.getInitialHolonomicPose()))
-            .andThen(new PPSwerveControllerCommand(
-                traj, 
-                this::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(5.0, 0.0, 0.0),
-                new PIDController(5.0, 0.0, 0.0),
-                new PIDController(0.5, 0.0, 0.0),
-                this::setModuleStates,
-                true,
-                this));
-    }
-
     @Override
     public void periodic() {
-        swervePose.update(getYaw(), getModulePositions());
-
         if (swerveDebug) {
             for (SwerveModule mod : mSwerveMods) {
                 SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
@@ -184,10 +144,6 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
             SmartDashboard.putNumber("Robot Pitch", getPitch());
             // SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
-            Pose2d robotPose = swervePose.getEstimatedPosition();
-            SmartDashboard.putNumber("Pose X", robotPose.getX());
-            SmartDashboard.putNumber("Pose Y", robotPose.getY());
-            SmartDashboard.putNumber("Pose Angle", robotPose.getRotation().getDegrees());
         }
     }
 }
