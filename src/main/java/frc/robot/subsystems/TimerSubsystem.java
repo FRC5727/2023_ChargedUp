@@ -20,7 +20,6 @@ public class TimerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     gameTime = Timer.getMatchTime();
-    double gameTimeConversion = gameTime / 60;
-    SmartDashboard.putNumber("Match Timer", gameTimeConversion);
+    SmartDashboard.putNumber("Match Timer", gameTime);
   }
 }
