@@ -194,12 +194,12 @@ public class ArmSubsystem extends SubsystemBase {
       // Determine first step based on last known position
       switch (lastPosition) {
         case GRID_HIGH:
-          if (position != Position.YOSHI) { // TODO What about auto? DriverStation.isAutonomous()
+          if (position != Position.YOSHI && !DriverStation.isAutonomous()) {
             targetPosition.add(Position.SAFE);
           }
           break;
         case SAFE:
-          if (lastTarget == Position.GRID_HIGH && position != Position.YOSHI) {
+          if (lastTarget == Position.GRID_HIGH && position != Position.YOSHI && !DriverStation.isAutonomous()) {
             targetPosition.add(Position.SAFE);
           }
           break;
