@@ -62,7 +62,8 @@ public class Auto {
         Map.entry("[No bump] 2.5 w/2 high [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
         Map.entry("[No bump-BLUE] 3 cube mixed [align inside edge BLUE]", new AutoConfig("SS-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
         Map.entry("[No bump-RED] 3 cube mixed [align inside edge RED]", new AutoConfig("SSRed-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
-        Map.entry("[No bump] 3 piece ideal [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick,place", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.GRID_MID)),
+        // Map.entry("[No bump] 3 piece ideal [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick,place", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.GRID_MID)),
+        Map.entry("[No bump] 3 cube column", new AutoConfig("SS-Place,pick,place,pick,place", true, Position.NONE, Position.GRID_HIGH, Position.GRID_MID)),
         Map.entry("[Middle cone] 1 high, over, back and balance", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Middle cube] 1 high", new AutoConfig("Mid-Place only", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
         Map.entry("[Middle cube] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
@@ -105,12 +106,14 @@ public class Auto {
                     .andThen(new WaitCommand(1.0))
                     .andThen(new IntakeCommand(s_Intake))));
         eventMap.put("Balance", new AutoBalanceCommand(s_Swerve, s_LED));
+        eventMap.put("Enable vision", Commands.runOnce(s_RobotPosition::enableVision));
+        eventMap.put("Disable vision", Commands.runOnce(s_RobotPosition::disableVision));
 
         autoBuilder = new SwerveAutoBuilder(
             s_RobotPosition::getPose, // Pose2d supplier
             s_RobotPosition::resetPosition, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-            new PIDConstants(12, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+            new PIDConstants(8, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
             new PIDConstants(4.25, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
             s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
             eventMap,

@@ -23,6 +23,7 @@ import frc.robot.Dashboard;
 
 public class RobotPosition extends SubsystemBase {
     public static boolean positionDebug = false;
+    private boolean useVision = true;
 
     private final MultiLinearInterpolator oneAprilTagLookupTable = new MultiLinearInterpolator(Constants.Vision.ONE_APRIL_TAG_LOOKUP_TABLE);
 
@@ -55,29 +56,39 @@ public class RobotPosition extends SubsystemBase {
         swervePose.resetPosition(s_Swerve.getYaw(), s_Swerve.getModulePositions(), pose);
     }
 
+    public void disableVision() {
+        useVision = false;
+    }
+
+    public void enableVision() {
+        useVision = true;
+    }
+
     @Override
     public void periodic() {
         Pose2d robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
-        // double maxXYError = 1.0;
+        double maxXYError = 1.0;
 
         boolean haveTarget = targetEntry.getDouble(0) > 0;
         double[] llpose = botposeEntry.getDoubleArray(new double[7]);
-        if (haveTarget && llpose[0] > 0.0 && llpose[1] > 0.0) {
-            Pose2d visionPose = new Pose2d(llpose[0], llpose[1], Rotation2d.fromDegrees(llpose[5]));
+        if (useVision) {
+            if (haveTarget && llpose[0] > 0.0 && llpose[1] > 0.0) {
+                Pose2d visionPose = new Pose2d(llpose[0], llpose[1], Rotation2d.fromDegrees(llpose[5]));
 
-            // if (Math.abs(robotPose.getX() - visionPose.getX()) > maxXYError ||
-            //            Math.abs(robotPose.getY() - visionPose.getY()) > maxXYError) {
-            //     DriverStation.reportWarning("Rejecting vision data with excess error", false);
-            // } else {
-                double[] targetPose = targetPoseEntry.getDoubleArray(new double[6]);
-                double targetDistance = Math.sqrt(Math.pow(targetPose[0], 2) + Math.pow(targetPose[1], 2) + Math.pow(targetPose[2], 2));
-                double[] stddev = oneAprilTagLookupTable.getLookupValue(targetDistance);
-                if (positionDebug) {
-                    SmartDashboard.putNumber("Target distance", targetDistance);
+                if (Math.abs(robotPose.getX() - visionPose.getX()) > maxXYError ||
+                        Math.abs(robotPose.getY() - visionPose.getY()) > maxXYError) {
+                    DriverStation.reportWarning("Rejecting vision data with excess error", false);
+                } else {
+                    double[] targetPose = targetPoseEntry.getDoubleArray(new double[6]);
+                    double targetDistance = Math.sqrt(Math.pow(targetPose[0], 2) + Math.pow(targetPose[1], 2) + Math.pow(targetPose[2], 2));
+                    double[] stddev = oneAprilTagLookupTable.getLookupValue(targetDistance);
+                    if (positionDebug) {
+                        SmartDashboard.putNumber("Target distance", targetDistance);
+                    }
+                    swervePose.setVisionMeasurementStdDevs(VecBuilder.fill(stddev[0], stddev[1], Units.degreesToRadians(stddev[2])));
+                    swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
                 }
-                swervePose.setVisionMeasurementStdDevs(VecBuilder.fill(stddev[0], stddev[1], Units.degreesToRadians(stddev[2])));
-                swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
-            // }
+            }
         }
 
         if (positionDebug) {
