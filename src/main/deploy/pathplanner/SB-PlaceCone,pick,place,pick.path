@@ -7,7 +7,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5844583975802933,
+        "x": 2.2856477152579524,
         "y": 0.51
       },
       "holonomicAngle": 180.0,
@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Disable vision",
           "Place first piece"
         ],
         "executionBehavior": "sequential",
@@ -26,20 +27,45 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9,
-        "y": 0.51
+        "x": 3.2,
+        "y": 0.92
       },
       "prevControl": {
-        "x": 3.8001130240641223,
-        "y": 0.51
+        "x": 2.647930837177098,
+        "y": 0.9199999999999999
       },
       "nextControl": {
-        "x": 4.425434019571125,
-        "y": 0.51
+        "x": 3.3658052709324844,
+        "y": 0.9199999999999999
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.7,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.9,
+        "y": 0.92
+      },
+      "prevControl": {
+        "x": 3.8001130240641223,
+        "y": 0.92
+      },
+      "nextControl": {
+        "x": 4.425434019571125,
+        "y": 0.92
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": 1.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -52,17 +78,17 @@
     {
       "anchorPoint": {
         "x": 4.5,
-        "y": 0.5077782085388741
+        "y": 0.92
       },
       "prevControl": {
         "x": 4.194502530908816,
-        "y": 0.5077782085388741
+        "y": 0.92
       },
       "nextControl": {
         "x": 5.287006771966996,
-        "y": 0.5077782085388741
+        "y": 0.92
       },
-      "holonomicAngle": 179.99,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -87,7 +113,7 @@
         "x": 6.315060087432252,
         "y": 0.92
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": -0.01,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -101,16 +127,16 @@
     },
     {
       "anchorPoint": {
-        "x": 7.2,
-        "y": 0.9158500773141907
+        "x": 7.1,
+        "y": 0.92
       },
       "prevControl": {
-        "x": 7.173375537293476,
-        "y": 0.9158500773141907
+        "x": 7.073375537293476,
+        "y": 0.92
       },
       "nextControl": {
-        "x": 7.173375537293476,
-        "y": 0.9158500773141907
+        "x": 7.073375537293476,
+        "y": 0.92
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -164,7 +190,7 @@
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.7,
+      "velOverride": 1.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -176,15 +202,15 @@
     },
     {
       "anchorPoint": {
-        "x": 3.3,
+        "x": 3.2,
         "y": 0.92
       },
       "prevControl": {
-        "x": 3.517827170248607,
+        "x": 3.417827170248607,
         "y": 0.9199999999999999
       },
       "nextControl": {
-        "x": 2.680278743811394,
+        "x": 2.5802787438113945,
         "y": 0.9199999999999999
       },
       "holonomicAngle": 180.0,
@@ -201,16 +227,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.82,
-        "y": 1.25
+        "x": 1.9,
+        "y": 1.05
       },
       "prevControl": {
-        "x": 2.5667180578553204,
-        "y": 1.25
+        "x": 2.6467180578553204,
+        "y": 1.05
       },
       "nextControl": {
-        "x": 2.5667180578553204,
-        "y": 1.25
+        "x": 2.6467180578553204,
+        "y": 1.05
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -226,16 +252,16 @@
     },
     {
       "anchorPoint": {
-        "x": 3.3,
+        "x": 3.2,
         "y": 0.92
       },
       "prevControl": {
-        "x": 2.556181228173127,
-        "y": 0.9199999999999999
+        "x": 2.6021470012108967,
+        "y": 0.92
       },
       "nextControl": {
-        "x": 4.0438187718268725,
-        "y": 0.9200000000000002
+        "x": 3.943818771826873,
+        "y": 0.92
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -264,7 +290,7 @@
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 0.7,
+      "velOverride": 1.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -326,15 +352,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.082313989189382,
+        "x": 7.35,
         "y": 1.2
       },
       "prevControl": {
-        "x": 7.082313989189382,
+        "x": 7.35,
         "y": 0.7303572125411641
       },
       "nextControl": {
-        "x": 7.082313989189382,
+        "x": 7.35,
         "y": 1.6696427874588358
       },
       "holonomicAngle": 90.0,
@@ -351,15 +377,15 @@
     },
     {
       "anchorPoint": {
-        "x": 7.08,
+        "x": 7.35,
         "y": 1.9
       },
       "prevControl": {
-        "x": 7.08,
+        "x": 7.35,
         "y": 1.6055305028120783
       },
       "nextControl": {
-        "x": 7.08,
+        "x": 7.35,
         "y": 1.6055305028120783
       },
       "holonomicAngle": 90.0,
@@ -422,50 +448,58 @@
       }
     }
   ],
-  "maxVelocity": 3.0,
-  "maxAcceleration": 2.0,
+  "maxVelocity": 3.5,
+  "maxAcceleration": 2.2,
   "isReversed": null,
   "markers": [
     {
-      "position": 0.01,
-      "names": [
-        "Chassis"
-      ]
-    },
-    {
-      "position": 2.01,
+      "position": 2.25,
       "names": [
         "Ground intake"
       ]
     },
     {
-      "position": 4.01,
+      "position": 5.01,
       "names": [
+        "Enable vision",
         "Move arm to safe"
-      ]
-    },
-    {
-      "position": 7.0,
-      "names": [
-        "Move arm to second"
       ]
     },
     {
       "position": 8.0,
       "names": [
+        "Move arm to second"
+      ]
+    },
+    {
+      "position": 9.0,
+      "names": [
+        "Disable vision",
         "Eject cube"
       ]
     },
     {
-      "position": 8.01,
+      "position": 9.15,
       "names": [
         "Chassis"
       ]
     },
     {
-      "position": 11.01,
+      "position": 12.01,
       "names": [
         "Ground intake"
+      ]
+    },
+    {
+      "position": 15.01,
+      "names": [
+        "Chassis"
+      ]
+    },
+    {
+      "position": 0.25,
+      "names": [
+        "Chassis"
       ]
     }
   ]
