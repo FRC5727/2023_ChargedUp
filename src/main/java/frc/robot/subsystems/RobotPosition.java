@@ -77,7 +77,9 @@ public class RobotPosition extends SubsystemBase {
 
                 if (Math.abs(robotPose.getX() - visionPose.getX()) > maxXYError ||
                         Math.abs(robotPose.getY() - visionPose.getY()) > maxXYError) {
-                    DriverStation.reportWarning("Rejecting vision data with excess error", false);
+                    if (DriverStation.isAutonomous()) {
+                        DriverStation.reportWarning("Rejecting vision data with excess error", false);
+                    }
                 } else {
                     double[] targetPose = targetPoseEntry.getDoubleArray(new double[6]);
                     double targetDistance = Math.sqrt(Math.pow(targetPose[0], 2) + Math.pow(targetPose[1], 2) + Math.pow(targetPose[2], 2));
