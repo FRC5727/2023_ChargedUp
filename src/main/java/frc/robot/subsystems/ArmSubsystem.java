@@ -324,9 +324,16 @@ public class ArmSubsystem extends SubsystemBase {
       }
     }
     if (!doneMovement()) {
-      // TODO Consider removing (or considerably raising) max voltage with PID profile in place
-      lowerArmMaster.setVoltage(constrainValue(lowerPidController.calculate(getLowerAngle()), lowerMaxVoltage));
-      upperArmMaster.setVoltage(constrainValue(upperPidController.calculate(getUpperAngle()), upperMaxVoltage));
+      if (lowerPidController.atGoal()) {
+        lowerArmMaster.stopMotor();
+      } else {
+        lowerArmMaster.setVoltage(constrainValue(lowerPidController.calculate(getLowerAngle()), lowerMaxVoltage));
+      }
+      if (upperPidController.atGoal()) {
+        upperArmMaster.stopMotor();
+      } else {
+        upperArmMaster.setVoltage(constrainValue(upperPidController.calculate(getUpperAngle()), upperMaxVoltage));
+      }
     } else {
       stopMovement();
       setArmColor(lastPosition, Colors.blue);
