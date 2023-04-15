@@ -24,7 +24,7 @@
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
-        "waitTime": 5.5
+        "waitTime": 6.25
       }
     },
     {
