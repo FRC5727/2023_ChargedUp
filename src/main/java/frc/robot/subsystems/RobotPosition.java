@@ -22,7 +22,7 @@ import frc.robot.Dashboard;
 
 public class RobotPosition extends SubsystemBase {
     public static boolean positionDebug = false;
-    private boolean useVision = true;
+    private boolean useVision = false;
     private boolean lightsOn = false;
 
     private final MultiLinearInterpolator oneAprilTagLookupTable = new MultiLinearInterpolator(Constants.Vision.ONE_APRIL_TAG_LOOKUP_TABLE);
