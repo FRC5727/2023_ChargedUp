@@ -215,6 +215,7 @@ public class ArmSubsystem extends SubsystemBase {
           break;
         case STARTING:
         case CHASSIS:
+        case CHASSIS_CONE:
         case GRID_MID:
         case GRID_LOW:
         case INTAKE_SUBSTATION:
@@ -243,6 +244,7 @@ public class ArmSubsystem extends SubsystemBase {
         case INTAKE_PREGROUND:
         case INTAKE_SUBSTATION:
         case CHASSIS:
+        case CHASSIS_CONE:
         case GRID_MID:
         case GRID_LOW:
         case SAFE:
