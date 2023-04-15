@@ -60,12 +60,17 @@ public class RobotPosition extends SubsystemBase {
 
     public void disableVision() {
         useVision = false;
+        if (lightsOn) {
+            LimelightHelpers.setLEDMode_ForceOff(Constants.Vision.limelightName);
+            lightsOn = false;
+        }
     }
 
     public void enableVision() {
         useVision = true;
         if (!lightsOn) {
             LimelightHelpers.setLEDMode_ForceOn(Constants.Vision.limelightName);
+            lightsOn = true;
         }
     }
 
