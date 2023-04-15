@@ -227,15 +227,15 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9,
+        "x": 1.88,
         "y": 1.05
       },
       "prevControl": {
-        "x": 2.6467180578553204,
+        "x": 2.6267180578553204,
         "y": 1.05
       },
       "nextControl": {
-        "x": 2.6467180578553204,
+        "x": 2.6267180578553204,
         "y": 1.05
       },
       "holonomicAngle": 180.0,
@@ -453,7 +453,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 2.25,
+      "position": 2.0,
       "names": [
         "Ground intake"
       ]
@@ -466,7 +466,7 @@
       ]
     },
     {
-      "position": 8.0,
+      "position": 7.0,
       "names": [
         "Move arm to second"
       ]
