@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Disable vision",
           "Place first piece"
         ],
         "executionBehavior": "sequential",
@@ -77,15 +78,15 @@
     {
       "anchorPoint": {
         "x": 6.2,
-        "y": 0.96
+        "y": 0.93
       },
       "prevControl": {
         "x": 5.449695451544669,
-        "y": 0.96
+        "y": 0.93
       },
       "nextControl": {
         "x": 6.315060087432252,
-        "y": 0.96
+        "y": 0.93
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -102,15 +103,15 @@
     {
       "anchorPoint": {
         "x": 7.0,
-        "y": 0.96
+        "y": 0.93
       },
       "prevControl": {
         "x": 6.973375537293476,
-        "y": 0.96
+        "y": 0.93
       },
       "nextControl": {
         "x": 6.973375537293476,
-        "y": 0.96
+        "y": 0.93
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -179,7 +180,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.01,
+      "position": 0.15,
       "names": [
         "Chassis"
       ]

@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Disable vision",
           "Place first piece",
           "Move arm to safe",
           "Chassis"

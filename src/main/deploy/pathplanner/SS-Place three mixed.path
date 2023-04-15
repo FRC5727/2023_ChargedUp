@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Disable vision",
           "Place first piece"
         ],
         "executionBehavior": "sequential",
@@ -354,7 +355,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.01,
+      "position": 0.15,
       "names": [
         "Ground intake"
       ]
@@ -362,17 +363,19 @@
     {
       "position": 3.01,
       "names": [
+        "Enable vision",
         "Move arm to second"
       ]
     },
     {
       "position": 4.99,
       "names": [
-        "Eject cube"
+        "Eject cube",
+        "Enable vision"
       ]
     },
     {
-      "position": 5.01,
+      "position": 5.15,
       "names": [
         "Ground intake"
       ]
@@ -380,13 +383,15 @@
     {
       "position": 9.01,
       "names": [
-        "Move arm to third"
+        "Move arm to third",
+        "Enable vision"
       ]
     },
     {
       "position": 12.0,
       "names": [
-        "Eject cube"
+        "Eject cube",
+        "Disable vision"
       ]
     },
     {

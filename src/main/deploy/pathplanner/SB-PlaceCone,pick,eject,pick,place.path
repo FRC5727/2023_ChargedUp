@@ -17,6 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Disable vision",
           "Place first piece"
         ],
         "executionBehavior": "sequential",
@@ -342,6 +343,7 @@
       "stopEvent": {
         "names": [
           "Eject cube",
+          "Move arm to safe",
           "Chassis"
         ],
         "executionBehavior": "sequential",
@@ -355,7 +357,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.01,
+      "position": 0.15,
       "names": [
         "Chassis"
       ]
@@ -369,13 +371,15 @@
     {
       "position": 4.01,
       "names": [
+        "Enable vision",
         "Move arm to second"
       ]
     },
     {
       "position": 5.0,
       "names": [
-        "Eject cube"
+        "Eject cube",
+        "Disable vision"
       ]
     },
     {
@@ -387,6 +391,7 @@
     {
       "position": 8.01,
       "names": [
+        "Enable vision",
         "Move arm to safe"
       ]
     },
