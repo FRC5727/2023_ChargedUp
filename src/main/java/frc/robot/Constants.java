@@ -84,6 +84,7 @@ public final class Constants {
     public static final double drivePeakCurrentDuration = 0.1;
     public static final boolean driveEnableCurrentLimit = true;
 
+
     /*
      * These values are used by the drive falcon to ramp in open loop and closed
      * loop driving.
@@ -114,9 +115,9 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     /** Meters per Second */
-    public static final double maxSpeed = 6.5; // TODO: This must be tuned to specific robot
+    public static final double maxSpeed = 4.5; // TODO: This must be tuned to specific robot
     /** Radians per Second */
-    public static final double maxAngularVelocity = 10.0; // TODO: This must be tuned to specific robot
+    public static final double maxAngularVelocity = Units.degreesToRadians(450); // TODO: This must be tuned to specific robot
 
     /* Neutral Modes */
     public static final NeutralMode angleNeutralMode = NeutralMode.Brake;
