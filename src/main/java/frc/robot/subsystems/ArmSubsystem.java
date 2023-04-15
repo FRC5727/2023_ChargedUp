@@ -48,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
     CALIBRATION,
     STARTING,
     CHASSIS,
+    CHASSIS_CONE,
     SAFE,
     GRID_LOW,
     GRID_MID,
@@ -69,6 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
       Map.entry(Position.CALIBRATION, new ArmPosition(-20, 0)),
       Map.entry(Position.STARTING, new ArmPosition(-21, -60)),
       Map.entry(Position.CHASSIS, new ArmPosition(-27, -44)),
+      Map.entry(Position.CHASSIS_CONE, new ArmPosition(-27, -52)),
       Map.entry(Position.SAFE, new ArmPosition(-27, 22)),
       Map.entry(Position.GRID_LOW, new ArmPosition(-23, -33)),
       Map.entry(Position.GRID_MID, new ArmPosition(-7, -7)),
@@ -281,9 +283,16 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void beginMovement() {
-    ArmPosition nextPosition = armPositions.get(targetPosition.peek());
+    Position nextPositionType = targetPosition.peek();
+    ArmPosition nextPosition;
+
+    // If moving to chassis and holding a cone, tuck a slightly tighter position
+    if (nextPositionType == Position.CHASSIS && DriverStation.isTeleopEnabled() && !s_Intake.isCube() && s_Intake.isStalled()) {
+      nextPositionType = Position.CHASSIS_CONE;
+    }
 
     // TODO Consider passing a State, so that velocity can be non-zero for intermediate points
+    nextPosition = armPositions.get(nextPositionType);
     lowerPidController.setGoal(nextPosition.lowerArmAngle);
     upperPidController.setGoal(nextPosition.upperArmAngle);
     if (DriverStation.isTeleop()) {
