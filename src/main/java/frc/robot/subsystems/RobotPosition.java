@@ -13,17 +13,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.lib.util.MultiLinearInterpolator;
 import frc.robot.Constants;
 import frc.robot.Dashboard;
 
-// TODO Enable and disable vision processing
 // TODO Vision subsystem, parsing JSON, with timestamp to avoid redundant updates?
-// TODO Ignore wildly divergent values (button to force accept?)
 
 public class RobotPosition extends SubsystemBase {
     public static boolean positionDebug = false;
     private boolean useVision = true;
+    private boolean lightsOn = false;
 
     private final MultiLinearInterpolator oneAprilTagLookupTable = new MultiLinearInterpolator(Constants.Vision.ONE_APRIL_TAG_LOOKUP_TABLE);
 
@@ -46,6 +46,8 @@ public class RobotPosition extends SubsystemBase {
         botposeEntry = limelightTable.getEntry(DriverStation.getAlliance() == Alliance.Red ? "botpose_wpired" : "botpose_wpiblue");
         targetEntry = limelightTable.getEntry("tv");
         targetPoseEntry = limelightTable.getEntry("targetpose_cameraspace");
+
+        LimelightHelpers.setLEDMode_ForceOff(Constants.Vision.limelightName);
     }
 
     public Pose2d getPose() {
@@ -62,12 +64,14 @@ public class RobotPosition extends SubsystemBase {
 
     public void enableVision() {
         useVision = true;
+        if (!lightsOn) {
+            LimelightHelpers.setLEDMode_ForceOn(Constants.Vision.limelightName);
+        }
     }
 
     @Override
     public void periodic() {
         Pose2d robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
-        double maxXYError = 1.0;
 
         boolean haveTarget = targetEntry.getDouble(0) > 0;
         double[] llpose = botposeEntry.getDoubleArray(new double[7]);
@@ -75,9 +79,9 @@ public class RobotPosition extends SubsystemBase {
             if (haveTarget && llpose[0] > 0.0 && llpose[1] > 0.0) {
                 Pose2d visionPose = new Pose2d(llpose[0], llpose[1], Rotation2d.fromDegrees(llpose[5]));
 
-                if (Math.abs(robotPose.getX() - visionPose.getX()) > maxXYError ||
-                        Math.abs(robotPose.getY() - visionPose.getY()) > maxXYError) {
-                    if (DriverStation.isAutonomous()) {
+                if (Math.abs(robotPose.getX() - visionPose.getX()) > Constants.Vision.maxXYError ||
+                        Math.abs(robotPose.getY() - visionPose.getY()) > Constants.Vision.maxXYError) {
+                    if (DriverStation.isAutonomousEnabled()) {
                         DriverStation.reportWarning("Rejecting vision data with excess error", false);
                     }
                 } else {
@@ -91,6 +95,12 @@ public class RobotPosition extends SubsystemBase {
                     swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
                 }
             }
+        }
+
+        if (lightsOn && !DriverStation.isAutonomousEnabled()) {
+            // Don't keep LEDs on past auto
+            LimelightHelpers.setLEDMode_ForceOff(Constants.Vision.limelightName);
+            lightsOn = false;
         }
 
         if (positionDebug) {

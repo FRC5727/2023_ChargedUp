@@ -206,6 +206,9 @@ public final class Constants {
   }
 
   public static final class Vision {
+    public static final String limelightName = "limelight";
+    public static final double maxXYError = 1.0;
+
     public static final double[][] ONE_APRIL_TAG_LOOKUP_TABLE = {
       // {distance in meters, x std deviation, y std deviation, r (in degrees) std deviation}
       {0, 0.01, 0.01, 10},
