@@ -36,7 +36,7 @@ public class Auto {
     private final SendableChooser<ArmSubsystem.Position> placeChooser3 = new SendableChooser<>();
     private final SendableChooser<Command> quickChooser = new SendableChooser<>();
 
-    private final double firstArmTimeout = 3.25;
+    private final double firstArmTimeout = 2.5;
     private AutoConfig activeConfig;
 
     public static class AutoConfig {
@@ -57,23 +57,24 @@ public class Auto {
     }
 
     private final SortedMap<String, AutoConfig> quickpicks = new TreeMap<>(Map.ofEntries(
-        Map.entry("[Clear] 3 cube link [innermost]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
-        Map.entry("[Clear] 2 high + balance [outer]", new AutoConfig("SS-PlaceCone,pick,place,balance", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        Map.entry("[Clear] 2.5 w/2 high [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        Map.entry("[Clear-BLUE] 3 cube mixed [align inside edge BLUE]", new AutoConfig("SS-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
-        Map.entry("[Clear-RED] 3 cube mixed [align inside edge RED]", new AutoConfig("SSRed-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
-        // Map.entry("[Clear] 3 piece ideal [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick,place", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.GRID_MID)),
-        Map.entry("[Clear] 3 piece column", new AutoConfig("SS-Place,pick,place,pick,place", false, Position.NONE, Position.GRID_HIGH, Position.GRID_MID)),
-        Map.entry("[Middle cone] 1 high, over, back and balance", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Middle cube] 1 high", new AutoConfig("Mid-Place only", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Middle cube] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Middle cube] 1 high, delayed mobility (bumpside)", new AutoConfig("Mid-Place, delayed mobility (bumpside)", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Bump] 1.5 high + balance", new AutoConfig("SB-PlaceCone,pick,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        Map.entry("[Bump] 2.5 high [outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        Map.entry("[Bump] 3 piece w/push [outer]", new AutoConfig("SB-PlaceCone,pick,eject,pick,place", false, Position.GRID_HIGH, Position.CHASSIS, Position.GRID_HIGH))
-        // Map.entry("2.5 w/2 high -- Yoshi mode [substation, inner]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
-        // Map.entry("[Bump] 1.5 high + balance [cube]", new AutoConfig("SB-Place,pick,balance", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
-        // Map.entry("2 low + high [speed bump, cube]", new AutoConfig("SB-Place,pick,place,position", true, Position.CHASSIS, Position.GRID_HIGH, Position.NONE))
+        Map.entry("[Clear-P] 3 cube link [innermost]", new AutoConfig("SS-Place link (new)", true, Position.NONE, Position.CHASSIS, Position.CHASSIS)),
+        Map.entry("[Clear-Y] 2 high + balance [outer]", new AutoConfig("SS-PlaceCone,pick,place,balance", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        Map.entry("[Clear-Y] 2.5 w/2 high [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        Map.entry("[Clear-Y] 3 piece mixed [align inside edge]", new AutoConfig("SS-Place three mixed", false, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
+        // Map.entry("[Clear-BLUE-P] 3 cube mixed [align inside edge BLUE]", new AutoConfig("SSBlue-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
+        // Map.entry("[Clear-RED-P] 3 cube mixed [align inside edge RED]", new AutoConfig("SSRed-Place three mixed", true, Position.NONE, Position.GRID_HIGH, Position.CHASSIS)),
+        Map.entry("[Clear-Y] 3 piece ideal [outer]", new AutoConfig("SS-PlaceCone,pick,place,pick,place", false, Position.GRID_MID, Position.GRID_HIGH, Position.GRID_MID)),
+        Map.entry("[Clear-Y] 3 piece column", new AutoConfig("SS-Place,pick,place,pick,place", false, Position.NONE, Position.GRID_HIGH, Position.GRID_MID)),
+        Map.entry("[Middle-Y] 1 high, over, back and balance", new AutoConfig("Mid-Place,mobility,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle-P] 1 high", new AutoConfig("Mid-Place only", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle-P] 1 high, delayed mobility", new AutoConfig("Mid-Place, delayed mobility", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Middle-P] 1 high, delayed mobility (bumpside)", new AutoConfig("Mid-Place, delayed mobility (bumpside)", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Bump-Y] 1.5 high + balance", new AutoConfig("SB-PlaceCone,pick,balance", false, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        Map.entry("[Bump-Y] 2.5 high [outer]", new AutoConfig("SB-PlaceCone,pick,place,pick", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        Map.entry("[Bump-Y] 3 piece w/push [outer]", new AutoConfig("SB-PlaceCone,pick,eject,pick,place", false, Position.GRID_HIGH, Position.CHASSIS, Position.GRID_HIGH))
+        // Map.entry("[Clear-Y] 2.5 w/2 high -- Yoshi mode [inner]", new AutoConfig("SSInside-PlaceCone,Yoshi,place,Yoshi,return", false, Position.GRID_HIGH, Position.GRID_HIGH, Position.NONE)),
+        // Map.entry("[Bump-P] 1.5 high + balance", new AutoConfig("SB-Place,pick,balance", true, Position.GRID_HIGH, Position.NONE, Position.NONE)),
+        // Map.entry("[Bump-P] 2 low + high", new AutoConfig("SB-Place,pick,place,position", true, Position.CHASSIS, Position.GRID_HIGH, Position.NONE))
     ));
 
     private Command justPlaceCommand(IntakeSubsystem s_Intake)
