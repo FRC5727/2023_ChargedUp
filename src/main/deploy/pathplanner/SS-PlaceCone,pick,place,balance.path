@@ -127,16 +127,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.82,
-        "y": 4.35
+        "x": 1.88,
+        "y": 4.42
       },
       "prevControl": {
-        "x": 2.430565093916794,
-        "y": 4.35
+        "x": 2.4905650939167936,
+        "y": 4.42
       },
       "nextControl": {
-        "x": 2.430565093916794,
-        "y": 4.35
+        "x": 2.4905650939167936,
+        "y": 4.42
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -158,11 +158,11 @@
         "y": 3.3
       },
       "prevControl": {
-        "x": 1.7370102880415461,
+        "x": 1.9587442386610034,
         "y": 3.3
       },
       "nextControl": {
-        "x": 2.829298290175528,
+        "x": 2.829298290175529,
         "y": 3.3
       },
       "holonomicAngle": 180.0,
@@ -179,11 +179,11 @@
     },
     {
       "anchorPoint": {
-        "x": 4.2,
+        "x": 3.85,
         "y": 3.3
       },
       "prevControl": {
-        "x": 3.4926703997665154,
+        "x": 3.1426703997665153,
         "y": 3.3
       },
       "nextControl": null,
@@ -202,7 +202,7 @@
       }
     }
   ],
-  "maxVelocity": 3.0,
+  "maxVelocity": 3.5,
   "maxAcceleration": 2.4,
   "isReversed": null,
   "markers": [
@@ -215,7 +215,7 @@
     {
       "position": 3.01,
       "names": [
-        "Disable vision",
+        "Enable vision",
         "Move arm to second"
       ]
     },
