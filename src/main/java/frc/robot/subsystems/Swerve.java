@@ -134,6 +134,10 @@ public class Swerve extends SubsystemBase {
         return gyro.getRoll();
     }
 
+    public double getRoll(){
+        // The gyro is rotated 90 degrees, so the gyro pitch is the robot roll
+        return gyro.getPitch();
+    }
 
     @Override
     public void periodic() {

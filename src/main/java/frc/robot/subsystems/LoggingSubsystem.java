@@ -84,13 +84,37 @@ public class LoggingSubsystem extends SubsystemBase {
 
     LogManager.addDouble("Intake/Current/Output", s_Intake.getIntakeOutputCurrent());
     LogManager.addDouble("Intake/Current/Speed", s_Intake.getIntakeCurrentSpeed());
-    
+
     LogManager.addDouble("Intake/States/StallCounter", s_Intake.getStallCounter());
+  }
+
+  public void updateRobotPositionLogs(){
+    double[] pose = {
+      s_RobotPosition.getPose().getX(),
+      s_RobotPosition.getPose().getY(),
+      s_RobotPosition.getPose().getRotation().getDegrees()
+    };
+    double[] updatedPose = {
+      s_RobotPosition.getUpdatedPose().getX(),
+      s_RobotPosition.getUpdatedPose().getY(),
+      s_RobotPosition.getUpdatedPose().getRotation().getDegrees()
+    };
+    LogManager.addDoubleArray("Odometry/Pose2d", pose);
+    LogManager.addDoubleArray("Odometry/UpdatedPose2d", updatedPose);
+
+    LogManager.addDouble("Odometry/Gyro/Yaw", s_Swerve.getYaw().getDegrees());
+    LogManager.addDouble("Odometry/Gyro/Pitch", s_Swerve.getPitch());
+    LogManager.addDouble("Odometry/Gyro/Roll", s_Swerve.getRoll());
+
+    LogManager.addDouble("Odometry/Gyro/X", s_RobotPosition.getPose().getX());
+    LogManager.addDouble("Odometry/Gyro/Y", s_RobotPosition.getPose().getY());
+
   }
   @Override
   public void periodic() {
     updateSwerveLogs();
     updateArmLogs();
     updateIntakeLogs();
+    updateRobotPositionLogs();
   }
 }

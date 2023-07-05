@@ -29,6 +29,7 @@ public class RobotPosition extends SubsystemBase {
 
     private SwerveDrivePoseEstimator swervePose;
     private Swerve s_Swerve;
+    public Pose2d robotPose;
     private NetworkTable limelightTable;
     private NetworkTableEntry botposeEntry;
     private NetworkTableEntry targetEntry;
@@ -74,9 +75,17 @@ public class RobotPosition extends SubsystemBase {
         }
     }
 
+    public Pose2d getUpdatedPose(){
+        return robotPose;
+    }
+    
+    public double getGyroYaw(){
+        return s_Swerve.getYaw().getDegrees();
+    }
+
     @Override
     public void periodic() {
-        Pose2d robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
+        robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
 
         boolean haveTarget = targetEntry.getDouble(0) > 0;
         double[] llpose = botposeEntry.getDoubleArray(new double[7]);
