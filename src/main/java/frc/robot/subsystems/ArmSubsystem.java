@@ -374,6 +374,47 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+  public double getLowerGoal(){
+    return lowerPidController.getGoal().position;
+  }
+
+  public double getUpperGoal(){
+    return upperPidController.getGoal().position;
+  }
+
+  public boolean isLowerSet(){
+    return lowerPidController.atGoal();
+  }
+
+  public boolean isUpperSet(){
+    return upperPidController.atGoal();
+  }
+
+  public double getLowerMasterVoltage(){
+    return lowerArmMaster.getMotorOutputVoltage();
+  }
+
+  public double getUpperMasterVoltage(){
+    return upperArmMaster.getMotorOutputVoltage();
+  }
+
+  public double getLowerSlaveVoltage(){
+    return lowerArmSlave.getMotorOutputVoltage();
+  }
+
+  public double getUpperSlaveVoltage(){
+    return upperArmSlave.getMotorOutputVoltage();
+  }
+
+  public double getLowerPValue(){
+    return lowerPidController.getP();
+  }
+
+  public double getUpperPValue(){
+    return upperPidController.getP();
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
