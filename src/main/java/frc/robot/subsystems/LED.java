@@ -142,4 +142,7 @@ public class LED extends SubsystemBase {
   public void flash(int count, Color color) {
     setStrobe(color, count);
   }
+  public CANdle caNdlefx(){
+    return m_candle;
+  }
 }

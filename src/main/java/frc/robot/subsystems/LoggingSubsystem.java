@@ -38,7 +38,6 @@ public class LoggingSubsystem extends SubsystemBase {
       s_Swerve.mSwerveMods[3].getState().speedMetersPerSecond
     };
     LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
-
     double[] desiredStates = {
       s_Swerve.mSwerveMods[0].getDesiredAngle().getDegrees(),
       s_Swerve.mSwerveMods[0].getDesiredVelocity(),
@@ -50,10 +49,28 @@ public class LoggingSubsystem extends SubsystemBase {
       s_Swerve.mSwerveMods[3].getDesiredVelocity()
     };
     LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
+    double[] pose = {
+      s_RobotPosition.getPose().getX(),
+      s_RobotPosition.getPose().getY(),
+      s_RobotPosition.getPose().getRotation().getDegrees()
+    };
+    double[] updatedPose = {
+      s_RobotPosition.getUpdatedPose().getX(),
+      s_RobotPosition.getUpdatedPose().getY(),
+      s_RobotPosition.getUpdatedPose().getRotation().getDegrees()
+    };
+    LogManager.addDoubleArray("Swerve/Pose2d", pose);
+    LogManager.addDoubleArray("Swerve/UpdatedPose2d", updatedPose);
+
+    LogManager.addDouble("Swerve/Gyro/Yaw", s_Swerve.getYaw().getDegrees());
+    LogManager.addDouble("Swerve/Gyro/Pitch", s_Swerve.getPitch());
+    LogManager.addDouble("Swerve/Gyro/Roll", s_Swerve.getRoll());
+
+    LogManager.addDouble("Swerve/Pose/X", s_RobotPosition.getPose().getX());
+    LogManager.addDouble("Swerve/Pose/Y", s_RobotPosition.getPose().getY());
   }
 
   public void updateArmLogs(){
-    // LogManager.addDataType("Lower|Higher: Arm/function", value);
     LogManager.addDouble("Arm/Lower/Goal", s_Arm.getLowerGoal());
     LogManager.addDouble("Arm/Upper/Goal", s_Arm.getUpperGoal());
 
@@ -88,28 +105,6 @@ public class LoggingSubsystem extends SubsystemBase {
     LogManager.addDouble("Intake/States/StallCounter", s_Intake.getStallCounter());
   }
 
-  public void updateRobotPositionLogs(){
-    double[] pose = {
-      s_RobotPosition.getPose().getX(),
-      s_RobotPosition.getPose().getY(),
-      s_RobotPosition.getPose().getRotation().getDegrees()
-    };
-    double[] updatedPose = {
-      s_RobotPosition.getUpdatedPose().getX(),
-      s_RobotPosition.getUpdatedPose().getY(),
-      s_RobotPosition.getUpdatedPose().getRotation().getDegrees()
-    };
-    LogManager.addDoubleArray("Odometry/Pose2d", pose);
-    LogManager.addDoubleArray("Odometry/UpdatedPose2d", updatedPose);
-
-    LogManager.addDouble("Odometry/Gyro/Yaw", s_Swerve.getYaw().getDegrees());
-    LogManager.addDouble("Odometry/Gyro/Pitch", s_Swerve.getPitch());
-    LogManager.addDouble("Odometry/Gyro/Roll", s_Swerve.getRoll());
-
-    LogManager.addDouble("Odometry/Gyro/X", s_RobotPosition.getPose().getX());
-    LogManager.addDouble("Odometry/Gyro/Y", s_RobotPosition.getPose().getY());
-
-  }
   
   public void updateHardwareStatLogs(){
     /*================================================================================= */
@@ -177,7 +172,22 @@ public class LoggingSubsystem extends SubsystemBase {
     // Rear Right Angle Motor (module 3)
     LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/RR/Stats/Temp", 
     s_Swerve.mSwerveMods[3].getAngleMotorTemp());
-    
+    /*================================================================================= */
+    //Pigeon 2
+    LogManager.addDouble("Hardware/Swerve/Pigeon2/Stats/Temp", 
+    s_Swerve.gyroFx().getTemp());
+    /*================================================================================= */
+    //CANdle
+    LogManager.addDouble("Hardware/LEDs/CANdle/Stats/Temp", 
+    s_Led.caNdlefx().getTemperature());
+    LogManager.addDouble("Hardware/LEDs/CANdle/Stats/BusVoltage", 
+    s_Led.caNdlefx().getBusVoltage());
+    LogManager.addDouble("Hardware/LEDs/CANdle/Stats/Current", 
+    s_Led.caNdlefx().getCurrent());
+    LogManager.addDouble("Hardware/LEDs/CANdle/Stats/5vRailVoltage", 
+    s_Led.caNdlefx().get5VRailVoltage());
+    /*================================================================================= */
+
   }
 
   @Override
@@ -185,7 +195,6 @@ public class LoggingSubsystem extends SubsystemBase {
     updateSwerveLogs();
     updateArmLogs();
     updateIntakeLogs();
-    updateRobotPositionLogs();
     updateHardwareStatLogs();
   }
 }

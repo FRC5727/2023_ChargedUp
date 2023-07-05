@@ -138,7 +138,9 @@ public class Swerve extends SubsystemBase {
         // The gyro is rotated 90 degrees, so the gyro pitch is the robot roll
         return gyro.getPitch();
     }
-
+    public Pigeon2 gyroFx(){
+        return gyro;
+    }
     @Override
     public void periodic() {
         if (swerveDebug) {
