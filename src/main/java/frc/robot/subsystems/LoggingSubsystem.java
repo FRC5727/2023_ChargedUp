@@ -108,36 +108,36 @@ public class LoggingSubsystem extends SubsystemBase {
     //ARM Monitoring
     //Lower Master
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Master/Stats/Temp", 
-    s_Arm.lowerArmMasterFx().getTemperature());
+    s_Arm.getLowerArmMasterTemp());
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Master/Stats/BusVoltage", 
-    s_Arm.lowerArmMasterFx().getBusVoltage());
+    s_Arm.getLowerArmMasterBusVoltage());
     //Lower Slave
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Slave/Stats/Temp", 
-    s_Arm.lowerArmSlaveFx().getTemperature());
+    s_Arm.getLowerArmSlaveTemp());
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Slave/Stats/BusVoltage", 
-    s_Arm.lowerArmSlaveFx().getBusVoltage());
+    s_Arm.getLowerArmSlaveBusVoltage());
     //Upper Master
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Master/Stats/Temp", 
-    s_Arm.upperArmMasterFx().getTemperature());
+    s_Arm.getUpperArmMasterTemp());
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Master/Stats/BusVoltage", 
-    s_Arm.upperArmMasterFx().getBusVoltage());
+    s_Arm.getUpperArmMasterBusVoltage());
     //Upper Slave
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Slave/Stats/Temp", 
-    s_Arm.upperArmSlaveFx().getTemperature());
+    s_Arm.getUpperArmSlaveTemp());
     LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Slave/Stats/BusVoltage", 
-    s_Arm.upperArmSlaveFx().getBusVoltage());
+    s_Arm.getUpperArmSlaveBusVoltage());
     //Lower CANCoder
     LogManager.addDouble("Hardware/Arm/CANCoder/Lower/Stats/BusVoltage", 
-    s_Arm.lowerCoderFx().getBusVoltage());
+    s_Arm.getLowerCoderCANBusVoltage());
     //Upper CANCoder
     LogManager.addDouble("Hardware/Arm/CANCoder/Upper/Stats/BusVoltage", 
-    s_Arm.upperCoderFx().getBusVoltage());
+    s_Arm.getUpperCoderCANBusVoltage());
     /*================================================================================= */
     //Intake Neo
     LogManager.addDouble("Hardware/Intake/Motor/Neo550/Stats/Temp", 
-    s_Intake.intakeNeoFx().getMotorTemperature());
+    s_Intake.getIntakeNeoMotorTemp());
     LogManager.addDouble("Hardware/Intake/Motor/Neo550/Stats/BusVoltage", 
-    s_Intake.intakeNeoFx().getBusVoltage());
+    s_Intake.getIntakeNeoBusVoltage());
     /*================================================================================= */
     //Swerve Motors
     // 0 1
@@ -185,7 +185,7 @@ public class LoggingSubsystem extends SubsystemBase {
     s_Swerve.mSwerveMods[3].getCANCoderBusVoltage());
     //Pigeon 2
     LogManager.addDouble("Hardware/Swerve/Pigeon2/Stats/Temp", 
-    s_Swerve.gyroFx().getTemp());
+    s_Swerve.gyroTemp());
     /*================================================================================= */
     //CANdle
     LogManager.addDouble("Hardware/LEDs/CANdle/Stats/Temp", 

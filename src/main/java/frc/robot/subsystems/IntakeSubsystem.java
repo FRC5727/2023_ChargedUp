@@ -130,9 +130,16 @@ public class IntakeSubsystem extends SubsystemBase {
   public double getStallCounter(){
     return stallCounter;
   }
-  public CANSparkMax intakeNeoFx(){
-    return intakeNeo;
+
+  public double getIntakeNeoMotorTemp(){
+    return intakeNeo.getMotorTemperature();
   }
+
+  public double getIntakeNeoBusVoltage(){
+    return intakeNeo.getBusVoltage();
+  }
+
+  
   
   @Override
   public void periodic() {

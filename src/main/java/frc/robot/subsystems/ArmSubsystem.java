@@ -187,26 +187,40 @@ public class ArmSubsystem extends SubsystemBase {
   public double getUpperAbsoluteAngle(){
     return upperArmCoder.getAbsolutePosition();
   }
-  
-  public WPI_TalonFX lowerArmMasterFx(){
-    return lowerArmMaster;
-  }
-  public WPI_TalonFX upperArmMasterFx(){
-    return upperArmMaster;
-  }
-  public WPI_TalonFX lowerArmSlaveFx(){
-    return lowerArmSlave;
-  }
-  public WPI_TalonFX upperArmSlaveFx(){
-    return upperArmSlave;
-  }
-  public CANCoder lowerCoderFx(){
-    return lowerArmCoder;
-  }
-  public CANCoder upperCoderFx(){
-    return upperArmCoder;
-  }
 
+  public double getLowerArmMasterTemp(){
+    return lowerArmMaster.getTemperature();
+  }
+  public double getLowerArmMasterBusVoltage(){
+    return lowerArmMaster.getBusVoltage();
+  }
+  public double getLowerArmSlaveTemp(){
+    return lowerArmSlave.getTemperature();
+  }
+  public double getLowerArmSlaveBusVoltage(){
+    return lowerArmSlave.getBusVoltage();
+  }
+  
+  public double getUpperArmMasterTemp(){
+    return upperArmMaster.getTemperature();
+  }
+  public double getUpperArmMasterBusVoltage(){
+    return upperArmMaster.getBusVoltage();
+  }
+  public double getUpperArmSlaveTemp(){
+    return upperArmSlave.getTemperature();
+  }
+  public double getUpperArmSlaveBusVoltage(){
+    return upperArmSlave.getBusVoltage();
+  }
+  
+  public double getLowerCoderCANBusVoltage(){
+    return lowerArmCoder.getBusVoltage();
+  }
+  public double getUpperCoderCANBusVoltage(){
+    return upperArmCoder.getBusVoltage();
+  }
+  
   public void setTargetPosition(Position position) {
     Position lastTarget = targetPosition.isEmpty() ? null : targetPosition.getFirst();
     
