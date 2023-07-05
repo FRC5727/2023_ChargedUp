@@ -147,6 +147,36 @@ public class LoggingSubsystem extends SubsystemBase {
     LogManager.addDouble("Hardware/Intake/Motor/Neo550/Stats/BusVoltage", 
     s_Intake.intakeNeoFx().getBusVoltage());
     /*================================================================================= */
+    //Swerve Motors
+    // 0 1
+    // 2 3
+    //DRIVE MOTORS
+    // Front Left Drive Motor (module 0)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Drive/FL/Stats/Temp", 
+    s_Swerve.mSwerveMods[0].getDriveMotorTemp());
+    // Front Right Drive Motor (module 1)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Drive/FR/Stats/Temp", 
+    s_Swerve.mSwerveMods[1].getDriveMotorTemp());
+    // Rear Left Drive Motor (module 2)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Drive/RL/Stats/Temp", 
+    s_Swerve.mSwerveMods[2].getDriveMotorTemp());
+    // Rear Right Drive Motor (module 3)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Drive/RR/Stats/Temp", 
+    s_Swerve.mSwerveMods[3].getDriveMotorTemp());
+    /*================================================================================= */
+    //ANGLE MOTORS
+    // Front Left Angle Motor (module 0)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/FL/Stats/Temp", 
+    s_Swerve.mSwerveMods[0].getAngleMotorTemp());
+    // Front Right Angle Motor (module 1)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/FR/Stats/Temp", 
+    s_Swerve.mSwerveMods[1].getAngleMotorTemp());
+    // Rear Left Angle Motor (module 2)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/RL/Stats/Temp", 
+    s_Swerve.mSwerveMods[2].getAngleMotorTemp());
+    // Rear Right Angle Motor (module 3)
+    LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/RR/Stats/Temp", 
+    s_Swerve.mSwerveMods[3].getAngleMotorTemp());
     
   }
 

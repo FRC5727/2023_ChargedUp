@@ -129,14 +129,20 @@ public class SwerveModule {
         return desiredState;
     }
     public double getDesiredVelocity() {
-        return getDesiredState().speedMetersPerSecond;
-      }
+      return getDesiredState().speedMetersPerSecond;
+    }
     
-      public Rotation2d getDesiredAngle() {
-        return getDesiredState().angle;
-      }
+    public Rotation2d getDesiredAngle() {
+      return getDesiredState().angle;
+    }
     
-      public double getDriveVelocityError() {
-        return getDesiredState().speedMetersPerSecond - getState().speedMetersPerSecond;
-      }
+    public double getDriveVelocityError() {
+      return getDesiredState().speedMetersPerSecond - getState().speedMetersPerSecond;
+    }
+    public double getDriveMotorTemp(){
+        return mDriveMotor.getTemperature();
+    }
+    public double getAngleMotorTemp(){
+        return mAngleMotor.getTemperature();
+    }
 }
