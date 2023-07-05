@@ -18,13 +18,15 @@ public class LoggingSubsystem extends SubsystemBase {
   private Swerve s_Swerve;
   private RobotPosition s_RobotPosition;
   private ArmSubsystem s_Arm;
+  private PowerDistributionSubsystem s_Power;
   /** Creates a new LoggingSubsystem. */
-  public LoggingSubsystem(LED s_Led, IntakeSubsystem s_Intake, Swerve s_Swerve, RobotPosition s_RobotPosition, ArmSubsystem s_Arm) {
+  public LoggingSubsystem(LED s_Led, IntakeSubsystem s_Intake, Swerve s_Swerve, RobotPosition s_RobotPosition, ArmSubsystem s_Arm, PowerDistributionSubsystem s_Power) {
     this.s_Led = s_Led;
     this.s_Intake = s_Intake;
     this.s_Arm = s_Arm;
     this.s_Swerve = s_Swerve;
     this.s_RobotPosition = s_RobotPosition;
+    this.s_Power = s_Power;
   }
   public void updateSwerveLogs() {
     double[] actualStates = {
@@ -188,6 +190,56 @@ public class LoggingSubsystem extends SubsystemBase {
     s_Led.caNdlefx().get5VRailVoltage());
     /*================================================================================= */
 
+  }
+  public void PDHLogging(){
+    LogManager.addDouble("PDH/Slot/1/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(1));
+    LogManager.addDouble("PDH/Slot/2/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(2));
+    LogManager.addDouble("PDH/Slot/3/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(3));
+    LogManager.addDouble("PDH/Slot/4/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(4));
+    LogManager.addDouble("PDH/Slot/5/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(5));
+    LogManager.addDouble("PDH/Slot/6/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(6));
+    LogManager.addDouble("PDH/Slot/7/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(7));
+    LogManager.addDouble("PDH/Slot/8/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(8));
+    LogManager.addDouble("PDH/Slot/9/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(9));
+    LogManager.addDouble("PDH/Slot/10/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(10));
+    LogManager.addDouble("PDH/Slot/11/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(11));
+    LogManager.addDouble("PDH/Slot/12/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(12));
+    LogManager.addDouble("PDH/Slot/13/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(13));
+    LogManager.addDouble("PDH/Slot/14/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(14));
+    LogManager.addDouble("PDH/Slot/15/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(15));
+    LogManager.addDouble("PDH/Slot/16/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(16));
+    LogManager.addDouble("PDH/Slot/17/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(17));
+    LogManager.addDouble("PDH/Slot/18/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(18));
+    LogManager.addDouble("PDH/Slot/19/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(19));
+    LogManager.addDouble("PDH/Slot/20/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(20));
+    LogManager.addDouble("PDH/Slot/21/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(21));
+    LogManager.addDouble("PDH/Slot/22/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(22));
+    LogManager.addDouble("PDH/Slot/23/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(23));
+    LogManager.addDouble("PDH/Slot/24/DeviceName/Stats/Current", 
+    s_Power.powerDistribution.getCurrent(24));
   }
 
   @Override
