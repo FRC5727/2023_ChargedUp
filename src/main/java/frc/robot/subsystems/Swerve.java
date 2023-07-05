@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
 import frc.robot.Dashboard;
+import frc.lib.util.logging.LogManager;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -131,6 +132,31 @@ public class Swerve extends SubsystemBase {
     public double getPitch(){
         // The gyro is rotated 90 degrees, so the gyro roll is the robot pitch
         return gyro.getRoll();
+    }
+    public void updateLogs() {
+        double[] actualStates = {
+          mSwerveMods[0].getAngle().getDegrees(),
+          mSwerveMods[0].getState().speedMetersPerSecond,
+          mSwerveMods[1].getAngle().getDegrees(),
+          mSwerveMods[1].getState().speedMetersPerSecond,
+          mSwerveMods[2].getAngle().getDegrees(),
+          mSwerveMods[2].getState().speedMetersPerSecond,
+          mSwerveMods[3].getAngle().getDegrees(),
+          mSwerveMods[3].getState().speedMetersPerSecond
+        };
+        LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
+    
+        double[] desiredStates = {
+          mSwerveMods[0].getDesiredAngle().getDegrees(),
+          mSwerveMods[0].getDesiredVelocity(),
+          mSwerveMods[1].getDesiredAngle().getDegrees(),
+          mSwerveMods[1].getDesiredVelocity(),
+          mSwerveMods[2].getDesiredAngle().getDegrees(),
+          mSwerveMods[2].getDesiredVelocity(),
+          mSwerveMods[3].getDesiredAngle().getDegrees(),
+          mSwerveMods[3].getDesiredVelocity()
+        };
+        LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
     }
 
     @Override

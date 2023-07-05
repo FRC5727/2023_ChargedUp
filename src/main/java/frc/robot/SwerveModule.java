@@ -24,6 +24,8 @@ public class SwerveModule {
     private TalonFX mDriveMotor;
     private CANCoder angleEncoder;
 
+    private SwerveModuleState desiredState;
+
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
@@ -41,6 +43,8 @@ public class SwerveModule {
         /* Drive Motor Config */
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.CANivoreName);
         configDriveMotor();
+
+        setDesiredState(new SwerveModuleState(0, getAngle()), false);
 
         lastAngle = getState().angle;
     }
@@ -73,7 +77,7 @@ public class SwerveModule {
         }
     }
 
-    private Rotation2d getAngle() {
+    public Rotation2d getAngle() {
         return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
     }
 
@@ -120,4 +124,19 @@ public class SwerveModule {
             getAngle()
         );
     }
+
+    public SwerveModuleState getDesiredState() {
+        return desiredState;
+    }
+    public double getDesiredVelocity() {
+        return getDesiredState().speedMetersPerSecond;
+      }
+    
+      public Rotation2d getDesiredAngle() {
+        return getDesiredState().angle;
+      }
+    
+      public double getDriveVelocityError() {
+        return getDesiredState().speedMetersPerSecond - getState().speedMetersPerSecond;
+      }
 }
