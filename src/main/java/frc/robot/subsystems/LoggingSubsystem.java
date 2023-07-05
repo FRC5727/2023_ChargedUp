@@ -5,11 +5,6 @@
 package frc.robot.subsystems;
 
 import frc.lib.util.logging.LogManager;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LED;
-import frc.robot.subsystems.RobotPosition;
-import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LoggingSubsystem extends SubsystemBase {
@@ -175,6 +170,19 @@ public class LoggingSubsystem extends SubsystemBase {
     LogManager.addDouble("Hardware/Swerve/Falcon500/Angle/RR/Stats/Temp", 
     s_Swerve.mSwerveMods[3].getAngleMotorTemp());
     /*================================================================================= */
+    //Swerve Coders
+    //Front Left Coder
+    LogManager.addDouble("Hardware/Swerve/CANCoder/FL/Stats/BusVoltage", 
+    s_Swerve.mSwerveMods[0].getCANCoderBusVoltage());
+    //Front Right Coder
+    LogManager.addDouble("Hardware/Swerve/CANCoder/FR/Stats/BusVoltage", 
+    s_Swerve.mSwerveMods[1].getCANCoderBusVoltage());
+    //Rear Left Coder
+    LogManager.addDouble("Hardware/Swerve/CANCoder/RL/Stats/BusVoltage", 
+    s_Swerve.mSwerveMods[2].getCANCoderBusVoltage());
+    //Rear Right Coder
+    LogManager.addDouble("Hardware/Swerve/CANCoder/RR/Stats/BusVoltage", 
+    s_Swerve.mSwerveMods[3].getCANCoderBusVoltage());
     //Pigeon 2
     LogManager.addDouble("Hardware/Swerve/Pigeon2/Stats/Temp", 
     s_Swerve.gyroFx().getTemp());
@@ -248,5 +256,6 @@ public class LoggingSubsystem extends SubsystemBase {
     updateArmLogs();
     updateIntakeLogs();
     updateHardwareStatLogs();
+    PDHLogging();
   }
 }

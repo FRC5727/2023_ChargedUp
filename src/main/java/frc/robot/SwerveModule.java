@@ -145,4 +145,7 @@ public class SwerveModule {
     public double getAngleMotorTemp(){
         return mAngleMotor.getTemperature();
     }
+    public double getCANCoderBusVoltage(){
+        return angleEncoder.getBusVoltage();
+    }
 }
