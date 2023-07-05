@@ -130,6 +130,9 @@ public class IntakeSubsystem extends SubsystemBase {
   public double getStallCounter(){
     return stallCounter;
   }
+  public CANSparkMax intakeNeoFx(){
+    return intakeNeo;
+  }
   
   @Override
   public void periodic() {

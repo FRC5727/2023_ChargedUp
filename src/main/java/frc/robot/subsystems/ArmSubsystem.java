@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -185,6 +186,25 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double getUpperAbsoluteAngle(){
     return upperArmCoder.getAbsolutePosition();
+  }
+  
+  public WPI_TalonFX lowerArmMasterFx(){
+    return lowerArmMaster;
+  }
+  public WPI_TalonFX upperArmMasterFx(){
+    return upperArmMaster;
+  }
+  public WPI_TalonFX lowerArmSlaveFx(){
+    return lowerArmSlave;
+  }
+  public WPI_TalonFX upperArmSlaveFx(){
+    return upperArmSlave;
+  }
+  public CANCoder lowerCoderFx(){
+    return lowerArmCoder;
+  }
+  public CANCoder upperCoderFx(){
+    return upperArmCoder;
   }
 
   public void setTargetPosition(Position position) {

@@ -110,11 +110,52 @@ public class LoggingSubsystem extends SubsystemBase {
     LogManager.addDouble("Odometry/Gyro/Y", s_RobotPosition.getPose().getY());
 
   }
+  
+  public void updateHardwareStatLogs(){
+    /*================================================================================= */
+    //ARM Monitoring
+    //Lower Master
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Master/Stats/Temp", 
+    s_Arm.lowerArmMasterFx().getTemperature());
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Master/Stats/BusVoltage", 
+    s_Arm.lowerArmMasterFx().getBusVoltage());
+    //Lower Slave
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Slave/Stats/Temp", 
+    s_Arm.lowerArmSlaveFx().getTemperature());
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Lower/Slave/Stats/BusVoltage", 
+    s_Arm.lowerArmSlaveFx().getBusVoltage());
+    //Upper Master
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Master/Stats/Temp", 
+    s_Arm.upperArmMasterFx().getTemperature());
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Master/Stats/BusVoltage", 
+    s_Arm.upperArmMasterFx().getBusVoltage());
+    //Upper Slave
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Slave/Stats/Temp", 
+    s_Arm.upperArmSlaveFx().getTemperature());
+    LogManager.addDouble("Hardware/Arm/Motor/Falcon500/Upper/Slave/Stats/BusVoltage", 
+    s_Arm.upperArmSlaveFx().getBusVoltage());
+    //Lower CANCoder
+    LogManager.addDouble("Hardware/Arm/CANCoder/Lower/Stats/BusVoltage", 
+    s_Arm.lowerCoderFx().getBusVoltage());
+    //Upper CANCoder
+    LogManager.addDouble("Hardware/Arm/CANCoder/Upper/Stats/BusVoltage", 
+    s_Arm.upperCoderFx().getBusVoltage());
+    /*================================================================================= */
+    //Intake Neo
+    LogManager.addDouble("Hardware/Intake/Motor/Neo550/Stats/Temp", 
+    s_Intake.intakeNeoFx().getMotorTemperature());
+    LogManager.addDouble("Hardware/Intake/Motor/Neo550/Stats/BusVoltage", 
+    s_Intake.intakeNeoFx().getBusVoltage());
+    /*================================================================================= */
+    
+  }
+
   @Override
   public void periodic() {
     updateSwerveLogs();
     updateArmLogs();
     updateIntakeLogs();
     updateRobotPositionLogs();
+    updateHardwareStatLogs();
   }
 }
