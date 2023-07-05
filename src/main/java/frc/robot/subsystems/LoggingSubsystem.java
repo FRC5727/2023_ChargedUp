@@ -56,26 +56,41 @@ public class LoggingSubsystem extends SubsystemBase {
     // LogManager.addDataType("Lower|Higher: Arm/function", value);
     LogManager.addDouble("Arm/Lower/Goal", s_Arm.getLowerGoal());
     LogManager.addDouble("Arm/Upper/Goal", s_Arm.getUpperGoal());
+
     LogManager.addBoolean("Arm/Lower/isSet", s_Arm.isLowerSet());
     LogManager.addBoolean("Arm/Upper/isSet", s_Arm.isUpperSet());
+
     LogManager.addDouble("Arm/Lower/AngleAbsolute", s_Arm.getLowerAbsoluteAngle());
     LogManager.addDouble("Arm/Upper/AngleAbsolute", s_Arm.getUpperAbsoluteAngle());
+
     LogManager.addDouble("Arm/Lower/Angle", s_Arm.getLowerAngle());
     LogManager.addDouble("Arm/Upper/Angle", s_Arm.getUpperAngle());
+
     LogManager.addDouble("Arm/Lower/Master/Voltage", s_Arm.getLowerMasterVoltage());
     LogManager.addDouble("Arm/Upper/Master/Voltage", s_Arm.getUpperMasterVoltage());
+
     LogManager.addDouble("Arm/Lower/Slave/Voltage", s_Arm.getLowerSlaveVoltage());
     LogManager.addDouble("Arm/Upper/Slave/Voltage", s_Arm.getUpperSlaveVoltage());
+
     LogManager.addDouble("Arm/Lower/PID/P-value", s_Arm.getLowerPValue());
     LogManager.addDouble("Arm/Upper/PID/P-value", s_Arm.getUpperPValue());
   }
   
   public void updateIntakeLogs(){
+    LogManager.addBoolean("Intake/States/Cube?", s_Intake.isCube());
+    LogManager.addBoolean("Intake/States/isIdle", s_Intake.isIdle());
+    LogManager.addBoolean("Intake/States/Piece captured?", s_Intake.isStalled());
+    LogManager.addBoolean("Intake/States/isIntaking", s_Intake.isIntaking());
+
+    LogManager.addDouble("Intake/Current/Output", s_Intake.getIntakeOutputCurrent());
+    LogManager.addDouble("Intake/Current/Speed", s_Intake.getIntakeCurrentSpeed());
     
+    LogManager.addDouble("Intake/States/StallCounter", s_Intake.getStallCounter());
   }
   @Override
   public void periodic() {
     updateSwerveLogs();
     updateArmLogs();
+    updateIntakeLogs();
   }
 }

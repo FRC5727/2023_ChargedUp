@@ -110,6 +110,26 @@ public class IntakeSubsystem extends SubsystemBase {
     setSpeed();
     setColor();
   }
+
+  public boolean isIdle(){
+    return idle;
+  }
+
+  public boolean isIntaking(){
+    return intake;
+  }
+
+  public double getIntakeOutputCurrent(){
+    return intakeNeo.getOutputCurrent();
+  }
+
+  public double getIntakeCurrentSpeed(){
+    return intakeNeo.get();
+  }
+
+  public double getStallCounter(){
+    return stallCounter;
+  }
   
   @Override
   public void periodic() {
