@@ -50,6 +50,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
     }
 
+    
     private static ChassisSpeeds correctForDynamics(ChassisSpeeds originalSpeeds) {
         final double LOOP_TIME_S = 0.02;
         Pose2d futureRobotPose =
@@ -66,9 +67,7 @@ public class Swerve extends SubsystemBase {
         return updatedSpeeds;
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-       
-                
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {        
         ChassisSpeeds desiredChassisSpeeds =
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
             translation.getX(),
