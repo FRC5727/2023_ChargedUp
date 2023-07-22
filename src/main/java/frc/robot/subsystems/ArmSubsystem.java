@@ -17,6 +17,9 @@ import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,6 +61,11 @@ public class ArmSubsystem extends SubsystemBase {
     INTAKE_SUBSTATION,
     YOSHI,
   };
+
+  public MechanismLigament2d lowerArmLigament2d;
+  public MechanismLigament2d upperArmLigament2d;
+  public Mechanism2d armMechanism2d;
+  public MechanismRoot2d armRootMechanismRoot2d;
 
   // Next positions for the Arm to target
   private Deque<Position> targetPosition = new ArrayDeque<Position>();
@@ -139,6 +147,11 @@ public class ArmSubsystem extends SubsystemBase {
 
     Dashboard.watchBoolean("Arm debug", armDebug, (val) -> armDebug = val.booleanValue());
     Dashboard.watchBoolean("Arm direct debug", armDirectDebug, (val) -> armDirectDebug = val.booleanValue());
+
+    armMechanism2d = new Mechanism2d(3, 3);
+    armRootMechanismRoot2d = armMechanism2d.getRoot("arm", 0, 0);
+    lowerArmLigament2d = armRootMechanismRoot2d.append(new MechanismLigament2d("lower", 0.889, getLowerAngle()));
+    upperArmLigament2d = lowerArmLigament2d.append(new MechanismLigament2d("upper", 0.5842, getUpperAngle()));
 
     brake();
   }
@@ -447,12 +460,18 @@ public class ArmSubsystem extends SubsystemBase {
     return upperPidController.getP();
   }
 
+  public Mechanism2d getMechanism2d(){
+    return armMechanism2d;
+  }
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // Update dashboard to help monitor and debug
-
+    lowerArmLigament2d.setAngle(getLowerAngle());
+    upperArmLigament2d.setAngle(getUpperAngle());
+    SmartDashboard.putData("Arm", armMechanism2d); //need to set this for wpilog and visualization purposes
     if (armDebug) {
       SmartDashboard.putNumber("Target queue depth", targetPosition.size());
       SmartDashboard.putString("Target Position", targetPosition.isEmpty() ? "<none>" : targetPosition.peek().toString());

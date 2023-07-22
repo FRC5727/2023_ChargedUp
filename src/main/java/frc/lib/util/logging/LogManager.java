@@ -12,6 +12,8 @@ import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.IntegerLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.util.datalog.DataLogEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
@@ -33,6 +35,7 @@ public class LogManager {
   private static ArrayList<DoubleSupplier[]> doubleArrayValues = new ArrayList<>();
   private static ArrayList<BooleanSupplier> booleanValues = new ArrayList<>();
   private static ArrayList<IntSupplier> intValues = new ArrayList<>();
+
 
   // These are the log entries that are not updated periodically, they just receive individual values.
   private static HashMap<String, DoubleLogEntry> individualDoubleLogs = new HashMap<>();
@@ -149,6 +152,8 @@ public class LogManager {
       individualBooleanLogs.get(name).append(value);
     }
   }
+
+
 
   /**
    * Logs all the values that have been collected. Should be called periodically. 

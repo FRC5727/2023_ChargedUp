@@ -5,6 +5,12 @@
 package frc.robot.subsystems;
 
 import frc.lib.util.logging.LogManager;
+
+import java.lang.System.Logger;
+
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LoggingSubsystem extends SubsystemBase {
@@ -14,6 +20,7 @@ public class LoggingSubsystem extends SubsystemBase {
   private RobotPosition s_RobotPosition;
   private ArmSubsystem s_Arm;
   private PowerDistributionSubsystem s_Power;
+  long x = 0;
   /** Creates a new LoggingSubsystem. */
   public LoggingSubsystem(LED s_Led, IntakeSubsystem s_Intake, Swerve s_Swerve, RobotPosition s_RobotPosition, ArmSubsystem s_Arm, PowerDistributionSubsystem s_Power) {
     this.s_Led = s_Led;
@@ -22,6 +29,8 @@ public class LoggingSubsystem extends SubsystemBase {
     this.s_Swerve = s_Swerve;
     this.s_RobotPosition = s_RobotPosition;
     this.s_Power = s_Power;
+    DataLogManager.start();
+    DataLogManager.logNetworkTables(true);
   }
   public void updateSwerveLogs() {
     double[] actualStates = {
@@ -51,6 +60,7 @@ public class LoggingSubsystem extends SubsystemBase {
       s_RobotPosition.getPose().getY(),
       s_RobotPosition.getPose().getRotation().getDegrees()
     };
+
     double[] updatedPose = {
       s_RobotPosition.getUpdatedPose().getX(),
       s_RobotPosition.getUpdatedPose().getY(),
@@ -248,6 +258,9 @@ public class LoggingSubsystem extends SubsystemBase {
     s_Power.powerDistribution.getCurrent(23));
     LogManager.addDouble("PDH/Slot/24/DeviceName/Stats/Current", 
     s_Power.powerDistribution.getCurrent(24));
+  }
+  public void newLogging(){
+
   }
 
   @Override

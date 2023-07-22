@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
 
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     DataLogManager.start();
+    DataLogManager.logNetworkTables(true);
     DriverStation.startDataLog(DataLogManager.getLog(), true);
     DriverStation.silenceJoystickConnectionWarning(true);
     ctreConfigs = new CTREConfigs();
@@ -60,89 +62,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //CANCoders Absolute Position Values
-    // SmartDashboard.putNumber("Front Left Encoder Absolute Position Value: ", fle.getAbsolutePosition());
-    // SmartDashboard.putNumber("Front Right Encoder Absolute Position Value: ", fre.getAbsolutePosition());
-    // SmartDashboard.putNumber("Rear Right Encoder Absolute Position Value: ", rre.getAbsolutePosition());
-    // SmartDashboard.putNumber("Rear Left Encoder Absolute Position Value: ", rle.getAbsolutePosition());
-    // SmartDashboard.putNumber("lower coder", lowerArm.getAbsolutePosition());
-    // SmartDashboard.putNumber("high coder", highArm.getAbsolutePosition());
-    // SmartDashboard.putNumber("Front Left Encoder  Position Value: ", fle.getPosition());
-    // SmartDashboard.putNumber("Front Right Encoder  Position Value: ", fre.getPosition());
-    // SmartDashboard.putNumber("Rear Right Encoder  Position Value: ", rre.getPosition());
-    // SmartDashboard.putNumber("Rear Left Encoder  Position Value: ", rle.getPosition());
-    // //CANCoders Bus Voltage
-    // SmartDashboard.putNumber("Front Left Encoder Bus Voltage: ", fle.getBusVoltage());
-    // SmartDashboard.putNumber("Front Right Encoder Bus Voltage: ", fre.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Right Encoder Bus Voltage: ", rre.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Left Encoder Bus Voltage: ", rle.getBusVoltage());
-    // //CANCoders Velocity 
-    // SmartDashboard.putNumber("Front Left Encoder Velocity: ", fle.getVelocity());
-    // SmartDashboard.putNumber("Front Right Encoder Velocity: ", fre.getVelocity());
-    // SmartDashboard.putNumber("Rear Right Encoder Velocity: ", rre.getVelocity());
-    // SmartDashboard.putNumber("Rear Left Encoder Velocity: ", rle.getVelocity());
-    // //Falcons / Talon FX: Speed in percent
-    // SmartDashboard.putNumber("Front Left Drive Motor Speed: ", FLDMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Front Left Steer Motor Speed: ", FLSMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Front Right Drive Motor Speed: ", FRDMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Front Right Steer Motor Speed: ", FRSMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Speed: ", RRDMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Speed: ", RRSMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Speed: ", RLDMTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Speed: ", RLSMTalon.getMotorOutputPercent());
-    // //Falcons / Talon FX: Temps
-    // SmartDashboard.putNumber("Front Left Drive Motor Temp: ", FLDMTalon.getTemperature());
-    // SmartDashboard.putNumber("Front Left Steer Motor Temp: ", FLSMTalon.getTemperature());
-    // SmartDashboard.putNumber("Front Right Drive Motor Temp: ", FRDMTalon.getTemperature());
-    // SmartDashboard.putNumber("Front Right Steer Motor Temp: ", FRSMTalon.getTemperature());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Temp: ", RRDMTalon.getTemperature());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Temp: ", RRSMTalon.getTemperature());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Temp: ", RLDMTalon.getTemperature());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Temp: ", RLSMTalon.getTemperature());
-    // //Falcons / Talon FX: Bus Voltage
-    // SmartDashboard.putNumber("Front Left Drive Motor Bus Voltage: ", FLDMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Front Left Steer Motor Bus Voltage: ", FLSMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Front Right Drive Motor Bus Voltage: ", FRDMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Front Right Steer Motor Bus Voltage: ", FRSMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Bus Voltage: ", RRDMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Bus Voltage: ", RRSMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Bus Voltage: ", RLDMTalon.getBusVoltage());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Bus Voltage: ", RLSMTalon.getBusVoltage());
-    // //Falcons / Talon FX: Output Voltage
-    // SmartDashboard.putNumber("Front Left Drive Motor Output Voltage: ", FLDMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Front Left Steer Motor Output Voltage: ", FLSMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Front Right Drive Motor Output Voltage: ", FRDMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Front Right Steer Motor Output Voltage: ", FRSMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Output Voltage: ", RRDMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Output Voltage: ", RRSMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Output Voltage: ", RLDMTalon.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Output Voltage: ", RLSMTalon.getMotorOutputVoltage());
-    // //Falcons / Talon FX: Stator Current
-    // SmartDashboard.putNumber("Front Left Drive Motor Stator Current: ", FLDMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Front Left Steer Motor Stator Current: ", FLSMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Front Right Drive Motor Stator Current: ", FRDMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Front Right Steer Motor Stator Current: ", FRSMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Stator Current: ", RRDMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Stator Current: ", RRSMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Stator Current: ", RLDMTalon.getStatorCurrent());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Stator Current: ", RLSMTalon.getStatorCurrent());
-    // //Falcons / Talon FX: Supply Current
-    // SmartDashboard.putNumber("Front Left Drive Motor Supply Current: ", FLDMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Front Left Steer Motor Supply Current: ", FLSMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Front Right Drive Motor Supply Current: ", FRDMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Front Right Steer Motor Supply Current: ", FRSMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Rear Right Drive Motor Supply Current: ", RRDMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Rear Right Steer Motor Supply Current: ", RRSMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Rear Left Drive Motor Supply Current: ", RLDMTalon.getSupplyCurrent());
-    // SmartDashboard.putNumber("Rear Left Steer Motor Supply Current: ", RLSMTalon.getSupplyCurrent());
-    // //Pigeon
-    // SmartDashboard.putNumber("Pigeon 2.0 Yaw: ", pigeon2.getYaw());
-    // SmartDashboard.putNumber("Pigeon 2.0 Roll: ", pigeon2.getRoll());
-    // SmartDashboard.putNumber("Pigeon 2.0 Pitch: ", pigeon2.getPitch());
-    // SmartDashboard.putNumber("Pigeon 2.0 Temp: ", pigeon2.getTemp());
-    // SmartDashboard.putNumber("Pigeon 2.0 UpTime: ", pigeon2.getUpTime());
-    // SmartDashboard.putNumber("Pigeon 2.0 Absolute Compass Heading: ", pigeon2.getAbsoluteCompassHeading());
-    // SmartDashboard.putNumber("Pigeon 2.0 Compass Field Strength: ", pigeon2.getCompassFieldStrength());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -191,35 +110,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //while(Constants.mXboxController.getRightTriggerAxis() > 0.50 && Constants.mXboxController.getLeftTriggerAxis() > 0.50){
-      // TalonFX lowerMaster = new TalonFX(9, "CANivore");
-      // TalonFX lowerSlave = new TalonFX(11, "CANivore");
-      // TalonFX highMaster = new TalonFX(8, "CANivore");
-      // TalonFX highSlave = new TalonFX(10, "CANivore");
-      // lowerSlave.follow(lowerMaster);
-      // lowerSlave.setInverted(true);
-
-      // highSlave.follow(highMaster);
-      // highSlave.setInverted(true);
-      // lowerMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getLeftY() * 0.25);
-      // highMaster.set(TalonFXControlMode.PercentOutput, Constants.mXboxController.getRightY() * 0.25);
-    //}
     
-    // if(Constants.dXboxController.getLeftTriggerAxis() > 0.5){
-    //   intakeNeo.setIdleMode(IdleMode.kBrake);
-    //   intakeNeo.set(Constants.dXboxController.getLeftTriggerAxis() * -0.5);
-    // } else if (Constants.dXboxController.getRightTriggerAxis() > 0.5){
-    //   intakeNeo.setIdleMode(IdleMode.kBrake);
-    //   intakeNeo.set(Constants.dXboxController.getRightTriggerAxis() * 0.5);
-    // } else if (Constants.dXboxController.getRightTriggerAxis() < 0.1 && Constants.dXboxController.getLeftTriggerAxis() < 0.1){
-    //   intakeNeo.set(-.08);
-    //   intakeNeo.setIdleMode(IdleMode.kBrake);
-    // } 
-    // else if(Constants.dXboxController.getLeftTriggerAxis() < 0.1){
-    //   intakeNeo.set(0);
-    //   intakeNeo.setIdleMode(IdleMode.kBrake);
-    // }
-
   }
 
   @Override
