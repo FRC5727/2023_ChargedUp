@@ -7,10 +7,7 @@ package frc.robot.subsystems;
 import frc.lib.util.logging.LogManager;
 import frc.lib.util.logging.DataLogManager;
 
-import java.lang.System.Logger;
 
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LoggingSubsystem extends SubsystemBase {

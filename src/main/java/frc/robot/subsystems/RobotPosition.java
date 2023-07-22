@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
@@ -30,6 +31,8 @@ public class RobotPosition extends SubsystemBase {
     private SwerveDrivePoseEstimator swervePose;
     private Swerve s_Swerve;
     public Pose2d robotPose;
+    public Field2d field;
+    public Field2d field2;
     private NetworkTable limelightTable;
     private NetworkTableEntry botposeEntry;
     private NetworkTableEntry targetEntry;
@@ -37,7 +40,8 @@ public class RobotPosition extends SubsystemBase {
 
     public RobotPosition(Swerve swerve) {
         this.s_Swerve = swerve;
-
+        field  = new Field2d();
+        field2 = new Field2d();
         // The initial pose will be overridden later by the autonomous routine
         swervePose = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, s_Swerve.getYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
@@ -85,7 +89,7 @@ public class RobotPosition extends SubsystemBase {
 
     @Override
     public void periodic() {
-        robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
+        
 
         boolean haveTarget = targetEntry.getDouble(0) > 0;
         double[] llpose = botposeEntry.getDoubleArray(new double[7]);
@@ -109,6 +113,9 @@ public class RobotPosition extends SubsystemBase {
                     swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
                 }
             }
+            robotPose = swervePose.getEstimatedPosition(); 
+            field.setRobotPose(getPose());
+            field2.setRobotPose(getUpdatedPose());
         }
 
         if (lightsOn && !DriverStation.isAutonomousEnabled()) {
