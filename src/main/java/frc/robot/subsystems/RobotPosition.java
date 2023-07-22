@@ -89,8 +89,7 @@ public class RobotPosition extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
-
+        Pose2d robotPose = swervePose.update(s_Swerve.getYaw(), s_Swerve.getModulePositions());
         boolean haveTarget = targetEntry.getDouble(0) > 0;
         double[] llpose = botposeEntry.getDoubleArray(new double[7]);
         if (useVision) {
@@ -113,8 +112,7 @@ public class RobotPosition extends SubsystemBase {
                     swervePose.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - (llpose[6] / 1000.0));
                 }
             }
-            robotPose = swervePose.getEstimatedPosition(); 
-            field.setRobotPose(getPose());
+            field.setRobotPose(swervePose.getEstimatedPosition());
             field2.setRobotPose(getUpdatedPose());
         }
 
