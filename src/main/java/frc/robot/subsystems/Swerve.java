@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import frc.lib.math.BetterSwerveModuleState;
+import frc.lib.math.GeometryUtils;
+import frc.lib.math.SecondOrderSwerveModuleStates;
 import frc.robot.Constants;
 import frc.robot.Dashboard;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -9,8 +12,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +24,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Swerve extends SubsystemBase {
     public static boolean swerveDebug = false;
     private boolean speedLimit = false;
+
+    double previousT;
+    double offT;
+    Timer timer = new Timer();
+
+    private Rotation2d targetHeading;
     
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -45,19 +56,79 @@ public class Swerve extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
     }
+    private static ChassisSpeeds correctForDynamics(ChassisSpeeds originalSpeeds) {
+        final double LOOP_TIME_S = 0.02; 
+        Pose2d futureRobotPose =
+            new Pose2d(
+                originalSpeeds.vxMetersPerSecond * LOOP_TIME_S,
+                originalSpeeds.vyMetersPerSecond * LOOP_TIME_S,
+                Rotation2d.fromRadians(originalSpeeds.omegaRadiansPerSecond * LOOP_TIME_S));   
+        Twist2d twistForPose = GeometryUtils.log(futureRobotPose);
+        ChassisSpeeds updatedSpeeds =
+            new ChassisSpeeds(
+                twistForPose.dx / LOOP_TIME_S,
+                twistForPose.dy / LOOP_TIME_S,
+                twistForPose.dtheta / LOOP_TIME_S);
+        return updatedSpeeds;  
+    }
+    private ChassisSpeeds correctHeading(ChassisSpeeds desiredSpeed){
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        translation.getX(),
-                        translation.getY(),
-                        rotation,
-                        getYaw())
-                        : new ChassisSpeeds(
-                                translation.getX(),
-                                translation.getY(),
-                                rotation));
+        //Determine time interval
+        double currentT = timer.get();
+        double dt = currentT - previousT;
+        //Get desired rotational speed in radians per second and absolute translational speed in m/s
+        double vr = desiredSpeed.omegaRadiansPerSecond;
+        double v = Math.hypot(desiredSpeed.vxMetersPerSecond, desiredSpeed.vyMetersPerSecond);
+        if (vr > 0.01 || vr < -0.01){
+            offT = currentT;
+            setTargetHeading(getYaw());
+            return desiredSpeed;
+        }
+        if (currentT - offT < 0.5){
+            setTargetHeading(getYaw());
+            return desiredSpeed;
+        }
+        //Determine target and current heading
+        setTargetHeading( getTargetHeading().plus(new Rotation2d(vr * dt)) );
+        Rotation2d currentHeading = getYaw();
+        //Calculate the change in heading that is needed to achieve the target
+        Rotation2d deltaHeading = getTargetHeading().minus(currentHeading);
+        if (Math.abs(deltaHeading.getDegrees()) < 0.05){
+            return desiredSpeed;
+        }
+        double correctedVr = deltaHeading.getRadians() / dt * 0.05;
+        previousT = currentT;
+
+        return new ChassisSpeeds(desiredSpeed.vxMetersPerSecond, desiredSpeed.vyMetersPerSecond, correctedVr);
+    }
+    public Rotation2d getTargetHeading(){ 
+        return targetHeading; 
+    }
+    public void setTargetHeading(Rotation2d targetHeading) { 
+        this.targetHeading = targetHeading; 
+    }
+
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {        
+        ChassisSpeeds desiredChassisSpeeds =
+            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+            translation.getX(),
+            translation.getY(),
+            rotation,
+            getYaw())
+            : new ChassisSpeeds(
+                    translation.getX(),
+                    translation.getY(),
+                    rotation);
+        desiredChassisSpeeds = correctForDynamics(desiredChassisSpeeds);
+        
+        desiredChassisSpeeds = correctHeading(desiredChassisSpeeds);
+        
+        SecondOrderSwerveModuleStates secondOrderSwerveModuleStates = Constants.Swerve.secondKinematics.toSwerveModuleState(desiredChassisSpeeds, getYaw());
+        SwerveModuleState[] swerveModuleStates = secondOrderSwerveModuleStates.getSwerveModuleStates();
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+        
+        // BetterSwerveModuleState[] swerveModuleStates = Constants.Swerve.betterKinematics.toSwerveModuleStates(desiredChassisSpeeds);
+        // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);        
 
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -99,6 +170,10 @@ public class Swerve extends SubsystemBase {
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw())
                 : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+    public Rotation2d getFalseYaw() {
+        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw() + 360)
+                : Rotation2d.fromDegrees(gyro.getYaw() + 180);
     }
 
     // TODO Remove
