@@ -72,7 +72,6 @@ public class Swerve extends SubsystemBase {
         return updatedSpeeds;  
     }
     private ChassisSpeeds correctHeading(ChassisSpeeds desiredSpeed){
-
         //Determine time interval
         double currentT = timer.get();
         double dt = currentT - previousT;
